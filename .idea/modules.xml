@@ -4,6 +4,9 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/RubricApplication.iml" filepath="$PROJECT_DIR$/RubricApplication.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/rubric-android.iml" filepath="$PROJECT_DIR$/.idea/rubric-android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rubric-android-RubricApplication.iml" filepath="$PROJECT_DIR$/rubric-android-RubricApplication.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/rubric-android-app.iml" filepath="$PROJECT_DIR$/app/rubric-android-app.iml" />
     </modules>
   </component>
 </project>
