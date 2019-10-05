@@ -1,5 +1,6 @@
 package be.hogent.tile3.rubricapplication.injection.module
 
+import be.hogent.tile3.rubricapplication.network.ExampleRubricApi
 import be.hogent.tile3.rubricapplication.network.TestApi
 import be.hogent.tile3.rubricapplication.utils.BASE_URL
 import com.itkacher.okhttpprofiler.OkHttpProfilerInterceptor
@@ -23,6 +24,11 @@ object NetworkModule {
     @Provides
     internal fun provideTestApi(retrofit: Retrofit): TestApi {
         return retrofit.create(TestApi::class.java)
+    }
+
+    @Provides
+    internal fun provideExampleRubricApi(retrofit: Retrofit): ExampleRubricApi {
+        return retrofit.create(ExampleRubricApi::class.java)
     }
 
 
