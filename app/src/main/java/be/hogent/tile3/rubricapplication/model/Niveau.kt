@@ -2,24 +2,48 @@ package be.hogent.tile3.rubricapplication.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
+import java.io.Serializable
 
+@Entity(foreignKeys = arrayOf(
+    ForeignKey(
+        entity = Criterium::class,
+        parentColumns = arrayOf("criteriumId"),
+        childColumns = arrayOf("criteriumId"))
+), tableName = "niveau_table"
+)
 data class Niveau(
-    @field:Json(name = "id") val id: String = "",
-    @field:Json(name = "naam") val naam: String = "",
-    @field:Json(name = "volgnummer") val volgnummer: String = ""
-) : Parcelable {
+    @PrimaryKey @ColumnInfo(name = "niveauId") val niveauId: String = "",
+    @ColumnInfo(name = "titel") val titel: String = "",
+    @ColumnInfo(name = "omschrijving") val omschrijving: String = "",
+    @ColumnInfo(name = "ondergrens") val ondergrens: Int = 0,
+    @ColumnInfo(name = "bovengrens") val bovengrens: Int = 0,
+    @ColumnInfo(name = "volgnummer") val volgnummer: Int,
+    @ColumnInfo(name = "criteriumId") val criteriumId: String
+) : Parcelable, Serializable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),
+        parcel.readString(),
+        parcel.readInt(),
+        parcel.readInt(),
+        parcel.readInt(),
         parcel.readString()
     ) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(id)
-        parcel.writeString(naam)
-        parcel.writeString(volgnummer)
+        parcel.writeString(niveauId)
+        parcel.writeString(titel)
+        parcel.writeString(omschrijving)
+        parcel.writeInt(ondergrens)
+        parcel.writeInt(bovengrens)
+        parcel.writeInt(volgnummer)
+        parcel.writeString(criteriumId)
     }
 
     override fun describeContents(): Int {
