@@ -2,33 +2,42 @@ package be.hogent.tile3.rubricapplication.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.ForeignKey.CASCADE
+import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
+import java.io.Serializable
 
+@Entity(foreignKeys = arrayOf(ForeignKey(
+    entity = Rubric::class,
+    parentColumns = arrayOf("rubricId"),
+    childColumns = arrayOf("rubricId"))
+), tableName = "criterium_table"
+)
 data class Criterium(
-    @field:Json(name = "id") val id: String = "",
-    @field:Json(name = "naam") val naam: String = "",
-    @field:Json(name = "omschrijving") val omschrijving: String = "",
-    @field:Json(name = "gewicht") val gewicht: String = "",
-    @field:Json(name = "volgnummer") val kleur: String = "",
-    @field:Json(name = "niveauschaal") val niveauschaal: Niveauschaal
-    ) : Parcelable {
+    @PrimaryKey @ColumnInfo(name = "criteriumId") val criteriumId: String,
+    @ColumnInfo(name = "naam") val naam: String = "",
+    @ColumnInfo(name = "omschrijving") val omschrijving: String = "",
+    @ColumnInfo(name = "gewicht") val gewicht: Double = 0.0,
+    @ColumnInfo(name = "rubricId") val rubricId: String
+) : Parcelable, Serializable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readParcelable(Niveauschaal::class.java.classLoader)
+        parcel.readDouble(),
+        parcel.readString()
     ) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(id)
+        parcel.writeString(criteriumId)
         parcel.writeString(naam)
         parcel.writeString(omschrijving)
-        parcel.writeString(gewicht)
-        parcel.writeString(kleur)
-        parcel.writeParcelable(niveauschaal, flags)
+        parcel.writeDouble(gewicht)
+        parcel.writeString(rubricId)
     }
 
     override fun describeContents(): Int {
