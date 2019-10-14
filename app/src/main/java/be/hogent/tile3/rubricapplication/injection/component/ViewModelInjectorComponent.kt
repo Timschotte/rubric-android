@@ -14,11 +14,6 @@ import javax.inject.Singleton
 interface ViewModelInjectorComponent {
 
 
-    /**
-     * Injects the dependencies into the specified TestViewModel.
-     * @param testViewModel the [TestViewModel] in which to inject the dependencies.
-     */
-
     @Component.Builder
     interface Builder {
         fun build(): ViewModelInjectorComponent
