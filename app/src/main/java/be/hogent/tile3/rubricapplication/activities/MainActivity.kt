@@ -14,4 +14,9 @@ class MainActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
     }
+
+    fun launchRubricsActivity(view: View) {
+        val intent = Intent(this, RubricsActivity::class.java)
+        startActivity(intent)
+    }
 }
