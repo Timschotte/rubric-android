@@ -115,7 +115,7 @@ class RubricFragment : Fragment() {
                                     "De student kan er niets van",
                                     0,
                                     2,
-                                    1,
+                                    -2,
                                     "1"
                                 )
                             )
@@ -126,7 +126,7 @@ class RubricFragment : Fragment() {
                                     "De heeft al van het begrip gehoord",
                                     3,
                                     4,
-                                    2,
+                                    -1,
                                     "1"
                                 )
                             )
@@ -137,7 +137,7 @@ class RubricFragment : Fragment() {
                                     "De student kan het begrip verklaren",
                                     5,
                                     6,
-                                    3,
+                                    0,
                                     "1"
                                 )
                             )
@@ -148,7 +148,7 @@ class RubricFragment : Fragment() {
                                     "De student kan het begrip verklaren en begrijpt het",
                                     6,
                                     7,
-                                    4,
+                                    1,
                                     "1"
                                 )
                             )
@@ -159,7 +159,7 @@ class RubricFragment : Fragment() {
                                     "De student kan het begrip verklaren en snapt de context",
                                     8,
                                     10,
-                                    5,
+                                    2,
                                     "1"
                                 )
                             )
@@ -170,7 +170,7 @@ class RubricFragment : Fragment() {
                                     "De student denkt dat dit iets te maken heeft met stenen",
                                     0,
                                     2,
-                                    1,
+                                    -2,
                                     "2"
                                 )
                             )
@@ -181,7 +181,7 @@ class RubricFragment : Fragment() {
                                     "De student weet hoeveel letters er in solid zitten",
                                     3,
                                     4,
-                                    2,
+                                    -1,
                                     "2"
                                 )
                             )
@@ -192,7 +192,7 @@ class RubricFragment : Fragment() {
                                     "De student kan kan de letters omzetten",
                                     5,
                                     6,
-                                    3,
+                                    0,
                                     "2"
                                 )
                             )
@@ -203,7 +203,7 @@ class RubricFragment : Fragment() {
                                     "De student begrijpt wat hij zegt",
                                     6,
                                     7,
-                                    4,
+                                    1,
                                     "2"
                                 )
                             )
@@ -214,7 +214,7 @@ class RubricFragment : Fragment() {
                                     "De student is een expert",
                                     8,
                                     10,
-                                    5,
+                                    2,
                                     "2"
                                 )
                             )
@@ -225,7 +225,7 @@ class RubricFragment : Fragment() {
                                     "De student kan denkt dat dit een sexterm is",
                                     0,
                                     2,
-                                    1,
+                                    -2,
                                     "3"
                                 )
                             )
@@ -236,7 +236,7 @@ class RubricFragment : Fragment() {
                                     "De student heeft al van het begrip gehoord",
                                     3,
                                     4,
-                                    2,
+                                    -1,
                                     "3"
                                 )
                             )
@@ -247,7 +247,7 @@ class RubricFragment : Fragment() {
                                     "De student kan het begrip uitleggen",
                                     5,
                                     6,
-                                    3,
+                                    0,
                                     "3"
                                 )
                             )
@@ -258,7 +258,7 @@ class RubricFragment : Fragment() {
                                     "De student weet dat dit handig is om testen te schrijven",
                                     6,
                                     7,
-                                    4,
+                                    1,
                                     "3"
                                 )
                             )
@@ -269,7 +269,7 @@ class RubricFragment : Fragment() {
                                     "De student kent de verschillende soorten DI",
                                     8,
                                     10,
-                                    5,
+                                    2,
                                     "3"
                                 )
                             )
@@ -280,7 +280,7 @@ class RubricFragment : Fragment() {
                                     "De student heeft de cursus gelezen",
                                     0,
                                     0,
-                                    2,
+                                    -1,
                                     "4"
                                 )
                             )
@@ -291,7 +291,7 @@ class RubricFragment : Fragment() {
                                     "De student heeft de cursus niet gelezen",
                                     1,
                                     1,
-                                    3,
+                                    0,
                                     "4"
                                 )
                             )

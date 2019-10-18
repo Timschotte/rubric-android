@@ -1,25 +1,37 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/colorSecundary"
         android:stretchColumns="*">
 
         <TableRow
             android:id="@+id/criterium_tablerow">
 
-            <TextView
-                android:id="@+id/criteriumDescription"
+            <androidx.cardview.widget.CardView
+                android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:maxLines="6"
-                android:gravity="center_vertical"
-                tools:text="@tools:sample/lorem"
-                android:text="TextView" />
+                app:cardBackgroundColor="@color/colorPrimary"
+                android:layout_margin="5dp"
+                app:cardCornerRadius="10dp">
+                <TextView
+                    android:id="@+id/criteriumDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:maxLines="6"
+                    android:gravity="center"
+                    tools:text="@tools:sample/lorem"
+                    android:textColor="@color/colorTextOnPrimary"
+                    android:text="TextView" />
+            </androidx.cardview.widget.CardView>
+
 
 
 

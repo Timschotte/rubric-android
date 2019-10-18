@@ -51,4 +51,9 @@ class NiveauRepository(private val niveauDao: NiveauDao){
     fun getNiveausForCriterium(criteriumId: String): List<Niveau>{
         return niveauDao.getNiveausForCriterium(criteriumId)
     }
+
+    @WorkerThread
+    fun getNiveausForRubric(rubricId: String): List<Niveau>{
+        return niveauDao.getNiveausForRubric(rubricId)
+    }
 }

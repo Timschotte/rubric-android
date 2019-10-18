@@ -23,5 +23,9 @@ class NiveauViewModel: ViewModel(){
         return niveauRepository.getNiveausForCriterium(criteriumId)
     }
 
+    fun getNiveausForRubric(rubricId: String): List<Niveau> {
+        return niveauRepository.getNiveausForRubric(rubricId)
+    }
+
 
 }
