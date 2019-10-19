@@ -1,11 +1,9 @@
 package be.hogent.tile3.rubricapplication.adapters
 
-import android.app.ActionBar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProviders
@@ -13,7 +11,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.tile3.rubricapplication.R
-import be.hogent.tile3.rubricapplication.activities.RubricsActivity
 import be.hogent.tile3.rubricapplication.fragments.RubricFragment
 import be.hogent.tile3.rubricapplication.model.Criterium
 import be.hogent.tile3.rubricapplication.model.Niveau
@@ -60,24 +57,32 @@ class CriteriumRecyclerViewAdapter(private val parentFragment: RubricFragment) :
         val criterium: Criterium = getItem(position)
 
         //fill the layout with data
-        var niveaus: List<Niveau>
+        var criteriumNiveaus: List<Niveau>
+
+        var rubricNiveaus: List<Niveau>
         doAsync {
-            niveaus = niveauViewModel.getNiveausForCriterium(criterium.criteriumId )
+            criteriumNiveaus = niveauViewModel.getNiveausForCriterium(criterium.criteriumId )
+            rubricNiveaus = niveauViewModel.getNiveausForRubric(criterium.rubricId )
             holder.description.text = criterium.naam
 
             onComplete {
-                var hoogsteNiveau = 5
-                var laagsteNiveau = 1
+                var hoogsteNiveau = RubricUtils.hoogsteNiveau(rubricNiveaus)
+                var laagsteNiveau = RubricUtils.laagsteNiveau(rubricNiveaus)
 
                 for(x in laagsteNiveau until hoogsteNiveau + 1){
-                    if(niveaus.any { y -> y.volgnummer == x }){
-                        val huidigNiveau = niveaus.filter { z -> z.volgnummer == x }.get(0)
+                    if(criteriumNiveaus.any { y -> y.volgnummer == x }){
+                        val huidigNiveau = criteriumNiveaus.filter { z -> z.volgnummer == x }.get(0)
                         val niveauView = NiveauView(parentFragment.activity!!)
                         val layoutParam = TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f)
                         layoutParam.setMargins(5, 5, 5, 5)
                         niveauView.layoutParams = layoutParam
                         niveauView.titel.text = huidigNiveau.titel
                         niveauView.omschrijving.text = huidigNiveau.omschrijving
+                        if(x == 0){
+                            val resources = parentFragment.activity!!.applicationContext.resources
+                            val color: Int = resources.getColor(R.color.colorSecundaryDark)
+                            niveauView.NiveauCellContainer.setCardBackgroundColor(color)
+                        }
                         holder.tableRow.addView(niveauView)
                     } else{
                         val whitespace = LinearLayout(parentFragment.activity!!)
@@ -87,16 +92,6 @@ class CriteriumRecyclerViewAdapter(private val parentFragment: RubricFragment) :
                         holder.tableRow.addView(whitespace)
                     }
                 }
-
-                /*niveaus.forEach({
-                    val niveauView = NiveauView(parentFragment.activity!!)
-                    val layoutParam = TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f)
-                    layoutParam.setMargins(5, 5, 5, 5)
-                    niveauView.layoutParams = layoutParam
-                    niveauView.titel.text = it.titel
-                    niveauView.omschrijving.text = it.omschrijving
-                    holder.tableRow.addView(niveauView)
-                })*/
             }
 
         }

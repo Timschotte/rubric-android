@@ -39,4 +39,7 @@ interface NiveauDao{
 
     @Query("SELECT * from niveau_table WHERE criteriumId = :criteriumId")
     fun getNiveausForCriterium(criteriumId: String): List<Niveau>
+
+    @Query("SELECT niveau_table.* from niveau_table JOIN criterium_table ON niveau_table.criteriumId = criterium_table.criteriumId WHERE criterium_table.rubricId = :rubricId")
+    fun getNiveausForRubric(rubricId: String): List<Niveau>
 }
