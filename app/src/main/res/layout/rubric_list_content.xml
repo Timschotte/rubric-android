@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/rubric_userimage"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/rubric_onderwerp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="@tools:sample/full_names"
+        android:textSize="20sp"
+        android:textColor="@android:color/black"
+        app:layout_constraintTop_toTopOf="@+id/rubric_userimage"
+        app:layout_constraintStart_toEndOf="@+id/rubric_userimage"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/rubric_omschrijving" />
+
+    <TextView
+        android:id="@+id/rubric_omschrijving"
+        android:layout_width="285dp"
+        android:layout_height="20dp"
+        tools:text="@tools:sample/lorem[4:10]"
+        app:layout_constraintBottom_toBottomOf="@+id/rubric_userimage"
+        app:layout_constraintStart_toEndOf="@+id/rubric_userimage"
+        android:onClick="@{() -> mainViewModel.onGetRubric(1)}"
+        android:layout_marginStart="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintHorizontal_bias="0" />
+
+    <TextView
+        android:id="@+id/rubric_laatstewijziging"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="@tools:sample/date/hhmm"
+        app:layout_constraintTop_toTopOf="@+id/rubric_userimage"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="8dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>
