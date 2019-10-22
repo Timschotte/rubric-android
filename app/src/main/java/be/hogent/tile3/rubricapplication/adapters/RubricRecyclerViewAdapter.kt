@@ -1,22 +1,19 @@
 package be.hogent.tile3.rubricapplication.adapters
 
+import android.graphics.Color
 import android.os.Build
-import android.text.format.DateUtils
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import be.hogent.tile3.rubricapplication.R
+import be.hogent.tile3.rubricapplication.databinding.RubricListContentBinding
 import be.hogent.tile3.rubricapplication.model.Rubric
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.*
 
-class RubricRecyclerViewAdapter() : RecyclerView.Adapter<RubricRecyclerViewAdapter.ViewHolder>(){
+class RubricRecyclerViewAdapter(val clickListener: MainRubricListener) : ListAdapter<Rubric,
+        RubricRecyclerViewAdapter.ViewHolder>(MainRubricDiffCallback()){
+
     var data = listOf<Rubric>()
         set(value){
             field = value
@@ -28,25 +25,53 @@ class RubricRecyclerViewAdapter() : RecyclerView.Adapter<RubricRecyclerViewAdapt
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.rubric_list_content,parent, false)
-        return ViewHolder(view)
+        return ViewHolder.from(parent)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = data[position]
-        holder.onderwerp.text = item.onderwerp
-        holder.omschrijving.text = item.omschrijving
-        holder.laatstewijziging.text = LocalDate.parse(item.datumTijdLaatsteWijziging, DateTimeFormatter.ofPattern("ddMMyyyy")).toString()
-        holder.userimage.setImageResource(R.drawable.ic_user)
+
+        if (position %2 == 1){
+            holder.itemView.setBackgroundColor(Color.parseColor("#FFFFFF"))
+        }
+        else {
+            holder.itemView.setBackgroundColor(Color.parseColor("#FFFAF8FD"))
+        }
+
+        holder.bind(clickListener,item)
     }
 
+    class ViewHolder private constructor(val binding: RubricListContentBinding) : RecyclerView.ViewHolder(binding.root){
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        val onderwerp: TextView = itemView.findViewById(R.id.rubric_onderwerp)
-        val omschrijving: TextView = itemView.findViewById(R.id.rubric_omschrijving)
-        val laatstewijziging: TextView = itemView.findViewById(R.id.rubric_laatstewijziging)
-        val userimage: ImageView = itemView.findViewById(R.id.rubric_userimage)
+        fun bind(clickListener: MainRubricListener, item: Rubric){
+            binding.rubric = item
+            binding.clickListener = clickListener
+            binding.executePendingBindings()
+        }
+
+        companion object{
+            fun from(parent: ViewGroup): ViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = RubricListContentBinding.inflate(layoutInflater, parent, false)
+
+                return ViewHolder(binding)
+            }
+        }
     }
 
+}
+
+class MainRubricDiffCallback: DiffUtil.ItemCallback<Rubric>(){
+    override fun areItemsTheSame(oldItem: Rubric, newItem: Rubric): Boolean {
+        return oldItem.rubricId == newItem.rubricId
+    }
+
+    override fun areContentsTheSame(oldItem: Rubric, newItem: Rubric): Boolean {
+        return oldItem == newItem
+    }
+}
+
+class MainRubricListener(val clickListener: (Rubric) -> Unit){
+    fun onClick(rubric: Rubric) = clickListener(rubric)
 }

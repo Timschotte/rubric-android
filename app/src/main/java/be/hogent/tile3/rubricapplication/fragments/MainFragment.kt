@@ -1,5 +1,6 @@
 package be.hogent.tile3.rubricapplication.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.tile3.rubricapplication.R
+import be.hogent.tile3.rubricapplication.activities.RubricsActivity
+import be.hogent.tile3.rubricapplication.adapters.MainRubricListener
 import be.hogent.tile3.rubricapplication.adapters.RubricRecyclerViewAdapter
 import be.hogent.tile3.rubricapplication.model.Rubric
 import be.hogent.tile3.rubricapplication.ui.MainViewModel
@@ -27,7 +30,7 @@ class MainFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView = inflater.inflate(R.layout.fragment_main, container , false  )
+        val rootView = inflater.inflate(R.layout.fragment_main, container, false)
         return rootView
     }
 
@@ -39,7 +42,10 @@ class MainFragment: Fragment() {
 
         insertSampleData()
 
-        adapter = RubricRecyclerViewAdapter()
+        adapter = RubricRecyclerViewAdapter(MainRubricListener { rubric ->
+            val intent = Intent(activity,RubricsActivity::class.java)
+            startActivity(intent);
+        })
         rubricViewModel.getAllRubrics().observe(this, Observer<List<Rubric>> {
             adapter.data = it
         })
