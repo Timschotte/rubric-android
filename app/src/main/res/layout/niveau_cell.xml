@@ -12,9 +12,12 @@
 
 
     <LinearLayout
+        android:id="@+id/linearlayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:clipToPadding="false"
+        android:clipChildren="false">
 
         <TextView
             android:id="@+id/titel"
@@ -42,10 +45,63 @@
             android:maxLines="10"
             android:minLines="10"
             android:paddingTop="5dp"
-            android:text="TextView"
             android:textAlignment="center"
             android:textColor="@color/colorTextOnSecundary"
             tools:text="@tools:sample/lorem/random" />
+        <TextView
+            android:id="@+id/score"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:minLines="1"
+            android:paddingTop="5dp"
+            android:textAlignment="center"
+            android:visibility="invisible"
+            android:textColor="@color/colorPrimary"
+            tools:text="@tools:sample/lorem/random" />
+        <LinearLayout
+            android:id="@+id/sliderContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:clipToPadding="false"
+            android:visibility="invisible"
+            android:clipChildren="false">
+            <TextView
+                android:id="@+id/sliderMin"
+                android:layout_width="0dp"
+                android:layout_weight="0.1"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:minLines="1"
+                android:paddingTop="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                tools:text="@tools:sample/lorem" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/slider"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="0.8"
+                android:stepSize="1"
+                app:floatingLabel="true"
+                />
+
+            <TextView
+                android:id="@+id/sliderMax"
+                android:layout_width="0dp"
+                android:layout_weight="0.1"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:minLines="1"
+                android:paddingTop="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                tools:text="@tools:sample/lorem" />
+        </LinearLayout>
+
+
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

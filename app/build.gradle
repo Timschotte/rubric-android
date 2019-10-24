@@ -89,7 +89,7 @@ dependencies {
     implementation 'com.itkacher.okhttpprofiler:okhttpprofiler:1.0.5'
 
     //enables snackbar to show brief messages on screen
-    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.google.android.material:material:1.2.0-alpha01'
 
     //recyclerview
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
