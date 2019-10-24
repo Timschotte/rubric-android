@@ -19,6 +19,7 @@ import be.hogent.tile3.rubricapplication.model.Niveau
 import be.hogent.tile3.rubricapplication.ui.NiveauViewModel
 import be.hogent.tile3.rubricapplication.utils.RubricUtils
 import be.hogent.tile3.rubricapplication.views.NiveauView
+import com.google.android.material.slider.Slider
 import kotlinx.android.synthetic.main.criterium_list_content.view.*
 import kotlinx.android.synthetic.main.niveau_cell.view.*
 import org.jetbrains.anko.doAsync
@@ -33,11 +34,11 @@ class CriteriumRecyclerViewAdapter(private val parentFragment: RubricFragment) :
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Criterium>() {
             override fun areItemsTheSame(oldItem: Criterium, newItem: Criterium): Boolean {
-                return false //TODO
+                return true //TODO
             }
 
             override fun areContentsTheSame(oldItem: Criterium, newItem: Criterium): Boolean {
-                return false //TODO
+                return true //TODO
             }
         }
     }
@@ -59,13 +60,21 @@ class CriteriumRecyclerViewAdapter(private val parentFragment: RubricFragment) :
                     if (it == v) {
                         //the cell we clicked on is the one we now iterate over, this cell should be selected
                         it.NiveauCellContainer.setCardBackgroundColor(selectedColor)
+                        if(item.niveau.ondergrens != item.niveau.bovengrens){
+                            it.NiveauCellContainer.linearlayout.sliderContainer.visibility = View.VISIBLE
+                            it.NiveauCellContainer.linearlayout.score.text = it.NiveauCellContainer.linearlayout.slider.value.toInt().toString()
+                        }
+                        it.NiveauCellContainer.linearlayout.score.visibility = View.VISIBLE
                     } else {
                         //this isn't the cell we clicked on, we reset the background color to the unselected state
                         it.NiveauCellContainer.setCardBackgroundColor(unselectedColor)
+                        it.NiveauCellContainer.linearlayout.score.visibility = View.INVISIBLE
+                        it.NiveauCellContainer.linearlayout.sliderContainer.visibility = View.INVISIBLE
                     }
                 }
             }
         }
+
     }
 
     //This will create the contentView
@@ -140,6 +149,16 @@ class CriteriumRecyclerViewAdapter(private val parentFragment: RubricFragment) :
         } else {
             initializeEmptyCell(layoutParam, niveauView)
         }
+        if(huidigNiveau.ondergrens != huidigNiveau.bovengrens){
+            niveauView.slider.valueTo = huidigNiveau.bovengrens.toFloat()
+            niveauView.slider.valueFrom = huidigNiveau.ondergrens.toFloat()
+            niveauView.sliderMax.text = huidigNiveau.bovengrens.toString()
+            niveauView.sliderMin.text = huidigNiveau.ondergrens.toString()
+            niveauView.slider.setOnChangeListener { slider, value -> niveauView.score.text = value.toInt().toString() }
+        }else{
+            niveauView.score.text = huidigNiveau.ondergrens.toString()
+        }
+
         niveauView.setTag(MultipleTagObject(huidigNiveau, criterium, holder.tableRow))
         niveauView.setOnClickListener(onClickListener)
         holder.tableRow.addView(niveauView)
