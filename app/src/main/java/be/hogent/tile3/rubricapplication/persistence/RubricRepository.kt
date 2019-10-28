@@ -31,7 +31,7 @@ class RubricRepository(private val rubricDao: RubricDao){
      * Deletes all rubrics from the db
      */
     @WorkerThread
-    fun deleteAllMemories(){
+    fun deleteAllRubrics(){
         rubricDao.deleteAllRubrics()
     }
 

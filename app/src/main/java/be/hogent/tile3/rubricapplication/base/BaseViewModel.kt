@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import be.hogent.tile3.rubricapplication.injection.component.DaggerViewModelInjectorComponent
 import be.hogent.tile3.rubricapplication.injection.component.ViewModelInjectorComponent
 import be.hogent.tile3.rubricapplication.injection.module.NetworkModule
+import be.hogent.tile3.rubricapplication.ui.MainViewModel
 
 
 /**
@@ -24,7 +25,9 @@ abstract class BaseViewModel : ViewModel() {
      * Injects the required dependencies
      */
     private fun inject() {
-
+        when(this){
+            is MainViewModel -> injectorComponent.inject(this)
+        }
     }
 
 }

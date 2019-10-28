@@ -1,5 +1,6 @@
 package be.hogent.tile3.rubricapplication.injection.module
 
+import be.hogent.tile3.rubricapplication.network.RubricApi
 import be.hogent.tile3.rubricapplication.utils.BASE_URL
 import com.itkacher.okhttpprofiler.OkHttpProfilerInterceptor
 import dagger.Module
@@ -19,7 +20,10 @@ object NetworkModule {
      * Provides the Test Service implemenation
      * @param retrofit the retrofit object used to instantiate the service
      */
-
+    @Provides
+    internal fun provideRubricApi(retrofit: Retrofit): RubricApi {
+        return retrofit.create(RubricApi::class.java)
+    }
 
 
     /**

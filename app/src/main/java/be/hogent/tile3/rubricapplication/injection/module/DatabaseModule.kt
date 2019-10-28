@@ -21,8 +21,8 @@ import javax.inject.Singleton
 class DatabaseModule(private val application: Application) {
 
     /**
-     * Shows how to create a MemoryRepository
-     *  @param memoryDao the MemoryDao used to instantiate the Repository
+     * Shows how to create a RubricRepository
+     *  @param rubricDao the RubricDao used to instantiate the Repository
      */
     @Provides
     @Singleton

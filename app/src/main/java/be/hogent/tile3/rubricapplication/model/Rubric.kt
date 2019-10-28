@@ -16,7 +16,7 @@ data class Rubric(
     @ColumnInfo(name = "omschrijving") val omschrijving: String = "",
     @ColumnInfo(name = "datumTijdCreatie") val datumTijdCreatie: String = "",
     @ColumnInfo(name = "datumTijdLaatsteWijziging") val datumTijdLaatsteWijziging: String = ""
-) : Parcelable, Serializable {
+) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),

@@ -10,7 +10,7 @@ import dagger.Component
 import javax.inject.Singleton
 
 /**
- * This will inject the databasecomponent into our MemoryViewModel
+ * This will inject the databasecomponent into our MainViewModel
  */
 @Singleton
 @Component(modules = [DatabaseModule::class])
@@ -19,5 +19,4 @@ interface DatabaseComponent {
     fun inject(rubricViewModel: RubricViewModel)
     fun inject(criteriumViewModel: CriteriumViewModel)
     fun inject(niveauViewModel: NiveauViewModel)
-    fun inject(mainViewModel: MainViewModel)
 }

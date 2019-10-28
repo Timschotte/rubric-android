@@ -13,16 +13,26 @@ import be.hogent.tile3.rubricapplication.R
 import be.hogent.tile3.rubricapplication.activities.RubricsActivity
 import be.hogent.tile3.rubricapplication.adapters.MainRubricListener
 import be.hogent.tile3.rubricapplication.adapters.RubricRecyclerViewAdapter
+import be.hogent.tile3.rubricapplication.data.RubricData
+import be.hogent.tile3.rubricapplication.data.RubricsResource
+import be.hogent.tile3.rubricapplication.model.Criterium
+import be.hogent.tile3.rubricapplication.model.Niveau
 import be.hogent.tile3.rubricapplication.model.Rubric
+import be.hogent.tile3.rubricapplication.ui.CriteriumViewModel
 import be.hogent.tile3.rubricapplication.ui.MainViewModel
+import be.hogent.tile3.rubricapplication.ui.NiveauViewModel
 import be.hogent.tile3.rubricapplication.ui.RubricViewModel
+import be.hogent.tile3.rubricapplication.utils.RubricDataToRubricMapper
 import kotlinx.android.synthetic.main.rubric_list.*
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.onComplete
 
 class MainFragment: Fragment() {
 
     private lateinit var  mainViewModel: MainViewModel
     private lateinit var  rubricViewModel: RubricViewModel
+    private lateinit var  criteriumViewModel: CriteriumViewModel
+    private lateinit var  niveauViewModel: NiveauViewModel
     private lateinit var adapter: RubricRecyclerViewAdapter
 
     override fun onCreateView(
@@ -39,33 +49,82 @@ class MainFragment: Fragment() {
 
         mainViewModel = ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
         rubricViewModel = ViewModelProviders.of(activity!!).get(RubricViewModel::class.java)
+        criteriumViewModel = ViewModelProviders.of(activity!!).get(CriteriumViewModel::class.java)
+        niveauViewModel = ViewModelProviders.of(activity!!).get(NiveauViewModel::class.java)
 
-        insertSampleData()
+        //comment for demo
+        deleteAllData()
 
         adapter = RubricRecyclerViewAdapter(MainRubricListener { rubric ->
             val intent = Intent(activity,RubricsActivity::class.java)
-            startActivity(intent);
+            intent.putExtra("rubric", rubric)
+            startActivity(intent)
         })
+
         rubricViewModel.getAllRubrics().observe(this, Observer<List<Rubric>> {
             adapter.data = it
         })
 
+        //Observes the livedate from the viewmodel and displays it when it changes
+        val rubricObjectObserver = Observer<List<RubricData>> { rubricData ->
+            processNewRubrics(rubricData)
+
+        }
+
+        //attach the observer to the livedata
+        mainViewModel.getRubricDataObject().observe(this, rubricObjectObserver)
         rubric_recyclerView.adapter = adapter
         rubric_recyclerView.layoutManager = LinearLayoutManager(activity)
     }
 
-    private fun insertSampleData(){
+    private fun processNewRubrics(rubricData: List<RubricData>) {
+        val rubrics = RubricDataToRubricMapper.getRubricModels(rubricData)
+        val criteria = RubricDataToRubricMapper.getCriteriumModels(rubricData)
+        val niveaus = RubricDataToRubricMapper.getNiveauModels(rubricData)
+        insertModelsInDatabank(rubrics, criteria, niveaus)
+    }
+
+    private fun insertModelsInDatabank(
+        rubrics: List<Rubric>,
+        criteria: List<Criterium>,
+        niveaus: List<Niveau>
+    ) {
         doAsync {
-            rubricViewModel.insertRubric(Rubric("1","Android","Het vak native apps I", "01012019","01012019"))
-            rubricViewModel.insertRubric(Rubric("2","IOS","Het vak native apps II", "01012019","01012019"))
-            rubricViewModel.insertRubric(Rubric("3","Projecten","Het vak native apps III", "01012019","01012019"))
-            rubricViewModel.insertRubric(Rubric("4","Onderzoekstechnieken","Het vak onderzoekstechnieken", "01012019","01012019"))
-            rubricViewModel.insertRubric(Rubric("5","Probleemoplossend denken I","Het vak probleemoplossend denken I", "01012019","01012019"))
-            rubricViewModel.insertRubric(Rubric("6","Probleemoplossend denken II","Het vak probleemoplossend denken II", "01012019","01012019"))
-            rubricViewModel.insertRubric(Rubric("7","Android","Het vak native apps III", "01012019","01012019"))
-            rubricViewModel.insertRubric(Rubric("8","Android","Het vak native apps IV", "01012019","01012019"))
+            for (rubric in rubrics) {
+                rubricViewModel.insertRubric(rubric)
+            }
+            onComplete {
+                doAsync {
+                    for (criterium in criteria) {
+                        criteriumViewModel.insertCriterium(criterium)
+                    }
+                    onComplete {
+                        doAsync {
+                            for (niveau in niveaus) {
+                                niveauViewModel.insertNiveau(niveau)
+                            }
+                        }
+                    }
+                }
+
+            }
         }
     }
 
+    private fun deleteAllData() {
+        doAsync {
+            niveauViewModel.removeAllNiveaus()
+            onComplete {
+                doAsync {
+                    criteriumViewModel.removeAllCriteria()
+                    onComplete {
+                        doAsync {
+                            rubricViewModel.removeAllRubrics()
+                        }
+                    }
+                }
 
+            }
+        }
+    }
 }
