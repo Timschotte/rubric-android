@@ -27,5 +27,13 @@ class NiveauViewModel: ViewModel(){
         return niveauRepository.getNiveausForRubric(rubricId)
     }
 
+    fun removeAllNiveaus(){
+        return niveauRepository.deleteAllNiveaus()
+    }
+
+    fun insertNiveau(niveau: Niveau){
+        return niveauRepository.insert(niveau)
+    }
+
 
 }

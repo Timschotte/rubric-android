@@ -30,7 +30,7 @@ class CriteriumRepository(private val criteriumDao: CriteriumDao){
      * Deletes all criteria from the db
      */
     @WorkerThread
-    fun deleteAllMemories(){
+    fun deleteAllCriteria(){
         criteriumDao.deleteAllCriteria()
     }
 

@@ -88,7 +88,7 @@ class CriteriumRecyclerViewAdapter(private val parentFragment: RubricFragment) :
 
     //This will fill the items with data and set a listener
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        //get the memory
+        //get the criterium
         val criterium: Criterium = getItem(position)
 
         //fill the layout with data

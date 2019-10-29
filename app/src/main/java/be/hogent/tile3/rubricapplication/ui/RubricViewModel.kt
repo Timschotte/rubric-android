@@ -45,4 +45,8 @@ class RubricViewModel: ViewModel(){
     fun insertNiveau(niveau: Niveau){
         niveauRepository.insert(niveau)
     }
+
+    fun removeAllRubrics(){
+        rubricRepository.deleteAllRubrics()
+    }
 }
