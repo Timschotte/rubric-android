@@ -1,15 +1,25 @@
 package be.hogent.tile3.rubricapplication.ui
 
+import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.model.Criterium
 import be.hogent.tile3.rubricapplication.model.CriteriumEvaluatie
 import be.hogent.tile3.rubricapplication.model.Evaluatie
 import be.hogent.tile3.rubricapplication.model.Niveau
+import be.hogent.tile3.rubricapplication.persistence.CriteriumRepository
+import be.hogent.tile3.rubricapplication.persistence.NiveauRepository
+import javax.inject.Inject
 
 class CriteriumEvaluatieViewModel: ViewModel(){
+
+    @Inject lateinit var niveauRepository: NiveauRepository
+    @Inject lateinit var criteriumRepository: CriteriumRepository
+    // todo: evaluatierepository maken en injecteren
+    // todo: criteriumevaluatierepository maken en injecteren
+
     // CriteriumEvaluatieViewModel kent volgende:
     //   1. De Evaluatie die aan de gang is. Deze Evaluatie kent ook de Rubric en de Student.
     //   2. Het Criterium wat hier geëvalueerd wordt.
@@ -20,8 +30,13 @@ class CriteriumEvaluatieViewModel: ViewModel(){
 
     val huidigCriterium: LiveData<Criterium> = getDummyCriterium()
     val criteriumNiveaus: LiveData<List<Niveau>> = getDummyCriteriumNiveaus()
+    val geselecteerdCriteriumNiveau: LiveData<Niveau> = getInitieelGeselecteerdCriteriumNiveau()
     val evaluatie: LiveData<Evaluatie> = getDummyEvaluatie()
     val criteriumEvaluatie: LiveData<CriteriumEvaluatie> = getDummyCriteriumEvaluatie()
+
+    init{
+        App.component.inject(this)
+    }
 
 }
 fun getDummyCriterium(): MutableLiveData<Criterium>{
@@ -38,6 +53,11 @@ fun getDummyCriteriumNiveaus(): MutableLiveData<List<Niveau>>{
         Niveau("cn14","Gevorderd", LOREM_2, 12, 15, 1, "c1"),
         Niveau("cn15","Excellerend", LOREM_1, 16, 20, 2, "c1")
     )
+    return result
+}
+fun getInitieelGeselecteerdCriteriumNiveau(): MutableLiveData<Niveau>{
+    var result = MutableLiveData<Niveau>()
+    result.value = Niveau("cn13","Lerend", LOREM_1, 10, 11, 0, "c1")
     return result
 }
 fun getDummyEvaluatie(): MutableLiveData<Evaluatie>{
