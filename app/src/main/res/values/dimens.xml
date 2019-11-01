@@ -2,4 +2,6 @@
 <resources>
     <dimen name="criterium_evaluatie_edge_button_height">35dp</dimen>
     <dimen name="criterium_evaluatie_edge_button_image_height">25dp</dimen>
+    <dimen name="criterium_evaluatie_list_item_normaal_breedte">200dp</dimen>
+    <dimen name="criterium_evaluatie_list_item_normaal_hoogte">275dp</dimen>
 </resources>

@@ -12,6 +12,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 
 import be.hogent.tile3.rubricapplication.R
+import be.hogent.tile3.rubricapplication.adapters.CriteriumEvaluatieListAdapter
+import be.hogent.tile3.rubricapplication.adapters.CriteriumEvaluatieListListener
 import be.hogent.tile3.rubricapplication.databinding.FragmentCriteriumEvaluatieBinding
 import be.hogent.tile3.rubricapplication.ui.CriteriumEvaluatieViewModel
 import be.hogent.tile3.rubricapplication.ui.NiveauViewModel
@@ -43,6 +45,21 @@ class CriteriumEvaluatieFragment : Fragment() {
             binding.scoreNumberPicker.minValue = geselecteerdNiveau.ondergrens
             binding.scoreNumberPicker.maxValue = geselecteerdNiveau.bovengrens
 
+        })
+
+        val adapter =
+            CriteriumEvaluatieListAdapter(CriteriumEvaluatieListListener { niveauId ->
+                criteriumEvaluatieViewModel.onNiveauClicked(niveauId)
+            })
+
+        binding.criteriumNiveausRecycler.adapter = adapter
+
+        criteriumEvaluatieViewModel.criteriumNiveaus.observe(viewLifecycleOwner, Observer {
+            if(!it.isNullOrEmpty()){
+                it.let {
+                    adapter.submitList(it)
+                }
+            }
         })
 
         return binding.root

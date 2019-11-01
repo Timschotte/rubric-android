@@ -38,6 +38,10 @@ class CriteriumEvaluatieViewModel: ViewModel(){
         App.component.inject(this)
     }
 
+    fun onNiveauClicked(niveauId: String){
+        Log.i("CriteriumEvaluatieVM","onNiveauClicked triggered")
+    }
+
 }
 fun getDummyCriterium(): MutableLiveData<Criterium>{
     var result = MutableLiveData<Criterium>()
