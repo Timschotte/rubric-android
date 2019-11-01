@@ -1,14 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+
     tools:context=".fragments.CriteriumEvaluatieFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <data>
+        <variable
+            name="criteriumEvaluatieViewModel"
+            type="be.hogent.tile3.rubricapplication.ui.CriteriumEvaluatieViewModel" />
+    </data>
 
-</FrameLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/criteriumEvaluatieConstraint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/upEdgeButton"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/criterium_evaluatie_edge_button_height"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+            <ImageView
+                android:id="@+id/upEdgeButtonArrowsImage"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/criterium_evaluatie_edge_button_image_height"
+                android:layout_weight="1"
+                android:src="@drawable/arrows_up" />
+        </LinearLayout>
+
+        <HorizontalScrollView
+            android:id="@+id/criteriumNiveausHorizontalScroll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/scoreNumberPicker"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/upEdgeButton">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/criteriumNiveausRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        </HorizontalScrollView>
+
+
+        <NumberPicker
+            android:id="@+id/scoreNumberPicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/criteriumNiveausHorizontalScroll" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/voegCommentaarToeFloatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:src="@android:drawable/ic_menu_edit"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.95"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.90" />
+
+        <LinearLayout
+            android:id="@+id/downEdgeButton"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/criterium_evaluatie_edge_button_height"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+            <ImageView
+                android:id="@+id/downEdgeButtonArrowsImage"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/criterium_evaluatie_edge_button_image_height"
+                android:layout_weight="1"
+                android:src="@drawable/arrows_down" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

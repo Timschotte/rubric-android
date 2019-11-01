@@ -5,6 +5,8 @@
       <module fileurl="file://$PROJECT_DIR$/Projecten-rubric-android-RubricApplication.iml" filepath="$PROJECT_DIR$/Projecten-rubric-android-RubricApplication.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/Projecten-rubric-android-app.iml" filepath="$PROJECT_DIR$/app/Projecten-rubric-android-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/RubricApplication.iml" filepath="$PROJECT_DIR$/RubricApplication.iml" />
+      <module fileurl="file://$PROJECT_DIR$/RubricsAndroid-RubricApplication.iml" filepath="$PROJECT_DIR$/RubricsAndroid-RubricApplication.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/RubricsAndroid-app.iml" filepath="$PROJECT_DIR$/app/RubricsAndroid-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/rubric-android.iml" filepath="$PROJECT_DIR$/.idea/rubric-android.iml" />
       <module fileurl="file://$PROJECT_DIR$/rubric-android-RubricApplication.iml" filepath="$PROJECT_DIR$/rubric-android-RubricApplication.iml" />
