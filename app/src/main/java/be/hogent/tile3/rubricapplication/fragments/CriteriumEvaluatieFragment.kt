@@ -1,6 +1,7 @@
 package be.hogent.tile3.rubricapplication.fragments
 
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -19,6 +20,11 @@ import android.text.InputType
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import androidx.core.graphics.drawable.DrawableCompat
+import android.graphics.drawable.Drawable
+import androidx.appcompat.content.res.AppCompatResources
+
+
 
 
 /**

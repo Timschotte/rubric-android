@@ -21,18 +21,18 @@
             android:id="@+id/upEdgeButton"
             android:layout_width="match_parent"
             android:layout_height="@dimen/criterium_evaluatie_edge_button_height"
+            android:background="@drawable/up_edge_button_background"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/upEdgeButtonArrowsImage"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="@dimen/criterium_evaluatie_edge_button_image_height"
                 android:layout_weight="1"
-                android:src="@drawable/arrows_up" />
+                android:src="@drawable/arrow_up_icon" />
         </LinearLayout>
 
         <androidx.core.widget.NestedScrollView
@@ -70,6 +70,8 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:src="@android:drawable/ic_menu_edit"
+            app:backgroundTint="@color/colorPrimaryLight"
+            app:tint="@color/colorTextOnPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.95"
@@ -93,18 +95,18 @@
             android:id="@+id/downEdgeButton"
             android:layout_width="match_parent"
             android:layout_height="@dimen/criterium_evaluatie_edge_button_height"
+            android:background="@drawable/down_edge_button_background"
             android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
             <ImageView
                 android:id="@+id/downEdgeButtonArrowsImage"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="@dimen/criterium_evaluatie_edge_button_image_height"
                 android:layout_weight="1"
-                android:src="@drawable/arrows_down" />
+                android:src="@drawable/arrow_down_icon" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
