@@ -7,4 +7,7 @@
     <string name="criterium_evaluatie_commentaar_dialog_titel">Commentaar Toevoegen</string>
     <string name="criterium_evaluatie_commentaar_dialog_annuleer">Annuleer</string>
     <string name="criterium_evaluatie_commentaar_dialog_bevestig">Opslaan</string>
+    <string name="criterium_evaluatie_omschrijving_dialog_bevestig">OK</string>
+    <string name="criterium_evaluatie_omschrijving_dialog_titel_default">Criteriumomschrijving</string>
+    <string name="criterium_evaluatie_omschrijving_dialog_omschrijving_default">Dit criterium heeft geen omschrijving.</string>
 </resources>

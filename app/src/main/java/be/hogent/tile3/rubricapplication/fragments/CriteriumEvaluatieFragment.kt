@@ -2,7 +2,6 @@ package be.hogent.tile3.rubricapplication.fragments
 
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,11 +15,10 @@ import be.hogent.tile3.rubricapplication.adapters.CriteriumEvaluatieListAdapter
 import be.hogent.tile3.rubricapplication.adapters.CriteriumEvaluatieListListener
 import be.hogent.tile3.rubricapplication.databinding.FragmentCriteriumEvaluatieBinding
 import be.hogent.tile3.rubricapplication.ui.CriteriumEvaluatieViewModel
-import android.content.DialogInterface
 import android.text.InputType
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.marginLeft
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
 /**
@@ -95,6 +93,16 @@ class CriteriumEvaluatieFragment : Fragment() {
                 { dialog, _ -> dialog.cancel() }
 
             builder.show()
+        }
+
+        binding.toonCriteriumOmschrijvingImageButton.setOnClickListener {
+            MaterialAlertDialogBuilder(context)
+                .setTitle(criteriumEvaluatieViewModel.huidigCriterium.value?.naam
+                    ?: getString(R.string.criterium_evaluatie_omschrijving_dialog_titel_default))
+                .setMessage(criteriumEvaluatieViewModel.huidigCriterium.value?.omschrijving
+                    ?: getString(R.string.criterium_evaluatie_omschrijving_dialog_omschrijving_default))
+                .setPositiveButton(R.string.criterium_evaluatie_omschrijving_dialog_bevestig, null)
+                .show()
         }
 
         return binding.root
