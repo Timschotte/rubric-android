@@ -4,4 +4,13 @@
     <dimen name="criterium_evaluatie_edge_button_image_height">25dp</dimen>
     <dimen name="criterium_evaluatie_list_item_normaal_breedte">200dp</dimen>
     <dimen name="criterium_evaluatie_list_item_normaal_hoogte">275dp</dimen>
+    <dimen name="criterium_evaluatie_list_item_geselecteerd_breedte">225dp</dimen>
+    <dimen name="criterium_evaluatie_list_item_geselecteerd_hoogte">300dp</dimen>
+    <dimen name="criterium_evaluatie_list_item_margin">15dp</dimen>
+    <dimen name="criterium_evaluatie_list_item_padding">10dp</dimen>
+    <dimen name="list_item_normaal_elevation">3dp</dimen>
+    <dimen name="list_item_geselecteerd_z">5dp</dimen>
+    <dimen name="criterium_evaluatie_omschrijving_height">175dp</dimen>
+    <dimen name="criterium_evaluatie_list_item_padding_bottom">20dp</dimen>
+    <dimen name="criterium_evaluatie_list_item_omschrijving_margin_bottom">20dp</dimen>
 </resources>

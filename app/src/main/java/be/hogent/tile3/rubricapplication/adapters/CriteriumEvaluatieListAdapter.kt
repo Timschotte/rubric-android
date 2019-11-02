@@ -2,24 +2,28 @@ package be.hogent.tile3.rubricapplication.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import be.hogent.tile3.rubricapplication.R
 import be.hogent.tile3.rubricapplication.databinding.ListItemNormaalCriteriumEvaluatieBinding
 import be.hogent.tile3.rubricapplication.model.Niveau
+import kotlinx.android.synthetic.main.list_item_normaal_criterium_evaluatie.view.*
 
 // TODO: dependency injection
 class CriteriumEvaluatieListAdapter(val clickListener: CriteriumEvaluatieListListener):
     ListAdapter<Niveau, CriteriumEvaluatieListAdapter.ViewHolder>(CriteriumNiveauListDiffCallback()){
 
-    // Create the contentView
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
     }
 
-    // Fill the item with content and set a click listener.
     override fun onBindViewHolder(holder: ViewHolder, position: Int){
         holder.bind(getItem(position)!!, clickListener)
+        if(holder.binding.niveau?.volgnummer == 0){
+            holder.pasOpmaakGeselecteerdToe()
+        }
     }
 
     class ViewHolder private constructor (val binding: ListItemNormaalCriteriumEvaluatieBinding)
@@ -37,6 +41,17 @@ class CriteriumEvaluatieListAdapter(val clickListener: CriteriumEvaluatieListLis
             binding.niveau = item
             binding.clickListener = clickListener
             binding.executePendingBindings()
+        }
+
+        fun pasOpmaakGeselecteerdToe(){
+            this.itemView.criteriumNiveauLayout.layoutParams.width =
+                this.itemView.context.resources.getDimension(R.dimen.criterium_evaluatie_list_item_geselecteerd_breedte).toInt()
+            this.itemView.criteriumNiveauLayout.layoutParams.height =
+                this.itemView.context.resources.getDimension(R.dimen.criterium_evaluatie_list_item_geselecteerd_hoogte).toInt()
+            this.itemView.criteriumNiveauLayout.background=
+                ContextCompat.getDrawable(this.itemView.context,
+                    R.drawable.list_item_geselecteerd_background)
+            this.itemView.criteriumNiveauLayout.translationZ = this.itemView.context.resources.getDimension(R.dimen.list_item_geselecteerd_z)
         }
     }
 }
