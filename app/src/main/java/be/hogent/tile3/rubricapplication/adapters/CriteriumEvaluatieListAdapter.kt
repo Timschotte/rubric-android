@@ -2,6 +2,7 @@ package be.hogent.tile3.rubricapplication.adapters
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
@@ -35,6 +36,8 @@ class CriteriumEvaluatieListAdapter(val clickListener: CriteriumEvaluatieListLis
             holder.pasOpmaakGeselecteerdToe()
         else
             holder.verwijderOpmaakGeselecteerd()
+        if(holder.binding.niveau?.volgnummer == 0)
+            holder.binding.voldoendeNiveauIcoonImageView.visibility = View.VISIBLE
     }
 
     class ViewHolder private constructor (val binding: ListItemNormaalCriteriumEvaluatieBinding)
