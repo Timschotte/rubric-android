@@ -4,4 +4,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="criterium_evaluatie_commentaar_dialog_titel">Commentaar Toevoegen</string>
+    <string name="criterium_evaluatie_commentaar_dialog_annuleer">Annuleer</string>
+    <string name="criterium_evaluatie_commentaar_dialog_bevestig">Opslaan</string>
 </resources>

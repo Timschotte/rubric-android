@@ -16,7 +16,12 @@ import be.hogent.tile3.rubricapplication.adapters.CriteriumEvaluatieListAdapter
 import be.hogent.tile3.rubricapplication.adapters.CriteriumEvaluatieListListener
 import be.hogent.tile3.rubricapplication.databinding.FragmentCriteriumEvaluatieBinding
 import be.hogent.tile3.rubricapplication.ui.CriteriumEvaluatieViewModel
-import be.hogent.tile3.rubricapplication.ui.NiveauViewModel
+import android.content.DialogInterface
+import android.text.InputType
+import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
+import androidx.core.view.marginLeft
+
 
 /**
  * A simple [Fragment] subclass.
@@ -68,6 +73,29 @@ class CriteriumEvaluatieFragment : Fragment() {
                 adapter.notifyDataSetChanged()
             }
         })
+
+        binding.voegCommentaarToeFloatingActionButton.setOnClickListener {
+            var oudeCommentaar =
+                criteriumEvaluatieViewModel.criteriumEvaluatie.value?.commentaar ?: ""
+
+            val builder = AlertDialog.Builder(this.context!!)
+            builder.setTitle(R.string.criterium_evaluatie_commentaar_dialog_titel)
+
+            val input = EditText(this.context!!)
+            input.inputType = InputType.TYPE_TEXT_FLAG_MULTI_LINE
+            input.setSingleLine(false)
+            input.setText(oudeCommentaar)
+            builder.setView(input)
+
+            builder.setPositiveButton(R.string.criterium_evaluatie_commentaar_dialog_bevestig)
+                { _, _ -> criteriumEvaluatieViewModel.onCommentaarChanged(
+                    oudeCommentaar,
+                    input.text.toString()) }
+            builder.setNegativeButton(R.string.criterium_evaluatie_commentaar_dialog_annuleer)
+                { dialog, _ -> dialog.cancel() }
+
+            builder.show()
+        }
 
         return binding.root
     }

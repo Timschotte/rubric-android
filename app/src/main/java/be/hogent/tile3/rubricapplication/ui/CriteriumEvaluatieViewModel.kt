@@ -52,11 +52,27 @@ class CriteriumEvaluatieViewModel: ViewModel(){
     }
 
     fun onNiveauClicked(niveauId: String, positie: Int){
-        Log.i("CriteriumEvaluatieVM","onNiveauClicked triggered met id " + niveauId + " en positie " + positie)
         geselecteerdCriteriumNiveau.value = criteriumNiveaus.value?.singleOrNull{it.niveauId == niveauId}
         positieGeselecteerdCriteriumNiveau?.value = positie
         criteriumEvaluatie.value?.behaaldNiveau = niveauId
         criteriumEvaluatie.value?.score = geselecteerdCriteriumNiveau.value?.ondergrens ?: 0
+        Log.i("CriteriumEvaluatieVM","Voor criterium " + huidigCriterium.value?.naam +
+                " is het geselecteerde niveau " + criteriumEvaluatie.value?.behaaldNiveau +
+                " met een score van " + criteriumEvaluatie.value?.score +
+                " en commentaar \"" + criteriumEvaluatie.value?.commentaar + "\"")
+        // Todo: persisteren
+    }
+
+    fun onScoreChanged(oudeScore: Int, nieuweScore: Int){
+        Log.i("CriteriumEvaluatieVM", "Numberpicker score veranderd van " + oudeScore + " naar " + nieuweScore)
+        criteriumEvaluatie.value?.score = nieuweScore
+        // Todo: persisteren
+    }
+
+    fun onCommentaarChanged(oudeCommentaar: String, nieuweCommentaar: String){
+        Log.i("CriteriumEvaluatieVM", "Oude commentaar: " + oudeCommentaar + "\nNieuwe commentaar: " + nieuweCommentaar)
+        criteriumEvaluatie.value?.commentaar = nieuweCommentaar
+        // Todo: persisteren
     }
 
 }
