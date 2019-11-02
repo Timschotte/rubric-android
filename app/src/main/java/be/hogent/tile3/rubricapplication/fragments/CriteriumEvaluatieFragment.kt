@@ -48,8 +48,8 @@ class CriteriumEvaluatieFragment : Fragment() {
         })
 
         val adapter =
-            CriteriumEvaluatieListAdapter(CriteriumEvaluatieListListener { niveauId ->
-                criteriumEvaluatieViewModel.onNiveauClicked(niveauId)
+            CriteriumEvaluatieListAdapter(CriteriumEvaluatieListListener { niveauId, position ->
+                criteriumEvaluatieViewModel.onNiveauClicked(niveauId, position)
             })
 
         binding.criteriumNiveausRecycler.adapter = adapter
@@ -59,6 +59,13 @@ class CriteriumEvaluatieFragment : Fragment() {
                 it.let {
                     adapter.submitList(it)
                 }
+            }
+        })
+
+        criteriumEvaluatieViewModel.positieGeselecteerdCriteriumNiveau?.observe(viewLifecycleOwner, Observer{
+            it?.let{
+                adapter.stelPositieGeselecteerdNiveauIn(it)
+                adapter.notifyDataSetChanged()
             }
         })
 

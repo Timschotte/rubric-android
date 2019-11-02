@@ -30,16 +30,33 @@ class CriteriumEvaluatieViewModel: ViewModel(){
 
     val huidigCriterium: LiveData<Criterium> = getDummyCriterium()
     val criteriumNiveaus: LiveData<List<Niveau>> = getDummyCriteriumNiveaus()
-    val geselecteerdCriteriumNiveau: LiveData<Niveau> = getInitieelGeselecteerdCriteriumNiveau()
+    val geselecteerdCriteriumNiveau: MutableLiveData<Niveau> = getInitieelGeselecteerdCriteriumNiveau()
+    val positieGeselecteerdCriteriumNiveau: MutableLiveData<Int> = getInitielePositie()
     val evaluatie: LiveData<Evaluatie> = getDummyEvaluatie()
     val criteriumEvaluatie: LiveData<CriteriumEvaluatie> = getDummyCriteriumEvaluatie()
 
     init{
+        positieGeselecteerdCriteriumNiveau?.value =
+            criteriumNiveaus.value?.indexOf(criteriumNiveaus.value?.singleOrNull{
+                it.niveauId == criteriumEvaluatie.value?.behaaldNiveau})
+        Log.i("CriteriumEvaluatieVM", "Positie geselecteerd critniv: " + positieGeselecteerdCriteriumNiveau.toString())
         App.component.inject(this)
     }
 
-    fun onNiveauClicked(niveauId: String){
-        Log.i("CriteriumEvaluatieVM","onNiveauClicked triggered")
+    // merk op: de observers op positieGeselecteerdCriteriumNiveau werken niet goed als we de initiële
+    // waarde op null zetten
+    fun getInitielePositie(): MutableLiveData<Int>{
+        var result = MutableLiveData<Int>()
+        result.value = -1
+        return result
+    }
+
+    fun onNiveauClicked(niveauId: String, positie: Int){
+        Log.i("CriteriumEvaluatieVM","onNiveauClicked triggered met id " + niveauId + " en positie " + positie)
+        geselecteerdCriteriumNiveau.value = criteriumNiveaus.value?.singleOrNull{it.niveauId == niveauId}
+        positieGeselecteerdCriteriumNiveau?.value = positie
+        criteriumEvaluatie.value?.behaaldNiveau = niveauId
+        criteriumEvaluatie.value?.score = geselecteerdCriteriumNiveau.value?.ondergrens ?: 0
     }
 
 }

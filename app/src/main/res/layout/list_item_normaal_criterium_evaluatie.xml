@@ -8,6 +8,9 @@
             name="niveau"
             type="be.hogent.tile3.rubricapplication.model.Niveau" />
         <variable
+            name="positie"
+            type="Integer" />
+        <variable
             name="clickListener"
             type="be.hogent.tile3.rubricapplication.adapters.CriteriumEvaluatieListListener" />
     </data>
@@ -26,7 +29,7 @@
             android:layout_marginEnd="15dp"
             android:background="@drawable/list_item_normaal_background"
             android:elevation="@dimen/list_item_normaal_elevation"
-            android:onClick="@{() -> clickListener.onClick(niveau)}"
+            android:onClick="@{() -> clickListener.onClick(niveau, positie)}"
             android:orientation="vertical"
             android:padding="@dimen/criterium_evaluatie_list_item_padding"
             app:layout_constraintBottom_toBottomOf="parent"

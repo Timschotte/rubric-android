@@ -1,5 +1,6 @@
 package be.hogent.tile3.rubricapplication.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -15,15 +16,25 @@ import kotlinx.android.synthetic.main.list_item_normaal_criterium_evaluatie.view
 class CriteriumEvaluatieListAdapter(val clickListener: CriteriumEvaluatieListListener):
     ListAdapter<Niveau, CriteriumEvaluatieListAdapter.ViewHolder>(CriteriumNiveauListDiffCallback()){
 
+    // -1 geeft aan dat we in de beginsituatie zitten, en dus het voldoendeNiveau moeten aanduiden
+    private var positieGeselecteerdNiveau: Int = -1
+
+    fun stelPositieGeselecteerdNiveauIn(positieGeselecteerdNiveau: Int){
+        Log.i("CriteriumEvaluatieLA","stelPositiGeselecteerdNiveauIn("+positieGeselecteerdNiveau+")")
+        this.positieGeselecteerdNiveau = positieGeselecteerdNiveau
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int){
-        holder.bind(getItem(position)!!, clickListener)
-        if(holder.binding.niveau?.volgnummer == 0){
+        holder.bind(getItem(position)!!, position, clickListener)
+        Log.i("CriteriumEvaluatieLA","binding position " + position.toString())
+        if(position == positieGeselecteerdNiveau)
             holder.pasOpmaakGeselecteerdToe()
-        }
+        else
+            holder.verwijderOpmaakGeselecteerd()
     }
 
     class ViewHolder private constructor (val binding: ListItemNormaalCriteriumEvaluatieBinding)
@@ -37,8 +48,9 @@ class CriteriumEvaluatieListAdapter(val clickListener: CriteriumEvaluatieListLis
             }
         }
 
-        fun bind(item: Niveau, clickListener: CriteriumEvaluatieListListener) {
+        fun bind(item: Niveau, position: Int, clickListener: CriteriumEvaluatieListListener) {
             binding.niveau = item
+            binding.positie = position
             binding.clickListener = clickListener
             binding.executePendingBindings()
         }
@@ -53,6 +65,17 @@ class CriteriumEvaluatieListAdapter(val clickListener: CriteriumEvaluatieListLis
                     R.drawable.list_item_geselecteerd_background)
             this.itemView.criteriumNiveauLayout.translationZ = this.itemView.context.resources.getDimension(R.dimen.list_item_geselecteerd_z)
         }
+
+        fun verwijderOpmaakGeselecteerd(){
+            this.itemView.criteriumNiveauLayout.layoutParams.width =
+                this.itemView.context.resources.getDimension(R.dimen.criterium_evaluatie_list_item_normaal_breedte).toInt()
+            this.itemView.criteriumNiveauLayout.layoutParams.height =
+                this.itemView.context.resources.getDimension(R.dimen.criterium_evaluatie_list_item_normaal_hoogte).toInt()
+            this.itemView.criteriumNiveauLayout.background=
+                ContextCompat.getDrawable(this.itemView.context,
+                    R.drawable.list_item_normaal_background)
+            this.itemView.criteriumNiveauLayout.translationZ = 0.0F
+        }
     }
 }
 
@@ -66,6 +89,6 @@ class CriteriumNiveauListDiffCallback: DiffUtil.ItemCallback<Niveau>(){
     }
 }
 
-class CriteriumEvaluatieListListener(val clickListener: (niveauId: String) -> Unit){
-    fun onClick(niveau: Niveau) = clickListener(niveau.niveauId)
+class CriteriumEvaluatieListListener(val clickListener: (niveauId: String, position: Int) -> Unit){
+    fun onClick(niveau: Niveau, position: Int) = clickListener(niveau.niveauId, position)
 }

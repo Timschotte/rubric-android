@@ -27,7 +27,7 @@ data class CriteriumEvaluatie(
     // Merk op: we verwachten hier een waarde voor behaaldNiveau. By default is dit het centrale
     // niveau, zodat dit in de GUI bij start goed weergegeven wordt. Dit is het criteriumniveau met
     // volgnummer 0.
-    @ColumnInfo(name = "behaaldNiveau") val behaaldNiveau: String,
-    @ColumnInfo(name = "score") val score: Int?,
-    @ColumnInfo(name = "commentaar") val commentaar: String?
+    @ColumnInfo(name = "behaaldNiveau") var behaaldNiveau: String,
+    @ColumnInfo(name = "score") var score: Int?,
+    @ColumnInfo(name = "commentaar") var commentaar: String?
 )
