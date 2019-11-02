@@ -55,6 +55,8 @@ class CriteriumEvaluatieFragment : Fragment() {
                 criteriumEvaluatieViewModel.onNiveauClicked(niveauId, position)
             })
 
+        binding.criteriumNiveausRecycler.isNestedScrollingEnabled = false
+
         binding.criteriumNiveausRecycler.adapter = adapter
 
         criteriumEvaluatieViewModel.criteriumNiveaus.observe(viewLifecycleOwner, Observer {

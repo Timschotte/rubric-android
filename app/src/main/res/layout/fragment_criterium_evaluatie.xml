@@ -35,7 +35,7 @@
                 android:src="@drawable/arrows_up" />
         </LinearLayout>
 
-        <HorizontalScrollView
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/criteriumNiveausHorizontalScroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -46,11 +46,11 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/criteriumNiveausRecycler"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-        </HorizontalScrollView>
+        </androidx.core.widget.NestedScrollView>
 
 
         <NumberPicker
