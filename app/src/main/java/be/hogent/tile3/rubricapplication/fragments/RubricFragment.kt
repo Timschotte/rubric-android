@@ -37,7 +37,7 @@ class RubricFragment : Fragment() {
         val rootView = inflater.inflate(R.layout.fragment_rubric, container, false)
 
         arguments?.let {
-            rubric = it.getSerializable(ARG_RUBRIC) as Rubric
+            rubric = it.getParcelable(ARG_RUBRIC) as Rubric
         }
 
         return rootView
