@@ -17,14 +17,16 @@ import be.hogent.tile3.rubricapplication.adapters.CriteriumEvaluatieListListener
 import be.hogent.tile3.rubricapplication.databinding.FragmentCriteriumEvaluatieBinding
 import be.hogent.tile3.rubricapplication.ui.CriteriumEvaluatieViewModel
 import android.text.InputType
+import android.util.Log
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
+import be.hogent.tile3.rubricapplication.ui.CriteriumOverzichtViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import javax.inject.Inject
 
 
-
-
-class CriteriumEvaluatieFragment : Fragment() {
+class CriteriumEvaluatieFragment(val criteriumOverzichtViewModel: CriteriumOverzichtViewModel?)
+        : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +38,11 @@ class CriteriumEvaluatieFragment : Fragment() {
             container,
             false
         )
+
+
+        criteriumOverzichtViewModel?.geselecteerdCriterium?.observe(viewLifecycleOwner, Observer{
+            Log.i("CriteriumEvaluatieFrag","Received Criterium " + it.naam + " (" + it.criteriumId + ")")
+        })
 
         val criteriumEvaluatieViewModel = ViewModelProviders.of(this).get(
             CriteriumEvaluatieViewModel::class.java)

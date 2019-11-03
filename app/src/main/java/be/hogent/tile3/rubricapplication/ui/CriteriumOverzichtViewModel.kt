@@ -21,9 +21,11 @@ class CriteriumOverzichtViewModel: ViewModel(){
     // todo: evaluatierepository maken en injecteren
     // todo: criteriumevaluatierepository maken en injecteren
 
-    val huidigeRubric: MediatorLiveData<Rubric> = getDummyRubric()
-    val huidigeEvaluatie: MutableLiveData<Evaluatie> = getDummyEvaluatie()
-    val rubricCriteria: MediatorLiveData<List<Criterium>> = getDummyCriteria()
+    //val huidigeEvaluatie: MediatorLiveData<Evaluatie>
+
+    private val _rubricCriteria: MediatorLiveData<List<Criterium>> = getDummyCriteria()
+    val rubricCriteria: LiveData<List<Criterium>>
+        get() = _rubricCriteria
 
     private val _geselecteerdCriterium: MutableLiveData<Criterium> = getInitieelGeselecteerdCriterium()
     val geselecteerdCriterium: LiveData<Criterium>
