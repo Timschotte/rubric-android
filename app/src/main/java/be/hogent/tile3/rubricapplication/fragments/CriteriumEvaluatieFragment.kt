@@ -51,8 +51,10 @@ class CriteriumEvaluatieFragment : Fragment() {
         criteriumEvaluatieViewModel.geselecteerdCriteriumNiveau.observe(viewLifecycleOwner, Observer{
                 geselecteerdNiveau ->
             // NumberPicker minValue en maxValue niet mogelijk via databinding
-            binding.scoreNumberPicker.minValue = geselecteerdNiveau.ondergrens
-            binding.scoreNumberPicker.maxValue = geselecteerdNiveau.bovengrens
+            geselecteerdNiveau?.let {
+                binding.scoreNumberPicker.minValue = geselecteerdNiveau.ondergrens
+                binding.scoreNumberPicker.maxValue = geselecteerdNiveau.bovengrens
+            }
 
         })
 

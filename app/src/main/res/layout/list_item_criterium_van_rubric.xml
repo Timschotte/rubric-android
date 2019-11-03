@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="criterium"
+            type="be.hogent.tile3.rubricapplication.model.Criterium" />
+        <variable
+            name="clickListener"
+            type="be.hogent.tile3.rubricapplication.adapters.CriteriaListListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:onClick="@{() -> clickListener.onClick(criterium)}">
+
+        <TextView
+            android:id="@+id/criteriumNaamTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:criteriumNaam="@{criterium}"
+            app:layout_constraintBottom_toTopOf="@id/criteriumGewichtLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@tools:sample/lorem" />
+
+        <TextView
+            android:id="@+id/criteriumGewichtLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/list_item_criterium_van_rubric_gewicht_label_text"
+            android:textStyle="bold|italic"
+            app:layout_constraintBottom_toTopOf="@id/criteriumOmschrijvingTextView"
+            app:layout_constraintEnd_toStartOf="@id/criteriumGewichtTextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/criteriumNaamTextView" />
+
+        <TextView
+            android:id="@+id/criteriumGewichtTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:textAlignment="textStart"
+            android:textSize="18sp"
+            android:textStyle="italic"
+            app:criteriumGewicht="@{criterium}"
+            app:layout_constraintBaseline_toBaselineOf="@+id/criteriumGewichtLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/criteriumGewichtLabel"
+            tools:text="@string/list_item_criterium_van_rubric_gewicht_tool_text" />
+
+        <TextView
+            android:id="@+id/criteriumOmschrijvingTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:maxLines="3"
+            android:minLines="1"
+            android:textSize="18sp"
+            android:textStyle="italic"
+            app:criteriumOmschrijving="@{criterium}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/criteriumNaamTextView"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="@tools:sample/lorem/random" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/criteriumOmschrijvingTextView"
+            tools:layout_editor_absoluteX="-5dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
