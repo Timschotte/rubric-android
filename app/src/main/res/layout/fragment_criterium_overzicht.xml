@@ -14,8 +14,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
             android:background="@drawable/criterium_overzicht_rand"
+            android:orientation="horizontal"
             android:paddingRight="8dp">
 
             <androidx.recyclerview.widget.RecyclerView
@@ -27,20 +27,11 @@
             </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <FrameLayout
+            android:id="@+id/criterium_evaluatie_fragment_container"
+            android:name="be.hogent.tile3.rubricapplication.fragments.CriteriumEvaluatieFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hello Fragment Criterium Overzicht...."
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 

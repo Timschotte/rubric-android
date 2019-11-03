@@ -20,16 +20,10 @@ import android.text.InputType
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import androidx.core.graphics.drawable.DrawableCompat
-import android.graphics.drawable.Drawable
-import androidx.appcompat.content.res.AppCompatResources
 
 
 
 
-/**
- * A simple [Fragment] subclass.
- */
 class CriteriumEvaluatieFragment : Fragment() {
 
     override fun onCreateView(
@@ -117,6 +111,5 @@ class CriteriumEvaluatieFragment : Fragment() {
 
         return binding.root
     }
-
 
 }

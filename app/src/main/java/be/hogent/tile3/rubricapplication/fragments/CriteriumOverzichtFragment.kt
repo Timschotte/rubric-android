@@ -57,4 +57,12 @@ class CriteriumOverzichtFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val criteriumEvaluatieFragment = CriteriumEvaluatieFragment()
+        val transaction = childFragmentManager.beginTransaction()
+        transaction.replace(R.id.criterium_evaluatie_fragment_container, criteriumEvaluatieFragment).commit()
+    }
+
 }
