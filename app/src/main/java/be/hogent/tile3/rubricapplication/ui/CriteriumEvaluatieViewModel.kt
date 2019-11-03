@@ -40,8 +40,6 @@ class CriteriumEvaluatieViewModel: ViewModel(){
     val positieGeselecteerdCriteriumNiveau: LiveData<Int>
         get() = _positieGeselecteerdCriteriumNiveau
 
-    private val evaluatie: LiveData<Evaluatie> = getDummyEvaluatie()
-
     private val _criteriumEvaluatie: LiveData<CriteriumEvaluatie> = getDummyCriteriumEvaluatie()
     val criteriumEvaluatie: LiveData<CriteriumEvaluatie>
         get() = _criteriumEvaluatie
