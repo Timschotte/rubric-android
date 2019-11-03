@@ -29,13 +29,14 @@ class CriteriumEvaluatieViewModel: ViewModel(){
     // Voorlopig zet ik hier dummy data, te vervangen met LiveData uit de Repositories
 
     val huidigCriterium: LiveData<Criterium> = getDummyCriterium()
-    val criteriumNiveaus: LiveData<List<Niveau>> = getDummyCriteriumNiveaus()
+    val criteriumNiveaus: LiveData<List<Niveau>> = getDummyCriteriumNiveausVoorEvaluatieFragment()
     val geselecteerdCriteriumNiveau: MutableLiveData<Niveau> = getInitieelGeselecteerdCriteriumNiveau()
     val positieGeselecteerdCriteriumNiveau: MutableLiveData<Int> = getInitielePositie()
     val evaluatie: LiveData<Evaluatie> = getDummyEvaluatie()
     val criteriumEvaluatie: LiveData<CriteriumEvaluatie> = getDummyCriteriumEvaluatie()
 
     init{
+        // TODO: zorgen dat numberpicker direct goed staat bij lanceren evaluatie voor criterium
         positieGeselecteerdCriteriumNiveau?.value =
             criteriumNiveaus.value?.indexOf(criteriumNiveaus.value?.singleOrNull{
                 it.niveauId == criteriumEvaluatie.value?.behaaldNiveau})
@@ -48,6 +49,12 @@ class CriteriumEvaluatieViewModel: ViewModel(){
     fun getInitielePositie(): MutableLiveData<Int>{
         var result = MutableLiveData<Int>()
         result.value = -1
+        return result
+    }
+
+    fun getInitieelGeselecteerdCriteriumNiveau(): MutableLiveData<Niveau>{
+        var result = MutableLiveData<Niveau>()
+        result.value = null //Niveau("cn13","Lerend", LOREM_1, 10, 11, 0, "c1")
         return result
     }
 
@@ -81,7 +88,7 @@ fun getDummyCriterium(): MutableLiveData<Criterium>{
     result.value = Criterium("c1","Android Programmeren", "Evaluatie van de Android programming skillz van de student. Ongetwijfeld zijn die super-awesome shizzle.", 0.2, "r1")
     return result
 }
-fun getDummyCriteriumNiveaus(): MutableLiveData<List<Niveau>>{
+fun getDummyCriteriumNiveausVoorEvaluatieFragment(): MutableLiveData<List<Niveau>>{
     var result = MutableLiveData<List<Niveau>>()
     result.value = listOf(
         Niveau("cn11","Ontoereikend", LOREM_3, 0, 6, -2, "c1"),
@@ -90,16 +97,6 @@ fun getDummyCriteriumNiveaus(): MutableLiveData<List<Niveau>>{
         Niveau("cn14","Gevorderd", LOREM_2, 12, 15, 1, "c1"),
         Niveau("cn15","Excellerend", LOREM_1, 16, 20, 2, "c1")
     )
-    return result
-}
-fun getInitieelGeselecteerdCriteriumNiveau(): MutableLiveData<Niveau>{
-    var result = MutableLiveData<Niveau>()
-    result.value = Niveau("cn13","Lerend", LOREM_1, 10, 11, 0, "c1")
-    return result
-}
-fun getDummyEvaluatie(): MutableLiveData<Evaluatie>{
-    var result = MutableLiveData<Evaluatie>()
-    result.value = Evaluatie("e1", "s1", "r1")
     return result
 }
 fun getDummyCriteriumEvaluatie(): MutableLiveData<CriteriumEvaluatie>{

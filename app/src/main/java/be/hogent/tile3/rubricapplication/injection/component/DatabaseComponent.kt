@@ -16,5 +16,6 @@ interface DatabaseComponent {
     fun inject(rubricViewModel: RubricViewModel)
     fun inject(criteriumViewModel: CriteriumViewModel)
     fun inject(niveauViewModel: NiveauViewModel)
+    fun inject(criteriumOverzichtViewModel: CriteriumOverzichtViewModel)
     fun inject(criteriumEvaluatieViewModel: CriteriumEvaluatieViewModel)
 }

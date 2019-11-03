@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import be.hogent.tile3.rubricapplication.R
 import be.hogent.tile3.rubricapplication.fragments.CriteriumEvaluatieFragment
+import be.hogent.tile3.rubricapplication.fragments.CriteriumOverzichtFragment
 import be.hogent.tile3.rubricapplication.fragments.MainFragment
 
 class MainActivity : AppCompatActivity(){
@@ -15,7 +16,7 @@ class MainActivity : AppCompatActivity(){
         setContentView(R.layout.activity_main)
 
         //val mainFragment: MainFragment = MainFragment()
-        val mainFragment: CriteriumEvaluatieFragment = CriteriumEvaluatieFragment()
+        val mainFragment = CriteriumOverzichtFragment()
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.main_container, mainFragment)

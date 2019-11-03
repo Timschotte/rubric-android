@@ -10,4 +10,6 @@
     <string name="criterium_evaluatie_omschrijving_dialog_bevestig">OK</string>
     <string name="criterium_evaluatie_omschrijving_dialog_titel_default">Criteriumomschrijving</string>
     <string name="criterium_evaluatie_omschrijving_dialog_omschrijving_default">Dit criterium heeft geen omschrijving.</string>
+    <string name="list_item_criterium_van_rubric_gewicht_label_text">Gewicht: </string>
+    <string name="list_item_criterium_van_rubric_gewicht_tool_text">2.5</string>
 </resources>
