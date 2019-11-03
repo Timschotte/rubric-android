@@ -29,15 +29,26 @@ class CriteriumEvaluatieViewModel: ViewModel(){
     // Voorlopig zet ik hier dummy data, te vervangen met LiveData uit de Repositories
 
     val huidigCriterium: LiveData<Criterium> = getDummyCriterium()
+
     val criteriumNiveaus: LiveData<List<Niveau>> = getDummyCriteriumNiveausVoorEvaluatieFragment()
-    val geselecteerdCriteriumNiveau: MutableLiveData<Niveau> = getInitieelGeselecteerdCriteriumNiveau()
-    val positieGeselecteerdCriteriumNiveau: MutableLiveData<Int> = getInitielePositie()
-    val evaluatie: LiveData<Evaluatie> = getDummyEvaluatie()
-    val criteriumEvaluatie: LiveData<CriteriumEvaluatie> = getDummyCriteriumEvaluatie()
+
+    private val _geselecteerdCriteriumNiveau: MutableLiveData<Niveau> = getInitieelGeselecteerdCriteriumNiveau()
+    val geselecteerdCriteriumNiveau: LiveData<Niveau>
+        get() = _geselecteerdCriteriumNiveau
+
+    private val _positieGeselecteerdCriteriumNiveau: MutableLiveData<Int> = getInitielePositie()
+    val positieGeselecteerdCriteriumNiveau: LiveData<Int>
+        get() = _positieGeselecteerdCriteriumNiveau
+
+    private val evaluatie: LiveData<Evaluatie> = getDummyEvaluatie()
+
+    private val _criteriumEvaluatie: LiveData<CriteriumEvaluatie> = getDummyCriteriumEvaluatie()
+    val criteriumEvaluatie: LiveData<CriteriumEvaluatie>
+        get() = _criteriumEvaluatie
 
     init{
         // TODO: zorgen dat numberpicker direct goed staat bij lanceren evaluatie voor criterium
-        positieGeselecteerdCriteriumNiveau?.value =
+        _positieGeselecteerdCriteriumNiveau?.value =
             criteriumNiveaus.value?.indexOf(criteriumNiveaus.value?.singleOrNull{
                 it.niveauId == criteriumEvaluatie.value?.behaaldNiveau})
         Log.i("CriteriumEvaluatieVM", "Positie geselecteerd critniv: " + positieGeselecteerdCriteriumNiveau.toString())
@@ -59,8 +70,8 @@ class CriteriumEvaluatieViewModel: ViewModel(){
     }
 
     fun onNiveauClicked(niveauId: String, positie: Int){
-        geselecteerdCriteriumNiveau.value = criteriumNiveaus.value?.singleOrNull{it.niveauId == niveauId}
-        positieGeselecteerdCriteriumNiveau?.value = positie
+        _geselecteerdCriteriumNiveau.value = criteriumNiveaus.value?.singleOrNull{it.niveauId == niveauId}
+        _positieGeselecteerdCriteriumNiveau?.value = positie
         criteriumEvaluatie.value?.behaaldNiveau = niveauId
         criteriumEvaluatie.value?.score = geselecteerdCriteriumNiveau.value?.ondergrens ?: 0
         Log.i("CriteriumEvaluatieVM","Voor criterium " + huidigCriterium.value?.naam +

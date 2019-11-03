@@ -21,4 +21,6 @@ data class Evaluatie(
     @PrimaryKey @ColumnInfo(name = "evaluatieId") val evaluatieId: String,
     @ColumnInfo(name = "studentId") val studentId: String,
     @ColumnInfo(name = "rubricId") val rubricId: String
+    // TODO: toevoegen docent en data (aanmaak, wijziging)
+    // TODO: lijst criteriumevaluaties inzetten
 )

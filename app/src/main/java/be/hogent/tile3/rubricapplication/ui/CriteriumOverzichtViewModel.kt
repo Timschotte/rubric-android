@@ -1,5 +1,6 @@
 package be.hogent.tile3.rubricapplication.ui
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -23,11 +24,17 @@ class CriteriumOverzichtViewModel: ViewModel(){
     val huidigeRubric: MediatorLiveData<Rubric> = getDummyRubric()
     val huidigeEvaluatie: MutableLiveData<Evaluatie> = getDummyEvaluatie()
     val rubricCriteria: MediatorLiveData<List<Criterium>> = getDummyCriteria()
-    val geselecteerdCriterium: MutableLiveData<Criterium> = getInitieelGeselecteerdCriterium()
-    val positieGeselecteerdCriteriumNiveau: MutableLiveData<Int> = getInitielePositie()
+
+    private val _geselecteerdCriterium: MutableLiveData<Criterium> = getInitieelGeselecteerdCriterium()
+    val geselecteerdCriterium: LiveData<Criterium>
+        get() = _geselecteerdCriterium
+
+    private val _positieGeselecteerdCriterium: MutableLiveData<Int> = getInitielePositie()
+    val positieGeselecteerdCriterium: LiveData<Int>
+        get() = _positieGeselecteerdCriterium
 
     init{
-        geselecteerdCriterium.value = rubricCriteria.value?.get(0)
+        _geselecteerdCriterium.value = rubricCriteria.value?.get(0)
         App.component.inject(this)
     }
 
@@ -41,6 +48,16 @@ class CriteriumOverzichtViewModel: ViewModel(){
         var result = MutableLiveData<Criterium>()
         result.value = Criterium("", "", "", 0.0, "")
         return result
+    }
+
+    fun onCriteriumClicked(criteriumId: String, positie: Int){
+        _geselecteerdCriterium.value = rubricCriteria.value?.singleOrNull{it.criteriumId == criteriumId}
+        _positieGeselecteerdCriterium?.value = positie
+
+        Log.i("CriteriumOverzichtVM","Criterium " + geselecteerdCriterium.value?.naam +
+                " op positie " + positieGeselecteerdCriterium.value.toString() +
+                " werd geselecteerd.")
+        // Todo: persisteren
     }
 
 }

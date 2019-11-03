@@ -14,9 +14,7 @@ import androidx.lifecycle.ViewModelProviders
 import be.hogent.tile3.rubricapplication.R
 import be.hogent.tile3.rubricapplication.adapters.CriteriaListListener
 import be.hogent.tile3.rubricapplication.adapters.CriteriumOverzichtListAdapter
-import be.hogent.tile3.rubricapplication.databinding.FragmentCriteriumEvaluatieBinding
 import be.hogent.tile3.rubricapplication.databinding.FragmentCriteriumOverzichtBinding
-import be.hogent.tile3.rubricapplication.ui.CriteriumEvaluatieViewModel
 import be.hogent.tile3.rubricapplication.ui.CriteriumOverzichtViewModel
 
 /**
@@ -39,8 +37,9 @@ class CriteriumOverzichtFragment : Fragment() {
             CriteriumOverzichtViewModel::class.java)
 
         val adapter =
-            CriteriumOverzichtListAdapter(CriteriaListListener { criteriumId ->
-                Log.i("CriteriumOverzichtFrag","")
+            CriteriumOverzichtListAdapter(CriteriaListListener { criteriumId, positie ->
+                Log.i("CriteriumOverzichtFrag","Geklikt op criterium met id " + criteriumId + "en positie " + positie)
+                criteriumOverzichtViewModel.onCriteriumClicked(criteriumId, positie)
             })
 
         binding.rubricCriteriaListRecycler.adapter = adapter
@@ -49,6 +48,13 @@ class CriteriumOverzichtFragment : Fragment() {
             Log.i("CriteriumOverzichtFrag", "New rubricCriteria list received, size: " + it?.size)
             it?.let{
                 adapter.submitList(it)
+            }
+        })
+
+        criteriumOverzichtViewModel.positieGeselecteerdCriterium.observe(viewLifecycleOwner, Observer{
+            it?.let{
+                adapter.stelPositieGeselecteerdCriteriumIn(it)
+                adapter.notifyDataSetChanged()
             }
         })
 
@@ -64,5 +70,7 @@ class CriteriumOverzichtFragment : Fragment() {
         val transaction = childFragmentManager.beginTransaction()
         transaction.replace(R.id.criterium_evaluatie_fragment_container, criteriumEvaluatieFragment).commit()
     }
+
+
 
 }

@@ -8,15 +8,19 @@
             name="criterium"
             type="be.hogent.tile3.rubricapplication.model.Criterium" />
         <variable
+            name="positie"
+            type="Integer" />
+        <variable
             name="clickListener"
             type="be.hogent.tile3.rubricapplication.adapters.CriteriaListListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/criteriumLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:onClick="@{() -> clickListener.onClick(criterium)}">
+        android:onClick="@{() -> clickListener.onClick(criterium, positie)}"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/criteriumNaamTextView"
