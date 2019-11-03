@@ -22,6 +22,7 @@ import androidx.room.PrimaryKey
 ), tableName = "criterium_evaluatie_table")
 data class CriteriumEvaluatie(
     @PrimaryKey @ColumnInfo(name = "criteriumEvaluatieId") val criteriumEvaluatieId: String,
+    // TODO: weghalen evaluatieId
     @ColumnInfo(name = "evaluatieId") val evaluatieId: String,
     @ColumnInfo(name = "criteriumId") val criteriumId: String,
     // Merk op: we verwachten hier een waarde voor behaaldNiveau. By default is dit het centrale

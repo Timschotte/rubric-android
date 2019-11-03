@@ -2,15 +2,26 @@ package be.hogent.tile3.rubricapplication.adapters
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import be.hogent.tile3.rubricapplication.R
 import be.hogent.tile3.rubricapplication.databinding.ListItemCriteriumVanRubricBinding
 import be.hogent.tile3.rubricapplication.model.Criterium
+import kotlinx.android.synthetic.main.list_item_criterium_van_rubric.view.*
 
 class CriteriumOverzichtListAdapter(val clickListener: CriteriaListListener):
     ListAdapter<Criterium, CriteriumOverzichtListAdapter.ViewHolder>(CriteriaListDiffCallback()){
+
+    private var positieGeselecteerdCriterium: Int = -1
+
+    fun stelPositieGeselecteerdCriteriumIn(positieGeselecteerdNiveau: Int){
+        Log.i("CriteriumEvaluatieLA","stelPositiGeselecteerdNiveauIn("+positieGeselecteerdNiveau+")")
+        this.positieGeselecteerdCriterium = positieGeselecteerdNiveau
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         Log.i("CriteriumOverzichtLA", "Creating viewholder...")
@@ -19,7 +30,11 @@ class CriteriumOverzichtListAdapter(val clickListener: CriteriaListListener):
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int){
         Log.i("CriteriumOverzichtLA", "binding viewholder for position " + position)
-        holder.bind(getItem(position)!!, clickListener)
+        holder.bind(getItem(position)!!, position, clickListener)
+        if(position == positieGeselecteerdCriterium)
+            holder.pasOpmaakGeselecteerdToe()
+        else
+            holder.verwijderOpmaakGeselecteerd()
     }
 
     class ViewHolder private constructor (val binding: ListItemCriteriumVanRubricBinding)
@@ -34,11 +49,23 @@ class CriteriumOverzichtListAdapter(val clickListener: CriteriaListListener):
             }
         }
 
-        fun bind(item: Criterium, clickListener: CriteriaListListener) {
+        fun bind(item: Criterium, position: Int, clickListener: CriteriaListListener) {
             Log.i("CriteriumOverzichtLA", "Binding criterium " + item.naam)
             binding.criterium = item
+            binding.positie = position
             binding.clickListener = clickListener
             binding.executePendingBindings()
+        }
+
+        fun pasOpmaakGeselecteerdToe(){
+            this.itemView.criteriumLayout.background = ContextCompat
+                .getDrawable(this.itemView.context, R.drawable.list_item_geselecteerd_background)
+            this.itemView.divider.visibility = View.INVISIBLE
+        }
+
+        fun verwijderOpmaakGeselecteerd(){
+            this.itemView.background = null
+            this.itemView.divider.visibility = View.VISIBLE
         }
     }
 }
@@ -58,6 +85,6 @@ class CriteriaListDiffCallback: DiffUtil.ItemCallback<Criterium>(){
     }
 }
 
-class CriteriaListListener(val clickListener: (criteriumId: String) -> Unit){
-    fun onClick(criterium: Criterium) = clickListener(criterium.criteriumId)
+class CriteriaListListener(val clickListener: (criteriumId: String, position: Int) -> Unit){
+    fun onClick(criterium: Criterium, position: Int) = clickListener(criterium.criteriumId, position)
 }
