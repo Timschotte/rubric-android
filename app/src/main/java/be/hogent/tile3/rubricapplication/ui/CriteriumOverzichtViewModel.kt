@@ -35,8 +35,16 @@ class CriteriumOverzichtViewModel: ViewModel(){
     val positieGeselecteerdCriterium: LiveData<Int>
         get() = _positieGeselecteerdCriterium
 
+    // Variabele wordt gebruikt om performantieredenen; zo moet de grootte van de lijst criteriu
+    // slechts 1x berekend worden tijdens een evaluatie.
+    private val _positieLaatsteCriterium: MutableLiveData<Int> = getInitielePositie()
+    val positieLaatsteCriterium: LiveData<Int>
+        get() = _positieLaatsteCriterium
+
     init{
         _geselecteerdCriterium.value = rubricCriteria.value?.get(0)
+        var grootteRubricCriteria: Int? = rubricCriteria.value?.size
+        _positieLaatsteCriterium.value = if(grootteRubricCriteria == null) 0 else (grootteRubricCriteria -1)
         App.component.inject(this)
     }
 
@@ -61,6 +69,33 @@ class CriteriumOverzichtViewModel: ViewModel(){
                 " werd geselecteerd.")
         // Todo: persisteren
     }
+
+    fun onUpEdgeButtonClicked(){
+        Log.i("CriteriumEvaluatieVM","Up Edge Button Clicked")
+        onEdgeButtonClicked(Direction.UP)
+    }
+
+    fun onDownEdgeButtonClicked(){
+        Log.i("CriteriumEvaluatieVM","Down Edge Button Clicked")
+        onEdgeButtonClicked(Direction.DOWN)
+    }
+
+    private enum class Direction{
+        UP,
+        DOWN
+    }
+
+    private fun onEdgeButtonClicked(direction: Direction){
+        var oudePositie: Int? = positieGeselecteerdCriterium.value
+        var nieuwePositie: Int = if(oudePositie == null) 0 else {
+            if(direction == Direction.UP) oudePositie -1 else oudePositie +1
+        }
+
+        _geselecteerdCriterium.value = rubricCriteria.value?.get(nieuwePositie)
+
+        _positieGeselecteerdCriterium?.value = nieuwePositie
+    }
+
 
 }
 

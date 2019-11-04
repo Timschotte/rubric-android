@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.model.Criterium
 import be.hogent.tile3.rubricapplication.model.CriteriumEvaluatie
-import be.hogent.tile3.rubricapplication.model.Evaluatie
 import be.hogent.tile3.rubricapplication.model.Niveau
 import be.hogent.tile3.rubricapplication.persistence.CriteriumRepository
 import be.hogent.tile3.rubricapplication.persistence.NiveauRepository
@@ -28,7 +27,7 @@ class CriteriumEvaluatieViewModel: ViewModel(){
     //         kunnen ingeven
     // Voorlopig zet ik hier dummy data, te vervangen met LiveData uit de Repositories
 
-    val huidigCriterium: LiveData<Criterium> = getDummyCriterium()
+    //val huidigCriterium: LiveData<Criterium> = getDummyCriterium()
 
     val criteriumNiveaus: LiveData<List<Niveau>> = getDummyCriteriumNiveausVoorEvaluatieFragment()
 
@@ -72,7 +71,7 @@ class CriteriumEvaluatieViewModel: ViewModel(){
         _positieGeselecteerdCriteriumNiveau?.value = positie
         criteriumEvaluatie.value?.behaaldNiveau = niveauId
         criteriumEvaluatie.value?.score = geselecteerdCriteriumNiveau.value?.ondergrens ?: 0
-        Log.i("CriteriumEvaluatieVM","Voor criterium " + huidigCriterium.value?.naam +
+        Log.i("CriteriumEvaluatieVM","Voor criterium " +
                 " is het geselecteerde niveau " + criteriumEvaluatie.value?.behaaldNiveau +
                 " met een score van " + criteriumEvaluatie.value?.score +
                 " en commentaar \"" + criteriumEvaluatie.value?.commentaar + "\"")
