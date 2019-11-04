@@ -17,4 +17,7 @@
     <dimen name="criterium_overzicht_list_item_omschrijving_height">50dp</dimen>
     <dimen name="criterium_overzicht_recycler_width">375dp</dimen>
     <dimen name="criterium_overzicht_list_item_criteriumnaamtextview_width">275dp</dimen>
+    <dimen name="criteria_overzicht_width">350dp</dimen>
+    <dimen name="criteria_overzicht_translationX">-295dp</dimen>
+    <dimen name="criteria_overzicht_ingeklapt_breedte">55dp</dimen>
 </resources>
