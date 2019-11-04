@@ -13,6 +13,8 @@ import be.hogent.tile3.rubricapplication.databinding.ListItemCriteriumVanRubricB
 import be.hogent.tile3.rubricapplication.model.Criterium
 import kotlinx.android.synthetic.main.list_item_criterium_van_rubric.view.*
 
+const val OMSCHRIJVING_MAX_LIJNEN: Int = 3
+
 class CriteriumOverzichtListAdapter(val clickListener: CriteriaListListener):
     ListAdapter<Criterium, CriteriumOverzichtListAdapter.ViewHolder>(CriteriaListDiffCallback()){
 
@@ -54,6 +56,19 @@ class CriteriumOverzichtListAdapter(val clickListener: CriteriaListListener):
             binding.criterium = item
             binding.positie = position
             binding.clickListener = clickListener
+            // zorgen dat bij het opnieuw binden van de viewholders, bv. als de gebruiker een
+            // ander criterium in de lijst selecteert, dat de tekst terug inklapt.
+            binding.criteriumOmschrijvingTextView.maxLines = OMSCHRIJVING_MAX_LIJNEN
+            binding.criteriumOmschrijvingTextView.setOnLongClickListener {
+                var numLines = it.criteriumOmschrijvingTextView.maxLines
+                if(numLines == OMSCHRIJVING_MAX_LIJNEN)
+                    it.criteriumOmschrijvingTextView.maxLines = Int.MAX_VALUE
+                else
+                    it.criteriumOmschrijvingTextView.maxLines = OMSCHRIJVING_MAX_LIJNEN
+                // setOnLongClickListener vereist een Boolean als return om aan te geven dat het
+                // event consumed werd
+                true
+            }
             binding.executePendingBindings()
         }
 
