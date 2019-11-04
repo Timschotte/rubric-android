@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -15,8 +16,11 @@ import be.hogent.tile3.rubricapplication.R
 import be.hogent.tile3.rubricapplication.adapters.CriteriaListListener
 import be.hogent.tile3.rubricapplication.adapters.CriteriumOverzichtListAdapter
 import be.hogent.tile3.rubricapplication.databinding.FragmentCriteriumOverzichtBinding
-import be.hogent.tile3.rubricapplication.injection.component.ViewModelInjectorComponent
 import be.hogent.tile3.rubricapplication.ui.CriteriumOverzichtViewModel
+import android.animation.ObjectAnimator
+import android.animation.AnimatorSet
+import android.animation.ValueAnimator
+
 
 /**
  * A simple [Fragment] subclass.
@@ -24,6 +28,8 @@ import be.hogent.tile3.rubricapplication.ui.CriteriumOverzichtViewModel
 class CriteriumOverzichtFragment : Fragment() {
 
     private var criteriumOverzichtViewModel: CriteriumOverzichtViewModel? = null
+
+    private var overzichtPaneelIngeklapt = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,6 +67,66 @@ class CriteriumOverzichtFragment : Fragment() {
             }
         })
 
+        binding.klapInKlapUitButton.setOnClickListener{
+            val animOverzichtBalk = ObjectAnimator.ofFloat(
+                binding.criteriumEvaluatieOverzichtBalk,
+                "translationX",
+                binding.criteriumEvaluatieOverzichtBalk.translationX,
+                if(!overzichtPaneelIngeklapt)
+                binding.criteriumEvaluatieOverzichtBalk.translationX + resources
+                    .getDimensionPixelOffset(R.dimen.criteria_overzicht_translationX)
+                    .toFloat()
+                else
+                    0.0F
+            )
+
+            val animCriteriumEvaluatieFramePositie = ObjectAnimator.ofFloat(
+                binding.criteriumEvaluatieFragmentContainer,
+                "translationX",
+                binding.criteriumEvaluatieFragmentContainer.translationX,
+                if(!overzichtPaneelIngeklapt)
+                    binding.criteriumEvaluatieFragmentContainer.translationX + resources
+                        .getDimensionPixelOffset(R.dimen.criteria_overzicht_translationX)
+                        .toFloat()
+                else
+                    0.0F
+            )
+
+            val animCriteriumEvaluatieFrameBreedte = ValueAnimator.ofInt(
+                binding.criteriumEvaluatieFragmentContainer.measuredWidth,
+                if(!overzichtPaneelIngeklapt)
+                    binding.criteriumOverzichtFragmentWrapper.width - resources
+                        .getDimensionPixelOffset(R.dimen.criteria_overzicht_ingeklapt_breedte)
+                else
+                    binding.criteriumOverzichtFragmentWrapper.width + resources
+                    .getDimensionPixelOffset(R.dimen.criteria_overzicht_translationX) - resources
+                        .getDimensionPixelOffset(R.dimen.criteria_overzicht_ingeklapt_breedte)
+            )
+
+            animCriteriumEvaluatieFrameBreedte.addUpdateListener { valueAnimator ->
+                val animWaarde = valueAnimator.animatedValue as Int
+                val layoutParams = binding.criteriumEvaluatieFragmentContainer.layoutParams
+                layoutParams.width = animWaarde
+                binding.criteriumEvaluatieFragmentContainer.layoutParams = layoutParams
+            }
+
+            val set = AnimatorSet()
+            set.duration = 500L
+            set.playTogether(animOverzichtBalk,
+                animCriteriumEvaluatieFramePositie,
+                animCriteriumEvaluatieFrameBreedte)
+            set.start()
+
+            if(overzichtPaneelIngeklapt)
+                (it as ImageButton).setImageResource(android.R.drawable.ic_media_previous)
+            else
+                (it as ImageButton).setImageResource(android.R.drawable.ic_media_next)
+
+            overzichtPaneelIngeklapt = !overzichtPaneelIngeklapt
+
+            binding.criteriumEvaluatieFragmentContainer.requestLayout()
+        }
+
         binding.setLifecycleOwner(this)
 
         return binding.root
@@ -69,10 +135,12 @@ class CriteriumOverzichtFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val criteriumEvaluatieFragment = CriteriumEvaluatieFragment(criteriumOverzichtViewModel)
+        val criteriumEvaluatieFragment = CriteriumEvaluatieFragment()
         val transaction = childFragmentManager.beginTransaction()
         transaction.replace(R.id.criterium_evaluatie_fragment_container, criteriumEvaluatieFragment).commit()
     }
+
+
 
 
 

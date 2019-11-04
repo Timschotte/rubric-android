@@ -7,20 +7,28 @@
     <!-- TODO: Update blank fragment layout -->
 
     <LinearLayout
+        android:id="@+id/criteriumOverzichtFragmentWrapper"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/criterium_evaluatie_overzicht_balk"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@drawable/criterium_overzicht_rand"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:paddingRight="8dp">
+
+            <ImageButton
+                android:id="@+id/klap_in_klap_uit_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:src="@android:drawable/ic_media_previous" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rubricCriteriaListRecycler"
-                android:layout_width="350dp"
+                android:layout_width="@dimen/criteria_overzicht_width"
                 android:layout_height="wrap_content"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
 
@@ -29,9 +37,9 @@
 
         <FrameLayout
             android:id="@+id/criterium_evaluatie_fragment_container"
-            android:name="be.hogent.tile3.rubricapplication.fragments.CriteriumEvaluatieFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_gravity="start" />
 
     </LinearLayout>
 
