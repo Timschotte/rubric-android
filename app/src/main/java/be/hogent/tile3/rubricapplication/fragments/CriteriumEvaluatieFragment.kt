@@ -108,12 +108,32 @@ class CriteriumEvaluatieFragment(val criteriumOverzichtViewModel: CriteriumOverz
 
         binding.toonCriteriumOmschrijvingImageButton.setOnClickListener {
             MaterialAlertDialogBuilder(context)
-                .setTitle(criteriumEvaluatieViewModel.huidigCriterium.value?.naam
+                .setTitle(criteriumOverzichtViewModel?.geselecteerdCriterium?.value?.naam
                     ?: getString(R.string.criterium_evaluatie_omschrijving_dialog_titel_default))
-                .setMessage(criteriumEvaluatieViewModel.huidigCriterium.value?.omschrijving
+                .setMessage(criteriumOverzichtViewModel?.geselecteerdCriterium?.value?.omschrijving
                     ?: getString(R.string.criterium_evaluatie_omschrijving_dialog_omschrijving_default))
                 .setPositiveButton(R.string.criterium_evaluatie_omschrijving_dialog_bevestig, null)
                 .show()
+        }
+
+        criteriumOverzichtViewModel?.positieGeselecteerdCriterium?.observe(viewLifecycleOwner, Observer{
+            if(it == 0){
+                binding.upEdgeButton.visibility = View.GONE
+            } else if( it == criteriumOverzichtViewModel?.positieLaatsteCriterium?.value ?: 0){
+                binding.downEdgeButton.visibility = View.GONE
+            }
+            else{
+                binding.upEdgeButton.visibility = View.VISIBLE
+                binding.downEdgeButton.visibility = View.VISIBLE
+            }
+        })
+
+        binding.upEdgeButton.setOnClickListener{
+            criteriumOverzichtViewModel?.onUpEdgeButtonClicked()
+        }
+
+        binding.downEdgeButton.setOnClickListener{
+            criteriumOverzichtViewModel?.onDownEdgeButtonClicked()
         }
 
         return binding.root
