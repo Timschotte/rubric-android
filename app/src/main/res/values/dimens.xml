@@ -14,6 +14,8 @@
     <dimen name="criterium_evaluatie_list_item_padding_bottom">20dp</dimen>
     <dimen name="criterium_evaluatie_list_item_omschrijving_margin_bottom">20dp</dimen>
     <dimen name="criterium_evaluatie_dialog_edittext_margin">5dp</dimen>
+    <dimen name="big_header_text">48sp</dimen>
+    <dimen name="text_margin">16dp</dimen>
     <dimen name="criterium_overzicht_list_item_omschrijving_height">50dp</dimen>
     <dimen name="criterium_overzicht_recycler_width">375dp</dimen>
     <dimen name="criterium_overzicht_list_item_criteriumnaamtextview_width">275dp</dimen>
