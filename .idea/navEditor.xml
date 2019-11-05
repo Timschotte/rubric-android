@@ -8,30 +8,93 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
-                  <entry key="criteriumEvaluatieFragment">
+                  <entry key="klasSelectFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="321" />
-                            <option name="y" value="84" />
+                            <option name="x" value="536" />
+                            <option name="y" value="227" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_klasSelectFragment_to_leerlingSelectFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="leerlingSelectFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="761" />
+                            <option name="y" value="206" />
                           </Point>
                         </option>
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="criteriumOverzichtFragment">
+                  <entry key="mainMenuFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="31" />
-                            <option name="y" value="54" />
+                            <option name="x" value="-20" />
+                            <option name="y" value="-142" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_criteriumOverzichtFragment_to_criteriumEvaluatieFragment">
+                            <entry key="action_mainMenuFragment_to_opleidingSelectFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="opleidingSelectFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="194" />
+                            <option name="y" value="-150" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_opleidingSelectFragment_to_rubricSelectFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="rubricSelectFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="315" />
+                            <option name="y" value="218" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_rubricSelectFragment_to_klasSelectFragment">
                               <value>
                                 <LayoutPositions />
                               </value>
