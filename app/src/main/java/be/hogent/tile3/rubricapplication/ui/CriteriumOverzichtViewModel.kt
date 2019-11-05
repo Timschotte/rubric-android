@@ -41,6 +41,10 @@ class CriteriumOverzichtViewModel: ViewModel(){
     val positieLaatsteCriterium: LiveData<Int>
         get() = _positieLaatsteCriterium
 
+    private val _overzichtPaneelUitgeklapt = MutableLiveData<Boolean>().apply{ postValue(true)}
+    val overzichtPaneelUitgeklapt: LiveData<Boolean>
+        get() = _overzichtPaneelUitgeklapt
+
     init{
         _geselecteerdCriterium.value = rubricCriteria.value?.get(0)
         var grootteRubricCriteria: Int? = rubricCriteria.value?.size
@@ -94,6 +98,12 @@ class CriteriumOverzichtViewModel: ViewModel(){
         _geselecteerdCriterium.value = rubricCriteria.value?.get(nieuwePositie)
 
         _positieGeselecteerdCriterium?.value = nieuwePositie
+    }
+
+    fun onKlapInKlapUitButtonClicked(){
+        _overzichtPaneelUitgeklapt.value?.let {
+            _overzichtPaneelUitgeklapt.value = !it
+        }
     }
 
 
