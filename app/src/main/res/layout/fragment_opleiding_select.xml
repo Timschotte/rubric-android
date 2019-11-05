@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="opleidingViewModel"
+            type="be.hogent.tile3.rubricapplication.ui.OpleidingViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/opleiding_fragment"
         android:layout_width="match_parent"

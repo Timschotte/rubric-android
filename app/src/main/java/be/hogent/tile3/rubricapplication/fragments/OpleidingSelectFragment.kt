@@ -33,6 +33,9 @@ class OpleidingSelectFragment : Fragment() {
         Log.i("OpleidingViewModel", "Called ViewModel")
         viewModel = ViewModelProviders.of(this).get(OpleidingViewModel::class.java)
 
+        binding.opleidingViewModel = viewModel
+
+
         binding.selecteerOpleidingButton.setOnClickListener{ view: View ->
             Navigation.findNavController(view).navigate(R.id.action_opleidingSelectFragment_to_rubricSelectFragment)
         }
