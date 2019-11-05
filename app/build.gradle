@@ -9,6 +9,7 @@ apply plugin: 'kotlin-kapt'
 
 apply plugin: 'org.jetbrains.dokka-android'
 
+apply plugin: "androidx.navigation.safeargs.kotlin"
 
 android {
     compileSdkVersion 28
@@ -110,7 +111,18 @@ dependencies {
 
     //Cardview
     implementation 'com.android.support:cardview-v7:28.0.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.1.0'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.1.0'
 
+
+    //Navigation
+    def nav_version = "2.1.0"
+    // Java
+    implementation "androidx.navigation:navigation-fragment:$nav_version"
+    implementation "androidx.navigation:navigation-ui:$nav_version"
+    // Kotlin
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
 }
 dokka {

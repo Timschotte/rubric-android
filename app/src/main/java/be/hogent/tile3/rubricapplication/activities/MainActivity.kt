@@ -14,12 +14,12 @@ class MainActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //val mainFragment: MainFragment = MainFragment()
-        val mainFragment: CriteriumEvaluatieFragment = CriteriumEvaluatieFragment()
-
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.main_container, mainFragment)
-            .commit()
+//        //val mainFragment: MainFragment = MainFragment()
+//        val mainFragment: CriteriumEvaluatieFragment = CriteriumEvaluatieFragment()
+//
+//        supportFragmentManager.beginTransaction()
+//            .replace(R.id.main_container, mainFragment)
+//            .commit()
 
     }
 
