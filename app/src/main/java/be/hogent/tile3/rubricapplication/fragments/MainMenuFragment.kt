@@ -29,7 +29,7 @@ class MainMenuFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main_menu, container, false)
 
         binding.startEvaluatieButton.setOnClickListener { view: View ->
-            Navigation.findNavController(view).navigate(R.id.action_mainMenuFragment_to_opleidingFragment)
+            Navigation.findNavController(view).navigate(R.id.action_mainMenuFragment_to_opleidingSelectFragment)
         }
 
         return binding.root
