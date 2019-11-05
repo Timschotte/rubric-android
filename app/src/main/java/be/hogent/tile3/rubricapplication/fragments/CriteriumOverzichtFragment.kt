@@ -67,12 +67,17 @@ class CriteriumOverzichtFragment : Fragment() {
             }
         })
 
-        binding.klapInKlapUitButton.setOnClickListener{
+        binding.klapInKlapUitButton.setOnClickListener {
+            criteriumOverzichtViewModel?.onKlapInKlapUitButtonClicked()
+        }
+
+        criteriumOverzichtViewModel?.overzichtPaneelUitgeklapt?.observe(viewLifecycleOwner,
+            Observer{ overzichtPaneelUitgeklapt: Boolean ->
             val animOverzichtBalk = ObjectAnimator.ofFloat(
                 binding.criteriumEvaluatieOverzichtBalk,
                 "translationX",
                 binding.criteriumEvaluatieOverzichtBalk.translationX,
-                if(!overzichtPaneelIngeklapt)
+                if(!overzichtPaneelUitgeklapt)
                 binding.criteriumEvaluatieOverzichtBalk.translationX + resources
                     .getDimensionPixelOffset(R.dimen.criteria_overzicht_translationX)
                     .toFloat()
@@ -84,7 +89,7 @@ class CriteriumOverzichtFragment : Fragment() {
                 binding.criteriumEvaluatieFragmentContainer,
                 "translationX",
                 binding.criteriumEvaluatieFragmentContainer.translationX,
-                if(!overzichtPaneelIngeklapt)
+                if(!overzichtPaneelUitgeklapt)
                     binding.criteriumEvaluatieFragmentContainer.translationX + resources
                         .getDimensionPixelOffset(R.dimen.criteria_overzicht_translationX)
                         .toFloat()
@@ -94,7 +99,7 @@ class CriteriumOverzichtFragment : Fragment() {
 
             val animCriteriumEvaluatieFrameBreedte = ValueAnimator.ofInt(
                 binding.criteriumEvaluatieFragmentContainer.measuredWidth,
-                if(!overzichtPaneelIngeklapt)
+                if(!overzichtPaneelUitgeklapt)
                     binding.criteriumOverzichtFragmentWrapper.width - resources
                         .getDimensionPixelOffset(R.dimen.criteria_overzicht_ingeklapt_breedte)
                 else
@@ -117,15 +122,13 @@ class CriteriumOverzichtFragment : Fragment() {
                 animCriteriumEvaluatieFrameBreedte)
             set.start()
 
-            if(overzichtPaneelIngeklapt)
-                (it as ImageButton).setImageResource(android.R.drawable.ic_media_previous)
+            if(overzichtPaneelUitgeklapt)
+                (binding.klapInKlapUitButton as ImageButton).setImageResource(android.R.drawable.ic_media_previous)
             else
-                (it as ImageButton).setImageResource(android.R.drawable.ic_media_next)
-
-            overzichtPaneelIngeklapt = !overzichtPaneelIngeklapt
+                (binding.klapInKlapUitButton as ImageButton).setImageResource(android.R.drawable.ic_media_next)
 
             binding.criteriumEvaluatieFragmentContainer.requestLayout()
-        }
+        })
 
         binding.setLifecycleOwner(this)
 
