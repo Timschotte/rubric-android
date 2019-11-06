@@ -35,7 +35,7 @@ class CriteriumOverzichtViewModel: ViewModel(){
     val positieGeselecteerdCriterium: LiveData<Int>
         get() = _positieGeselecteerdCriterium
 
-    // Variabele wordt gebruikt om performantieredenen; zo moet de grootte van de lijst criteriu
+    // Variabele wordt gebruikt om performantieredenen; zo moet de grootte van de lijst criteria
     // slechts 1x berekend worden tijdens een evaluatie.
     private val _positieLaatsteCriterium = MutableLiveData<Int>()
     val positieLaatsteCriterium: LiveData<Int>
@@ -52,20 +52,6 @@ class CriteriumOverzichtViewModel: ViewModel(){
         var grootteRubricCriteria: Int? = rubricCriteria.value?.size
         _positieLaatsteCriterium.value = if(grootteRubricCriteria == null) 0 else (grootteRubricCriteria -1)
         App.component.inject(this)
-    }
-
-    fun getInitielePositie(): MutableLiveData<Int>{
-        Log.i("CriteriumOverzichtVM","getInitielePositie called")
-        var result = MutableLiveData<Int>()
-        result.value = 0
-        return result
-    }
-
-    fun getInitieelGeselecteerdCriterium(): MutableLiveData<Criterium>{
-        Log.i("CriteriumOverzichtVM","getInitieelGeselecteerdCriterium called")
-        var result = MutableLiveData<Criterium>()
-        result.value = Criterium("", "", "", 0.0, "")
-        return result
     }
 
     fun onCriteriumClicked(criteriumId: String, positie: Int){

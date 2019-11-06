@@ -29,7 +29,18 @@ class CriteriumEvaluatieViewModel: ViewModel(){
 
     //val huidigCriterium: LiveData<Criterium> = getDummyCriterium()
 
-    val criteriumNiveaus: LiveData<List<Niveau>> = getDummyCriteriumNiveausVoorEvaluatieFragment()
+
+    private val _criteriumEvaluatie: LiveData<CriteriumEvaluatie> = getDummyCriteriumEvaluatie()
+    val criteriumEvaluatie: LiveData<CriteriumEvaluatie>
+        get() = _criteriumEvaluatie
+
+    private val _criterium: LiveData<Criterium> = getDummyCriterium()
+    val criterium: LiveData<Criterium>
+        get() = _criterium
+
+    val _criteriumNiveaus: LiveData<List<Niveau>> = getDummyCriteriumNiveausVoorEvaluatieFragment()
+    val criteriumNiveaus: LiveData<List<Niveau>>
+        get() = _criteriumNiveaus
 
     private val _geselecteerdCriteriumNiveau: MutableLiveData<Niveau> = getInitieelGeselecteerdCriteriumNiveau()
     val geselecteerdCriteriumNiveau: LiveData<Niveau>
@@ -39,12 +50,11 @@ class CriteriumEvaluatieViewModel: ViewModel(){
     val positieGeselecteerdCriteriumNiveau: LiveData<Int>
         get() = _positieGeselecteerdCriteriumNiveau
 
-    private val _criteriumEvaluatie: LiveData<CriteriumEvaluatie> = getDummyCriteriumEvaluatie()
-    val criteriumEvaluatie: LiveData<CriteriumEvaluatie>
-        get() = _criteriumEvaluatie
-
     init{
         // TODO: zorgen dat numberpicker direct goed staat bij lanceren evaluatie voor criterium
+        _geselecteerdCriteriumNiveau.value =
+            criteriumNiveaus.value?.singleOrNull{
+                it.niveauId == criteriumEvaluatie.value?.behaaldNiveau}
         _positieGeselecteerdCriteriumNiveau?.value =
             criteriumNiveaus.value?.indexOf(criteriumNiveaus.value?.singleOrNull{
                 it.niveauId == criteriumEvaluatie.value?.behaaldNiveau})
