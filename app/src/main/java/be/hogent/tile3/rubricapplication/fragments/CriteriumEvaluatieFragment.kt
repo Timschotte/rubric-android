@@ -48,6 +48,7 @@ class CriteriumEvaluatieFragment
                         .get(CriteriumEvaluatieViewModel::class.java)
 
             binding.criteriumEvaluatieViewModel = criteriumEvaluatieViewModel
+            binding.criterium = criteriumEvaluatieViewModel.criterium.value
 
             criteriumOverzichtViewModel?.geselecteerdCriterium?.observe(viewLifecycleOwner, Observer{
                 Log.i("CriteriumEvaluatieFrag","Received Criterium " + it.naam + " (" + it.criteriumId + ")")
