@@ -13,7 +13,7 @@ interface StudentDao{
     @Update
     fun update(student: Student)
 
-    @Query("SELECT * from student_table WHERE student_Id = :key")
+    @Query("SELECT * from student_table WHERE studentId = :key")
     fun getBy(key: Int): Student
 
     @Query("SELECT * from student_table ORDER BY studentNaam")

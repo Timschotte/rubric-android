@@ -2,19 +2,18 @@ package be.hogent.tile3.rubricapplication.model
 
 import android.os.Parcel
 import android.os.Parcelable
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
+import androidx.room.*
 import androidx.room.ForeignKey.CASCADE
-import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 import java.io.Serializable
 
-@Entity(foreignKeys = arrayOf(ForeignKey(
-    entity = Rubric::class,
-    parentColumns = arrayOf("rubricId"),
-    childColumns = arrayOf("rubricId"))
-), tableName = "criterium_table"
+@Entity(
+    foreignKeys = arrayOf(ForeignKey(
+        entity = Rubric::class,
+        parentColumns = arrayOf("rubricId"),
+        childColumns = arrayOf("rubricId"))),
+    tableName = "criterium_table",
+    indices = arrayOf(Index("rubricId"))
 )
 data class Criterium(
     @PrimaryKey @ColumnInfo(name = "criteriumId") val criteriumId: String,
