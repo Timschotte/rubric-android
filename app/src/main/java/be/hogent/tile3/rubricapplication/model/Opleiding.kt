@@ -14,5 +14,5 @@ data class Opleiding(
     var naam: String,
 
     @ColumnInfo(name = "rubrics")
-    var rubrics: Rubric[]
+    var rubrics: Rubric
 )
