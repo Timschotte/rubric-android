@@ -24,7 +24,7 @@ import be.hogent.tile3.rubricapplication.ui.CriteriumOverzichtViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import javax.inject.Inject
 
-class CriteriumEvaluatieFragment()
+class CriteriumEvaluatieFragment
         : Fragment() {
 
     override fun onCreateView(
@@ -40,10 +40,12 @@ class CriteriumEvaluatieFragment()
 
         this.parentFragment?.let{
             val criteriumOverzichtViewModel
-                    = ViewModelProviders.of(it).get(CriteriumOverzichtViewModel::class.java)
+                    = ViewModelProviders.of(it)
+                        .get(CriteriumOverzichtViewModel::class.java)
 
-            val criteriumEvaluatieViewModel = ViewModelProviders.of(this).get(
-                CriteriumEvaluatieViewModel::class.java)
+            val criteriumEvaluatieViewModel
+                    = ViewModelProviders.of(this)
+                        .get(CriteriumEvaluatieViewModel::class.java)
 
             binding.criteriumEvaluatieViewModel = criteriumEvaluatieViewModel
 

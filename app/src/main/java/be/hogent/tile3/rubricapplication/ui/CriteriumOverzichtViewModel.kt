@@ -27,17 +27,17 @@ class CriteriumOverzichtViewModel: ViewModel(){
     val rubricCriteria: LiveData<List<Criterium>>
         get() = _rubricCriteria
 
-    private val _geselecteerdCriterium: MutableLiveData<Criterium> = getInitieelGeselecteerdCriterium()
+    private val _geselecteerdCriterium = MutableLiveData<Criterium>()
     val geselecteerdCriterium: LiveData<Criterium>
         get() = _geselecteerdCriterium
 
-    private val _positieGeselecteerdCriterium: MutableLiveData<Int> = getInitielePositie()
+    private val _positieGeselecteerdCriterium = MutableLiveData<Int>()
     val positieGeselecteerdCriterium: LiveData<Int>
         get() = _positieGeselecteerdCriterium
 
     // Variabele wordt gebruikt om performantieredenen; zo moet de grootte van de lijst criteriu
     // slechts 1x berekend worden tijdens een evaluatie.
-    private val _positieLaatsteCriterium: MutableLiveData<Int> = getInitielePositie()
+    private val _positieLaatsteCriterium = MutableLiveData<Int>()
     val positieLaatsteCriterium: LiveData<Int>
         get() = _positieLaatsteCriterium
 
@@ -46,19 +46,23 @@ class CriteriumOverzichtViewModel: ViewModel(){
         get() = _overzichtPaneelUitgeklapt
 
     init{
+        Log.i("CriteriumOverzichtVM", "Init-block starts execution")
         _geselecteerdCriterium.value = rubricCriteria.value?.get(0)
+        _positieGeselecteerdCriterium.value = 0
         var grootteRubricCriteria: Int? = rubricCriteria.value?.size
         _positieLaatsteCriterium.value = if(grootteRubricCriteria == null) 0 else (grootteRubricCriteria -1)
         App.component.inject(this)
     }
 
     fun getInitielePositie(): MutableLiveData<Int>{
+        Log.i("CriteriumOverzichtVM","getInitielePositie called")
         var result = MutableLiveData<Int>()
         result.value = 0
         return result
     }
 
     fun getInitieelGeselecteerdCriterium(): MutableLiveData<Criterium>{
+        Log.i("CriteriumOverzichtVM","getInitieelGeselecteerdCriterium called")
         var result = MutableLiveData<Criterium>()
         result.value = Criterium("", "", "", 0.0, "")
         return result
