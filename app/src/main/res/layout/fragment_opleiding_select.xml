@@ -22,30 +22,11 @@
             android:text="@string/selecteer_opleiding"
             android:textAlignment="center"
             android:textSize="24sp"
-            app:layout_constraintBottom_toTopOf="@+id/scroll_view_opleidingen"
+            app:layout_constraintBottom_toTopOf="@+id/opleidingen_list"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <ScrollView
-            android:id="@+id/scroll_view_opleidingen"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintBottom_toTopOf="@+id/selecteer_opleiding_button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/selecteer_opleiding">
-
-            <LinearLayout
-                android:id="@+id/linear_layout_opleidingen"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
-        </ScrollView>
 
         <Button
             android:id="@+id/selecteer_opleiding_button"
@@ -59,7 +40,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/scroll_view_opleidingen" />
+            app:layout_constraintTop_toBottomOf="@+id/opleidingen_list" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/opleidingen_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:padding="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/selecteer_opleiding_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/selecteer_opleiding" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
