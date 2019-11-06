@@ -1,24 +1,11 @@
 package be.hogent.tile3.rubricapplication.ui
 
-import android.util.Log
-import androidx.lifecycle.ViewModel
-import java.util.*
-
-class OpleidingViewModel: ViewModel() {
-
-    private var opleiding = ""
-
-    var opleidingList = mutableListOf("Opleiding 1", "Opleiding 2", "Opleiding 3", "Opleiding 4")
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import be.hogent.tile3.rubricapplication.dao.OpleidingDao
 
 
-
-    init {
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        Log.i("OpleidingViewModel", "OpleidingViewModel destroyed")
-
-    }
+class OpleidingViewModel(val database: OpleidingDao,
+                         application: Application): AndroidViewModel(application) {
 
 }
