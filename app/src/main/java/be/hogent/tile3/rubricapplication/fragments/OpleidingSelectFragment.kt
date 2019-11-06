@@ -14,26 +14,32 @@ import androidx.navigation.Navigation
 import be.hogent.tile3.rubricapplication.R
 import be.hogent.tile3.rubricapplication.ui.OpleidingViewModel
 import be.hogent.tile3.rubricapplication.databinding.FragmentOpleidingSelectBinding
+import be.hogent.tile3.rubricapplication.factories.OpleidingViewModelFactory
+import be.hogent.tile3.rubricapplication.persistence.RubricsDatabase
 
 /**
  * A simple [Fragment] subclass.
  */
 class OpleidingSelectFragment : Fragment() {
 
-    private lateinit var viewModel: OpleidingViewModel
-    private lateinit var binding: FragmentOpleidingSelectBinding
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_opleiding_select, container, false)
+        val binding: FragmentOpleidingSelectBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_opleiding_select, container, false)
 
-        Log.i("OpleidingViewModel", "Called ViewModel")
-        viewModel = ViewModelProviders.of(this).get(OpleidingViewModel::class.java)
+        val application = requireNotNull(this.activity).application
 
-        binding.opleidingViewModel = viewModel
+        val dataSource = RubricsDatabase.getDatabase(application).opleidingDao()
+
+        val viewModelFactory = OpleidingViewModelFactory(dataSource, application)
+
+        val opleidingViewModel = ViewModelProviders.of(this,viewModelFactory).get(OpleidingViewModel::class.java)
+
+        binding.opleidingViewModel = opleidingViewModel
+
+        binding.setLifecycleOwner(this)
 
 
         binding.selecteerOpleidingButton.setOnClickListener{ view: View ->
