@@ -8,10 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 
 import be.hogent.tile3.rubricapplication.R
+import be.hogent.tile3.rubricapplication.adapters.OpleidingRecyclerViewAdapter
 import be.hogent.tile3.rubricapplication.ui.OpleidingViewModel
 import be.hogent.tile3.rubricapplication.databinding.FragmentOpleidingSelectBinding
 import be.hogent.tile3.rubricapplication.factories.OpleidingViewModelFactory
@@ -38,6 +40,15 @@ class OpleidingSelectFragment : Fragment() {
         val opleidingViewModel = ViewModelProviders.of(this,viewModelFactory).get(OpleidingViewModel::class.java)
 
         binding.opleidingViewModel = opleidingViewModel
+
+        val adapter = OpleidingRecyclerViewAdapter()
+        binding.opleidingenList.adapter = adapter
+
+        opleidingViewModel.opleidingen.observe(viewLifecycleOwner, Observer {
+            it?.let{
+                adapter.data = it
+            }
+        })
 
         binding.setLifecycleOwner(this)
 
