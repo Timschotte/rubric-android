@@ -30,13 +30,16 @@ abstract class RubricsDatabase : RoomDatabase() {
                 return tempInstance
             }
             synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    RubricsDatabase::class.java,
-                    "Rubrics_database"
-                )
-                    .build()
-                INSTANCE = instance
+                var instance = INSTANCE
+                if (instance == null){
+                    instance = Room.databaseBuilder(
+                        context.applicationContext,
+                        RubricsDatabase::class.java,
+                        "Rubrics_database"
+                    )
+                        .build()
+                    INSTANCE = instance
+                }
                 return instance
             }
         }
