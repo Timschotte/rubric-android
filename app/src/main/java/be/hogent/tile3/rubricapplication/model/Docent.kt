@@ -1,24 +1,25 @@
 package be.hogent.tile3.rubricapplication.model
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
 
-@Entity(tableName = "docent_table", foreignKeys = arrayOf(ForeignKey(
-    entity = Opleiding::class,
-    parentColumns = arrayOf("docent_id"),
-    childColumns = arrayOf("opleiding_id")
-
-)))
+@Entity(
+    tableName = "docent_table",
+    foreignKeys = arrayOf(ForeignKey(
+        entity = Opleiding::class,
+        parentColumns = arrayOf("opleidingId"),
+        childColumns = arrayOf("opleidingId")
+    )),
+    indices = arrayOf(Index("opleidingId"))
+)
 data class Docent(
 
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name="docentId")
     val docentId: Int = 0,
 
     @ColumnInfo(name = "naam")
     val naam: String,
 
-    @ColumnInfo(name = "opleiding_id")
+    @ColumnInfo(name = "opleidingId")
     val opleidingId: Int
 )
