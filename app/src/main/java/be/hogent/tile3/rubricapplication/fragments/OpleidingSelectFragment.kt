@@ -18,6 +18,7 @@ import be.hogent.tile3.rubricapplication.ui.OpleidingViewModel
 import be.hogent.tile3.rubricapplication.databinding.FragmentOpleidingSelectBinding
 import be.hogent.tile3.rubricapplication.factories.OpleidingViewModelFactory
 import be.hogent.tile3.rubricapplication.persistence.RubricsDatabase
+import kotlinx.android.synthetic.main.fragment_opleiding_select.*
 
 /**
  * A simple [Fragment] subclass.
@@ -41,14 +42,7 @@ class OpleidingSelectFragment : Fragment() {
 
         binding.opleidingViewModel = opleidingViewModel
 
-        val adapter = OpleidingRecyclerViewAdapter()
-        binding.opleidingenList.adapter = adapter
 
-        opleidingViewModel.opleidingen.observe(viewLifecycleOwner, Observer {
-            it?.let{
-                adapter.data = it
-            }
-        })
 
         binding.setLifecycleOwner(this)
 
@@ -57,6 +51,17 @@ class OpleidingSelectFragment : Fragment() {
             Navigation.findNavController(view).navigate(R.id.action_opleidingSelectFragment_to_rubricSelectFragment)
         }
 
+        val adapter = OpleidingRecyclerViewAdapter()
+        binding.opleidingenList.adapter = adapter
+
+        System.out.println(binding.opleidingenList)
+
+        opleidingViewModel.opleidingen.observe(viewLifecycleOwner, Observer {
+            it?.let{
+                System.out.println(it)
+                adapter.data = it
+            }
+        })
         return binding.root
 
     }

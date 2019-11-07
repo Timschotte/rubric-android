@@ -13,8 +13,9 @@ data class Opleiding(
     var opleidingId: Int = 0,
 
     @ColumnInfo(name = "naam")
-    var naam: String,
+    var naam: String
+    //,
 
-    @ColumnInfo(name = "rubrics")
-    var rubrics: String
+    //@ColumnInfo(name = "rubrics")
+    //var rubrics: String
 )
