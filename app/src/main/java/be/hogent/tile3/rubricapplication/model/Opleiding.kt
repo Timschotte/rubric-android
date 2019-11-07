@@ -1,21 +1,17 @@
 package be.hogent.tile3.rubricapplication.model
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.Index
-import androidx.room.PrimaryKey
+import android.os.Parcelable
+import androidx.room.*
+import com.squareup.moshi.Json
 
 @Entity(tableName = "opleiding_table")
 data class Opleiding(
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @ColumnInfo(name = "opleidingId")
+    @Json(name = "id")
     var opleidingId: Int = 0,
 
     @ColumnInfo(name = "naam")
     var naam: String
-    //,
-
-    //@ColumnInfo(name = "rubrics")
-    //var rubrics: String
 )

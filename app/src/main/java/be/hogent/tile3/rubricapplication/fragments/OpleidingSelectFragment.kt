@@ -62,6 +62,7 @@ class OpleidingSelectFragment : Fragment() {
                 adapter.data = it
             }
         })
+
         return binding.root
 
     }
