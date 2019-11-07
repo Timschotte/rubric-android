@@ -7,7 +7,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import be.hogent.tile3.rubricapplication.dao.OpleidingDao
 import be.hogent.tile3.rubricapplication.model.Opleiding
+import be.hogent.tile3.rubricapplication.network.OpleidingApi
 import kotlinx.coroutines.*
+import retrofit2.Call
+import retrofit2.Response
+import java.lang.Exception
+import javax.security.auth.callback.Callback
 
 
 class OpleidingViewModel(val database: OpleidingDao,
@@ -23,32 +28,33 @@ class OpleidingViewModel(val database: OpleidingDao,
 
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    var opleidingen = database.getAll()
+    private val _opleidingen = MutableLiveData<List<Opleiding>>()
+    val opleidingen: LiveData<List<Opleiding>>
+        get() = _opleidingen
+
+    private val _status = MutableLiveData<String>()
+    val status: LiveData<String>
+        get() = _status
 
     init {
-
-
-        System.out.println("Dit zijn de opleidingen")
-        System.out.println(opleidingen.toString())
-            //initializeDatabase()
-
-
+        getOpleidingen()
     }
 
-
-    private fun initializeDatabase(){
+    private fun getOpleidingen(){
         uiScope.launch {
-
-            val opleiding1 = Opleiding(4, "test")
-            val opleiding2 = Opleiding(5, "test2")
-            val opleiding3 = Opleiding(6, "test3")
-
-            insert(opleiding1)
-            insert(opleiding2)
-            insert(opleiding3)
-
+            var getOpleidingenDeferred = OpleidingApi.retrofitService.getProperties()
+            try {
+                var listResult = getOpleidingenDeferred.await()
+                _status.value = "Success: ${listResult.size} opleidingen opgehaald"
+                if (listResult.size > 0){
+                    _opleidingen.value = listResult
+                }
+            } catch (e: Exception){
+                _status.value = "Failure: ${e.message}"
+            }
         }
     }
+
 
     private suspend fun insert(opleiding: Opleiding) {
         withContext(Dispatchers.IO){
