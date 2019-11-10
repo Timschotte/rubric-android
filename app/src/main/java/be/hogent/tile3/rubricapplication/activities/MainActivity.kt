@@ -1,12 +1,9 @@
 package be.hogent.tile3.rubricapplication.activities
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import be.hogent.tile3.rubricapplication.R
-import be.hogent.tile3.rubricapplication.fragments.CriteriumEvaluatieFragment
 import be.hogent.tile3.rubricapplication.fragments.CriteriumOverzichtFragment
-import be.hogent.tile3.rubricapplication.fragments.MainFragment
 
 class MainActivity : AppCompatActivity(){
     /**

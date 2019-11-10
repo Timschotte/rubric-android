@@ -22,6 +22,12 @@ interface RubricDao{
     fun insert(rubric: Rubric)
 
     /**
+     *  Insert list of rubrics
+     */
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll(vararg databaseRubrics: Rubric)
+
+    /**
      * Delete a rubric
      */
     @Delete

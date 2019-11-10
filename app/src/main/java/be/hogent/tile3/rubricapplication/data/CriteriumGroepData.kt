@@ -5,7 +5,7 @@ import android.os.Parcelable
 import com.squareup.moshi.Json
 
 data class CriteriumGroepData(
-    @field:Json(name ="id") val id : Int,
+    @field:Json(name ="rubricId") val id : Int,
     @field:Json(name ="criteria") val criteria : List<CriteriumData>
     ) : Parcelable {
     constructor(parcel: Parcel) : this(
