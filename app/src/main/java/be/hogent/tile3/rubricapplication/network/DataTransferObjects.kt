@@ -103,8 +103,8 @@ fun List<NetworkRubric>.asNiveauDatabaseModelArray(): Array<Niveau> {
     return flatMap {
         it.criteriumGroepen.flatMap {
             groepen -> groepen.criteria.flatMap {
-            criterium -> criterium.criteriumNiveaus.map {
-            var criteriumId = criterium.id
+            var criteriumId = it.id
+            it.criteriumNiveaus.map {
             Niveau(it.id.toString(), it.niveau.naam, it.omschrijving, it.ondergrens, it.bovengrens, it.niveau.volgnummer, criteriumId.toString())
         }
         }
