@@ -3,6 +3,7 @@ package be.hogent.tile3.rubricapplication.injection.module
 import be.hogent.tile3.rubricapplication.network.RubricApi
 import be.hogent.tile3.rubricapplication.utils.BASE_URL
 import com.itkacher.okhttpprofiler.OkHttpProfilerInterceptor
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -53,6 +54,7 @@ class NetworkModule {
             .baseUrl(BASE_URL)
             .client(client)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
     }
 
