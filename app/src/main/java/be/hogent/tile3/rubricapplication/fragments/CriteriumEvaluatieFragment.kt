@@ -50,9 +50,9 @@ class CriteriumEvaluatieFragment
             binding.criteriumEvaluatieViewModel = criteriumEvaluatieViewModel
             binding.criterium = criteriumEvaluatieViewModel.criterium.value
 
-            criteriumOverzichtViewModel?.geselecteerdCriterium?.observe(viewLifecycleOwner, Observer{
+            /*criteriumOverzichtViewModel?.geselecteerdCriterium?.observe(viewLifecycleOwner, Observer{
                 Log.i("CriteriumEvaluatieFrag","Received Criterium " + it.naam + " (" + it.criteriumId + ")")
-            })
+            })*/
 
             criteriumEvaluatieViewModel.geselecteerdCriteriumNiveau.observe(viewLifecycleOwner, Observer{
                     geselecteerdNiveau ->

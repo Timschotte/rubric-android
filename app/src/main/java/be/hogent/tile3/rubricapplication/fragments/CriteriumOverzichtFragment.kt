@@ -183,7 +183,7 @@ class CriteriumOverzichtFragment : Fragment() {
             }
         })
 
-        criteriumOverzichtViewModel.criteria.observe(this, Observer {
+        criteriumOverzichtViewModel.rubricCriteria.observe(this, Observer {
             it.map {
                 Log.i("Test", String.format("id=%s, naam=%s, omschrijving=%s, gewicht=%s, rubricId=%s  in criteria verkregen via database (called from CriteriumOverzichtFragment)", it.criteriumId, it.naam, it.omschrijving, it.gewicht, it.rubricId))
             }

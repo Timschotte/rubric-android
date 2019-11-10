@@ -30,7 +30,7 @@ class CriteriumOverzichtViewModel: ViewModel(){
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     lateinit var rubrics: LiveData<List<Rubric>>
-    lateinit var criteria: LiveData<List<Criterium>>
+    lateinit var rubricCriteria: LiveData<List<Criterium>>
 
     //this line makes app crash..
     /*val rubrics = rubricRepository.rubrics*/
@@ -47,9 +47,9 @@ class CriteriumOverzichtViewModel: ViewModel(){
         get() = _rubrics*/
 
 
-    private val _rubricCriteria: MediatorLiveData<List<Criterium>> = getDummyCriteria()
+    /*private val _rubricCriteria: MediatorLiveData<List<Criterium>> = getDummyCriteria()
     val rubricCriteria: LiveData<List<Criterium>>
-        get() = _rubricCriteria
+        get() = _rubricCriteria*/
 
     private val _geselecteerdCriterium = MutableLiveData<Criterium>()
     val geselecteerdCriterium: LiveData<Criterium>
@@ -72,7 +72,7 @@ class CriteriumOverzichtViewModel: ViewModel(){
     init{
         App.component.inject(this)
         rubrics = rubricRepository.rubrics
-        criteria = rubricRepository.criteria
+        rubricCriteria = rubricRepository.criteria
         Log.i("CriteriumOverzichtVM", "Init-block starts execution")
         _geselecteerdCriterium.value = rubricCriteria.value?.get(0)
         _positieGeselecteerdCriterium.value = 0
