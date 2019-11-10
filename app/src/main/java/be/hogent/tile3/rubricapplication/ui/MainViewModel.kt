@@ -2,16 +2,16 @@ package be.hogent.tile3.rubricapplication.ui
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import be.hogent.tile3.rubricapplication.base.BaseViewModel
+import androidx.lifecycle.ViewModel
+import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.data.RubricData
-import be.hogent.tile3.rubricapplication.data.RubricsResource
 import be.hogent.tile3.rubricapplication.network.RubricApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class MainViewModel: BaseViewModel(){
+class MainViewModel: ViewModel(){
     private val rubricDataObject = MutableLiveData<List<RubricData>>()
 
     @Inject
@@ -20,6 +20,9 @@ class MainViewModel: BaseViewModel(){
     private var subscription: Disposable
 
     init {
+
+        App.component.inject(this)
+
         subscription = rubricApi.getRubrics()
             //we tell it to fetch the data on background by
             .subscribeOn(Schedulers.io())

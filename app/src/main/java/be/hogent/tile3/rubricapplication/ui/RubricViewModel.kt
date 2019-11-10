@@ -3,7 +3,6 @@ package be.hogent.tile3.rubricapplication.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.tile3.rubricapplication.App
-import be.hogent.tile3.rubricapplication.base.BaseViewModel
 import be.hogent.tile3.rubricapplication.model.Criterium
 import be.hogent.tile3.rubricapplication.model.Niveau
 import be.hogent.tile3.rubricapplication.model.Rubric
