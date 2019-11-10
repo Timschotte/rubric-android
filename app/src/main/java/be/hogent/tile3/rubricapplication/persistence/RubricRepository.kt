@@ -4,9 +4,12 @@ import android.util.Log
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import be.hogent.tile3.rubricapplication.App
+import be.hogent.tile3.rubricapplication.dao.CriteriumDao
 import be.hogent.tile3.rubricapplication.dao.RubricDao
+import be.hogent.tile3.rubricapplication.model.Criterium
 import be.hogent.tile3.rubricapplication.model.Rubric
 import be.hogent.tile3.rubricapplication.network.RubricApi
+import be.hogent.tile3.rubricapplication.network.asCriteriumDatabaseModelArray
 import be.hogent.tile3.rubricapplication.network.asDatabaseModelArray
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -21,6 +24,7 @@ import javax.inject.Inject
 class RubricRepository(private val rubricDao: RubricDao){
 
     @Inject lateinit var rubricApi: RubricApi
+    @Inject lateinit var criteriumDao: CriteriumDao
 
     init {
         App.component.inject(this)
@@ -72,6 +76,7 @@ class RubricRepository(private val rubricDao: RubricDao){
             val rubrics = rubricApi.getRubrics().await()
             withContext(Dispatchers.IO){
                 rubricDao.insertAll(*rubrics.asDatabaseModelArray())
+                criteriumDao.insertAll(*rubrics.asCriteriumDatabaseModelArray())
             }
             rubrics.map {
                 Log.i("Test", it.omschrijving + "from refreshRubric in repository")
@@ -82,4 +87,5 @@ class RubricRepository(private val rubricDao: RubricDao){
     }
 
     val rubrics: LiveData<List<Rubric>> = rubricDao.getAllRubrics()
+    val criteria: LiveData<List<Criterium>> = criteriumDao.getAllCriteria()
 }

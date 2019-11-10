@@ -1,5 +1,6 @@
 package be.hogent.tile3.rubricapplication.network
 
+import be.hogent.tile3.rubricapplication.model.Criterium
 import be.hogent.tile3.rubricapplication.model.Rubric
 import com.squareup.moshi.JsonClass
 
@@ -86,5 +87,14 @@ fun List<NetworkRubric>.asDatabaseModelArray(): Array<Rubric> {
             it.datumTijdCreatie,
             it.datumTijdLaatsteWijziging
         )
+    }.toTypedArray()
+}
+
+fun List<NetworkRubric>.asCriteriumDatabaseModelArray(): Array<Criterium> {
+    return flatMap {
+        var rubricId = it.id
+        it.criteriumGroepen.flatMap { groepen -> groepen.criteria.map {
+            Criterium(it.id.toString(), it.naam, it.omschrijving, it.gewicht, rubricId.toString())
+        } }
     }.toTypedArray()
 }
