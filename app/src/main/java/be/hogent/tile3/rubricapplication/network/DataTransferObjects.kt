@@ -26,3 +26,15 @@ fun List<NetworkRubric>.asDatabaseModel(): List<Rubric> {
         )
     }
 }
+
+fun List<NetworkRubric>.asDatabaseModelArray(): Array<Rubric> {
+    return map {
+        Rubric(
+            it.rubricId.toString(),
+            it.onderwerp,
+            it.omschrijving,
+            it.datumTijdCreatie,
+            it.datumLaatsteWijziging
+        )
+    }.toTypedArray()
+}
