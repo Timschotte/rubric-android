@@ -22,6 +22,8 @@ import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import androidx.recyclerview.widget.RecyclerView
 import android.util.DisplayMetrics
+import android.widget.Toast
+import be.hogent.tile3.rubricapplication.App
 
 
 class CriteriumOverzichtFragment : Fragment() {
@@ -173,6 +175,12 @@ class CriteriumOverzichtFragment : Fragment() {
             binding.criteriumEvaluatieFragmentContainer.requestLayout()
 
                 Log.i("CriteriumOverzichtFrag", "breedte criteriumOverzichtFragmentWrapper (3): ${binding.criteriumOverzichtFragmentWrapper.width}")
+        })
+
+        criteriumOverzichtViewModel.rubrics.observe(this, Observer {
+            it.map {
+                Log.i("Test",it.omschrijving)
+            }
         })
 
         binding.setLifecycleOwner(this)

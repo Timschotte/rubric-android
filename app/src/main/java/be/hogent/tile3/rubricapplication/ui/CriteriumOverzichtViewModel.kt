@@ -1,5 +1,7 @@
 package be.hogent.tile3.rubricapplication.ui
 
+import android.content.Context
+import android.net.ConnectivityManager
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -10,19 +12,41 @@ import be.hogent.tile3.rubricapplication.model.Criterium
 import be.hogent.tile3.rubricapplication.model.Evaluatie
 import be.hogent.tile3.rubricapplication.model.Niveau
 import be.hogent.tile3.rubricapplication.model.Rubric
+import be.hogent.tile3.rubricapplication.network.NetworkRubric
 import be.hogent.tile3.rubricapplication.persistence.CriteriumRepository
 import be.hogent.tile3.rubricapplication.persistence.NiveauRepository
 import be.hogent.tile3.rubricapplication.persistence.RubricRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import java.lang.Exception
 import javax.inject.Inject
 
 
 class CriteriumOverzichtViewModel: ViewModel(){
+
+    @Inject lateinit var rubricRepository: RubricRepository
+    @Inject lateinit var context: Context
+
+    private var viewModelJob = Job()
+    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+
+    lateinit var rubrics: LiveData<List<Rubric>>
+
+    //this line makes app crash..
+    /*val rubrics = rubricRepository.rubrics*/
+
     @Inject lateinit var niveauRepository: NiveauRepository
     @Inject lateinit var criteriumRepository: CriteriumRepository
     // todo: evaluatierepository maken en injecteren
     // todo: criteriumevaluatierepository maken en injecteren
 
     //val huidigeEvaluatie: MediatorLiveData<Evaluatie>
+
+    /*private val _rubrics = MutableLiveData<List<Rubric>>()
+    val rubrics: LiveData<List<Rubric>>
+        get() = _rubrics*/
 
 
     private val _rubricCriteria: MediatorLiveData<List<Criterium>> = getDummyCriteria()
@@ -54,7 +78,38 @@ class CriteriumOverzichtViewModel: ViewModel(){
         var grootteRubricCriteria: Int? = rubricCriteria.value?.size
         _positieLaatsteCriterium.value = if(grootteRubricCriteria == null) 0 else (grootteRubricCriteria -1)
         App.component.inject(this)
+        /*getRubrics()*/
+        rubrics = rubricRepository.rubrics
+        refreshRubricDatabase()
     }
+
+    private fun refreshRubricDatabase() {
+        if (isNetworkAvailable()){
+            coroutineScope.launch {
+                rubricRepository.refreshRubrics()
+            }
+        }
+    }
+
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+        val activeNetworkInfo = connectivityManager!!.activeNetworkInfo
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected
+    }
+/*
+    private fun getRubrics(){
+        coroutineScope.launch {
+            var rubricsDeferred = rubricRepository.rubricApi.getRubrics()
+            try {
+                val result = rubricsDeferred.await()
+                _rubrics.value = result
+                Log.i("Test", "Done")
+            } catch (e: Exception){
+                Log.i("Test", e.message)
+                _rubrics.value = ArrayList()
+            }
+        }
+    }*/
 
     fun onCriteriumClicked(criteriumId: String, positie: Int){
         _geselecteerdCriterium.value = rubricCriteria.value?.singleOrNull{it.criteriumId == criteriumId}
@@ -98,7 +153,10 @@ class CriteriumOverzichtViewModel: ViewModel(){
         }
     }
 
-
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
+    }
 }
 
 fun getDummyRubric(): MediatorLiveData<Rubric>{

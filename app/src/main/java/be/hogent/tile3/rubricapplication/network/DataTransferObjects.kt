@@ -1,7 +1,6 @@
 package be.hogent.tile3.rubricapplication.network
 
 import be.hogent.tile3.rubricapplication.model.Rubric
-import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = false)
@@ -11,9 +10,9 @@ data class NetworkRubric(
     val omschrijving: String,
     val criteriumGroepen: List<NetworkCriteriumGroep>,
     val niveauSchaal: NetworkNiveauSchaal,
-    val opleidingsOnderdeel: NetworkOpleidingsOnderdeel,
+    val opleidingsOnderdeel: NetworkOpleidingsOnderdeel?,
     val datumTijdCreatie: String,
-    val datumLaatsteWijziging: String
+    val datumTijdLaatsteWijziging: String
 )
 
 @JsonClass(generateAdapter = false)
@@ -73,7 +72,7 @@ fun List<NetworkRubric>.asDatabaseModel(): List<Rubric> {
             it.onderwerp,
             it.omschrijving,
             it.datumTijdCreatie,
-            it.datumLaatsteWijziging
+            it.datumTijdLaatsteWijziging
         )
     }
 }
@@ -85,7 +84,7 @@ fun List<NetworkRubric>.asDatabaseModelArray(): Array<Rubric> {
             it.onderwerp,
             it.omschrijving,
             it.datumTijdCreatie,
-            it.datumLaatsteWijziging
+            it.datumTijdLaatsteWijziging
         )
     }.toTypedArray()
 }

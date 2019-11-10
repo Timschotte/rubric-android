@@ -1,6 +1,7 @@
 package be.hogent.tile3.rubricapplication.injection.component
 
 import be.hogent.tile3.rubricapplication.App
+import be.hogent.tile3.rubricapplication.fragments.CriteriumOverzichtFragment
 import be.hogent.tile3.rubricapplication.injection.module.DatabaseModule
 import be.hogent.tile3.rubricapplication.injection.module.NetworkModule
 import be.hogent.tile3.rubricapplication.persistence.RubricRepository
