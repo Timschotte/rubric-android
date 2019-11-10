@@ -10,7 +10,6 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = [NetworkModule::class, DatabaseModule::class])
 interface RepositoryComponent {
-    fun inject(mainViewModel: MainViewModel)
     fun inject(app: App)
     fun inject(rubricViewModel: RubricViewModel)
     fun inject(criteriumViewModel: CriteriumViewModel)
