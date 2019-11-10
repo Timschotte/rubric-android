@@ -10,10 +10,12 @@ import be.hogent.tile3.rubricapplication.model.CriteriumEvaluatie
 import be.hogent.tile3.rubricapplication.model.Niveau
 import be.hogent.tile3.rubricapplication.persistence.CriteriumRepository
 import be.hogent.tile3.rubricapplication.persistence.NiveauRepository
+import be.hogent.tile3.rubricapplication.persistence.RubricRepository
 import javax.inject.Inject
 
 class CriteriumEvaluatieViewModel: ViewModel(){
 
+    @Inject lateinit var rubricRepository: RubricRepository
     @Inject lateinit var niveauRepository: NiveauRepository
     @Inject lateinit var criteriumRepository: CriteriumRepository
     // todo: evaluatierepository maken en injecteren
@@ -38,9 +40,10 @@ class CriteriumEvaluatieViewModel: ViewModel(){
     val criterium: LiveData<Criterium>
         get() = _criterium
 
-    val _criteriumNiveaus: LiveData<List<Niveau>> = getDummyCriteriumNiveausVoorEvaluatieFragment()
+    var criteriumNiveaus: LiveData<List<Niveau>>
+    /*val _criteriumNiveaus: LiveData<List<Niveau>> = getDummyCriteriumNiveausVoorEvaluatieFragment()
     val criteriumNiveaus: LiveData<List<Niveau>>
-        get() = _criteriumNiveaus
+        get() = _criteriumNiveaus*/
 
     private val _geselecteerdCriteriumNiveau: MutableLiveData<Niveau> = getInitieelGeselecteerdCriteriumNiveau()
     val geselecteerdCriteriumNiveau: LiveData<Niveau>
@@ -51,6 +54,8 @@ class CriteriumEvaluatieViewModel: ViewModel(){
         get() = _positieGeselecteerdCriteriumNiveau
 
     init{
+        App.component.inject(this)
+        criteriumNiveaus = rubricRepository.niveaus
         // TODO: zorgen dat numberpicker direct goed staat bij lanceren evaluatie voor criterium
         _geselecteerdCriteriumNiveau.value =
             criteriumNiveaus.value?.singleOrNull{
@@ -59,7 +64,7 @@ class CriteriumEvaluatieViewModel: ViewModel(){
             criteriumNiveaus.value?.indexOf(criteriumNiveaus.value?.singleOrNull{
                 it.niveauId == criteriumEvaluatie.value?.behaaldNiveau})
         Log.i("CriteriumEvaluatieVM", "Positie geselecteerd critniv: " + positieGeselecteerdCriteriumNiveau.toString())
-        App.component.inject(this)
+
     }
 
     // merk op: de observers op positieGeselecteerdCriteriumNiveau werken niet goed als we de initiële

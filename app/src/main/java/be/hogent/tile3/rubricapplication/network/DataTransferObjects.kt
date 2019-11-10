@@ -1,6 +1,7 @@
 package be.hogent.tile3.rubricapplication.network
 
 import be.hogent.tile3.rubricapplication.model.Criterium
+import be.hogent.tile3.rubricapplication.model.Niveau
 import be.hogent.tile3.rubricapplication.model.Rubric
 import com.squareup.moshi.JsonClass
 
@@ -96,5 +97,17 @@ fun List<NetworkRubric>.asCriteriumDatabaseModelArray(): Array<Criterium> {
         it.criteriumGroepen.flatMap { groepen -> groepen.criteria.map {
             Criterium(it.id.toString(), it.naam, it.omschrijving, it.gewicht, rubricId.toString())
         } }
+    }.toTypedArray()
+}
+fun List<NetworkRubric>.asNiveauDatabaseModelArray(): Array<Niveau> {
+    return flatMap {
+        it.criteriumGroepen.flatMap {
+            groepen -> groepen.criteria.flatMap {
+            criterium -> criterium.criteriumNiveaus.map {
+            var criteriumId = criterium.id
+            Niveau(it.id.toString(), it.niveau.naam, it.omschrijving, it.ondergrens, it.bovengrens, it.niveau.volgnummer, criteriumId.toString())
+        }
+        }
+        }
     }.toTypedArray()
 }

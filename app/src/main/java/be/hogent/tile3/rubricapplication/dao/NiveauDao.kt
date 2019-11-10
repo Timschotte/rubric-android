@@ -23,6 +23,12 @@ interface NiveauDao{
     fun insert(niveau: Niveau)
 
     /**
+     *  Insert list of niveaus
+     */
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll(vararg niveaus: Niveau)
+
+    /**
      * Delete a niveau
      */
     @Delete

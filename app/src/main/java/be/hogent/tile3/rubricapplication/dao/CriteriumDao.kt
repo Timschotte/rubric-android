@@ -25,7 +25,7 @@ interface CriteriumDao{
      *  Insert list of criteria
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(vararg databaseRubrics: Criterium)
+    fun insertAll(vararg criteria: Criterium)
 
     /**
      * Delete a criterium

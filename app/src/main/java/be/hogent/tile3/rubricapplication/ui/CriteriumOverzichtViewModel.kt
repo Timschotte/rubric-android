@@ -29,8 +29,8 @@ class CriteriumOverzichtViewModel: ViewModel(){
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    lateinit var rubrics: LiveData<List<Rubric>>
-    lateinit var rubricCriteria: LiveData<List<Criterium>>
+    var rubrics: LiveData<List<Rubric>>
+    var rubricCriteria: LiveData<List<Criterium>>
 
     //this line makes app crash..
     /*val rubrics = rubricRepository.rubrics*/
