@@ -5,7 +5,7 @@ import android.os.Parcelable
 import com.squareup.moshi.Json
 
 data class NiveauschaalData(
-    @field:Json(name = "id") val id : Int,
+    @field:Json(name = "rubricId") val id : Int,
     @field:Json(name = "niveaus") val niveaus : List<NiveauData>
 ) : Parcelable {
     constructor(parcel: Parcel) : this(

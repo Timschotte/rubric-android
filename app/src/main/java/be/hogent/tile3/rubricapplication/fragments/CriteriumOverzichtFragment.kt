@@ -42,7 +42,7 @@ class CriteriumOverzichtFragment : Fragment() {
 
         val adapter =
             CriteriumOverzichtListAdapter(CriteriaListListener { criteriumId, positie ->
-                Log.i("CriteriumOverzichtFrag","Geklikt op criterium met id " + criteriumId + "en positie " + positie)
+                Log.i("CriteriumOverzichtFrag","Geklikt op criterium met rubricId " + criteriumId + "en positie " + positie)
                 criteriumOverzichtViewModel?.onCriteriumClicked(criteriumId, positie)
             })
 

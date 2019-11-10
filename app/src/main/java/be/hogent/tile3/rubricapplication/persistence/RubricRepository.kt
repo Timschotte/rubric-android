@@ -67,6 +67,7 @@ class RubricRepository(private val rubricDao: RubricDao){
     }
 
     suspend fun refreshRubrics(){
+        Log.i("RubricRepository", "refresh called in rubricrepository")
         try{
             val rubrics = rubricApi.getRubrics().await()
             withContext(Dispatchers.IO){

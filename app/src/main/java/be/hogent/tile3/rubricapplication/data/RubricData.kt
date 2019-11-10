@@ -5,7 +5,7 @@ import android.os.Parcelable
 import com.squareup.moshi.Json
 
 data class RubricData(
-    @field:Json(name = "id") val id : Int,
+    @field:Json(name = "rubricId") val id : Int,
     @field:Json(name = "onderwerp") val onderwerp : String,
     @field:Json(name = "omschrijving") val omschrijving : String,
     @field:Json(name = "criteriumGroepen") val criteriumGroepen : List<CriteriumGroepData>,

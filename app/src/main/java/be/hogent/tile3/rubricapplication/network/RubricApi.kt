@@ -9,8 +9,8 @@ import retrofit2.http.Path
 
 interface RubricApi{
 
-    @GET("rubric/{id}")
-    fun getRubric(@Path("id") id: Int): Observable<RubricData>
+    @GET("rubric/{rubricId}")
+    fun getRubric(@Path("rubricId") id: Int): Observable<RubricData>
 
     @GET("rubric")
     fun getRubrics(): Deferred<List<NetworkRubric>>

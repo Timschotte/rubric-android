@@ -5,7 +5,7 @@ import android.os.Parcelable
 import com.squareup.moshi.Json
 
 data class CriteriumData(
-    @field:Json(name = "id") val id : Int,
+    @field:Json(name = "rubricId") val id : Int,
     @field:Json(name = "naam") val naam : String,
     @field:Json(name = "omschrijving") val omschrijving : String,
     @field:Json(name = "gewicht") val gewicht : Int,

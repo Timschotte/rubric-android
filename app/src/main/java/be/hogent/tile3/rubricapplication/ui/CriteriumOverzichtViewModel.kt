@@ -12,6 +12,7 @@ import be.hogent.tile3.rubricapplication.model.Niveau
 import be.hogent.tile3.rubricapplication.model.Rubric
 import be.hogent.tile3.rubricapplication.persistence.CriteriumRepository
 import be.hogent.tile3.rubricapplication.persistence.NiveauRepository
+import be.hogent.tile3.rubricapplication.persistence.RubricRepository
 import javax.inject.Inject
 
 
@@ -22,6 +23,7 @@ class CriteriumOverzichtViewModel: ViewModel(){
     // todo: criteriumevaluatierepository maken en injecteren
 
     //val huidigeEvaluatie: MediatorLiveData<Evaluatie>
+
 
     private val _rubricCriteria: MediatorLiveData<List<Criterium>> = getDummyCriteria()
     val rubricCriteria: LiveData<List<Criterium>>
@@ -185,7 +187,7 @@ const val LOREM_8 = "Nullam placerat magna quam, a malesuada metus facilisis at.
         "hendrerit metus. Cras nec urna sed nibh cursus fringilla sit amet consectetur sem. " +
         "Aenean eu turpis vel ipsum lacinia scelerisque sit amet eu leo."
 const val LOREM_9 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget tellus a tellus volutpat pretium ut nec purus."
-const val LOREM_10 = "Quisque lacinia justo non lacus convallis, id lobortis velit mollis.\n" +
+const val LOREM_10 = "Quisque lacinia justo non lacus convallis, rubricId lobortis velit mollis.\n" +
         "Vestibulum ut arcu egestas nisl convallis pretium quis in dolor.\n" +
         "Donec nibh purus, dictum ac sollicitudin in, euismod vel libero."
 const val LOREM_11 = "Phasellus non auctor urna. Integer efficitur nibh in consequat rhoncus. " +
