@@ -3,6 +3,8 @@ package be.hogent.tile3.rubricapplication.injection.module
 import be.hogent.tile3.rubricapplication.network.RubricApi
 import be.hogent.tile3.rubricapplication.utils.BASE_URL
 import com.itkacher.okhttpprofiler.OkHttpProfilerInterceptor
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import io.reactivex.schedulers.Schedulers
@@ -45,10 +47,12 @@ class NetworkModule {
             this.addInterceptor(OkHttpProfilerInterceptor())
         }.build()
 
+        val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(client)
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
             .build()
     }
