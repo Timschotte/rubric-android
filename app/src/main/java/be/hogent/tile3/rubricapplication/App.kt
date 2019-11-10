@@ -1,24 +1,25 @@
 package be.hogent.tile3.rubricapplication
 
 import android.app.Application
-import be.hogent.tile3.rubricapplication.injection.component.DaggerDatabaseComponent
-import be.hogent.tile3.rubricapplication.injection.component.DatabaseComponent
+import be.hogent.tile3.rubricapplication.injection.component.DaggerRepositoryComponent
+import be.hogent.tile3.rubricapplication.injection.component.RepositoryComponent
 import be.hogent.tile3.rubricapplication.injection.module.DatabaseModule
-import javax.inject.Inject
+import be.hogent.tile3.rubricapplication.injection.module.NetworkModule
 
 /**
  * This is the applicationContext used in the application
  */
 class App : Application() {
     companion object {
-        lateinit var component: DatabaseComponent
+        lateinit var component: RepositoryComponent
     }
 
     override fun onCreate() {
         super.onCreate()
-        component = DaggerDatabaseComponent
+        component = DaggerRepositoryComponent
             .builder()
             .databaseModule(DatabaseModule(this))
+            .networkModule(NetworkModule())
             .build()
     }
 }
