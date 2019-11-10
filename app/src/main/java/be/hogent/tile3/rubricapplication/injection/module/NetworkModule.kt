@@ -11,15 +11,17 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
+import javax.inject.Singleton
 
 @Module
-object NetworkModule {
+class NetworkModule {
 
 
     /**
      * Provides the Test Service implemenation
      * @param retrofit the retrofit object used to instantiate the service
      */
+    @Singleton
     @Provides
     internal fun provideRubricApi(retrofit: Retrofit): RubricApi {
         return retrofit.create(RubricApi::class.java)
@@ -29,6 +31,7 @@ object NetworkModule {
     /**
      * Return the TestResource object.
      */
+    @Singleton
     @Provides
     internal fun provideRetrofitInterface(): Retrofit {
 

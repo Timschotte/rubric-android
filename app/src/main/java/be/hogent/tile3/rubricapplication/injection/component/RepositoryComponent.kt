@@ -8,7 +8,7 @@ import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [DatabaseModule::class, NetworkModule::class])
+@Component(modules = [NetworkModule::class, DatabaseModule::class])
 interface RepositoryComponent {
     fun inject(mainViewModel: MainViewModel)
     fun inject(app: App)
@@ -17,4 +17,13 @@ interface RepositoryComponent {
     fun inject(niveauViewModel: NiveauViewModel)
     fun inject(criteriumOverzichtViewModel: CriteriumOverzichtViewModel)
     fun inject(criteriumEvaluatieViewModel: CriteriumEvaluatieViewModel)
+
+    @Component.Builder
+    interface Builder {
+        fun build(): RepositoryComponent
+
+        fun networkModule(networkModule: NetworkModule): Builder
+        fun databaseModule(databaseModule: DatabaseModule): Builder
+
+    }
 }
