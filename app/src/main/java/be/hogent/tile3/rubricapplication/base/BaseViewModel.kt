@@ -2,7 +2,7 @@ package be.hogent.tile3.rubricapplication.base
 
 import androidx.lifecycle.ViewModel
 import be.hogent.tile3.rubricapplication.injection.component.DaggerViewModelInjectorComponent
-import be.hogent.tile3.rubricapplication.injection.component.ViewModelInjectorComponent
+import be.hogent.tile3.rubricapplication.injection.component.NetworkComponent
 import be.hogent.tile3.rubricapplication.injection.module.NetworkModule
 import be.hogent.tile3.rubricapplication.ui.MainViewModel
 
@@ -12,7 +12,7 @@ import be.hogent.tile3.rubricapplication.ui.MainViewModel
  */
 abstract class BaseViewModel : ViewModel() {
 
-    private val injectorComponent: ViewModelInjectorComponent = DaggerViewModelInjectorComponent
+    private val injectorComponent: NetworkComponent = DaggerViewModelInjectorComponent
         .builder()
         .networkModule(NetworkModule)
         .build()

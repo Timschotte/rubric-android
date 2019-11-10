@@ -2,7 +2,6 @@ package be.hogent.tile3.rubricapplication.injection.component
 
 import be.hogent.tile3.rubricapplication.injection.module.NetworkModule
 import be.hogent.tile3.rubricapplication.ui.MainViewModel
-import be.hogent.tile3.rubricapplication.ui.RubricViewModel
 import dagger.Component
 import javax.inject.Singleton
 
@@ -13,14 +12,14 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [NetworkModule::class])
-interface ViewModelInjectorComponent {
+interface NetworkComponent {
 
     fun inject(mainViewModel: MainViewModel)
 
 
     @Component.Builder
     interface Builder {
-        fun build(): ViewModelInjectorComponent
+        fun build(): NetworkComponent
 
         fun networkModule(networkModule: NetworkModule): Builder
 
