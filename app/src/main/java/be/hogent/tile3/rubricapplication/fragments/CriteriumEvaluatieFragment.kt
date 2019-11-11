@@ -122,15 +122,8 @@ class CriteriumEvaluatieFragment
             }
 
             criteriumOverzichtViewModel?.positieGeselecteerdCriterium?.observe(viewLifecycleOwner, Observer{
-                if(it == 0){
-                    binding.upEdgeButton.visibility = View.GONE
-                } else if( it == criteriumOverzichtViewModel?.positieLaatsteCriterium?.value ?: 0){
-                    binding.downEdgeButton.visibility = View.GONE
-                }
-                else{
-                    binding.upEdgeButton.visibility = View.VISIBLE
-                    binding.downEdgeButton.visibility = View.VISIBLE
-                }
+                binding.upEdgeButton.visibility = if(it == 0) View.GONE else View.VISIBLE
+                binding.downEdgeButton.visibility = if(it == criteriumOverzichtViewModel?.positieLaatsteCriterium?.value ?: 0) View.GONE else View.VISIBLE
             })
 
             binding.upEdgeButton.setOnClickListener{
