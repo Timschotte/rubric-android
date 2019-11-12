@@ -3,11 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-        <variable
-            name="opleidingsOnderdeel"
-            type="be.hogent.tile3.rubricapplication.model.OpleidingsOnderdeel" />
-    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -16,15 +11,14 @@
 
         <TextView
             android:id="@+id/opleiding_naam"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_key"
-            android:padding="5dp"
-            android:text="@{opleidingsOnderdeel.naam}"
+            android:padding="10dp"
+            android:text=""
             android:textAlignment="center"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Toegepaste Informatica" />

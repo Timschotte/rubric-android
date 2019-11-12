@@ -81,7 +81,7 @@ data class NetworkStudent(
 /**
  * Transformeert opgehaalde lijst van netwerk naar een lijst van Rubric (in domain package)
  */
-fun List<NetworkRubric>.asDatabaseModel(): List<Rubric> {
+fun List<NetworkRubric>.asRubricDatabaseModel(): List<Rubric> {
     return map {
         Rubric(
             it.id.toString(),
@@ -105,11 +105,11 @@ fun List<NetworkRubric>.asDatabaseModelArray(): Array<Rubric> {
     }.toTypedArray()
 }
 
-//fun List<NetworkOpleidingsOnderdeel>.asDatabaseModel(): List<OpleidingsOnderdeel> {
-//    return map {
-//        OpleidingsOnderdeel(
-//            it.id,
-//            it.naam
-//        )
-//    }
-//}
+fun List<NetworkOpleidingsOnderdeel>.asOpleidingsOnderdeelDatabaseModel(): List<OpleidingsOnderdeel> {
+    return map {
+        OpleidingsOnderdeel(
+            it.id,
+            it.naam
+        )
+    }
+}

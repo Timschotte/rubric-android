@@ -14,19 +14,12 @@ class OpleidingsOnderdeelViewModel: ViewModel() {
 
     @Inject lateinit var opleidingsOnderdeelRepository: OpleidingsOnderdeelRepository
 
-
     private var viewModelJob = Job()
-
-    override fun onCleared() {
-        super.onCleared()
-        viewModelJob.cancel()
-    }
-
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    private val _opleidingen = MutableLiveData<List<OpleidingsOnderdeel>>()
-    val opleidingen: LiveData<List<OpleidingsOnderdeel>>
-        get() = _opleidingen
+    private var _opleidingsOnderdelen = MutableLiveData<List<OpleidingsOnderdeel>>()
+    val opleidingsOnderdelen: LiveData<List<OpleidingsOnderdeel>>
+        get() = _opleidingsOnderdelen
 
     private val _status = MutableLiveData<String>()
     val status: LiveData<String>
@@ -34,7 +27,13 @@ class OpleidingsOnderdeelViewModel: ViewModel() {
 
     init {
         App.component.inject(this)
+        _opleidingsOnderdelen = getDummyOpleidingsOnderdelen()
         //getOpleidingen()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
     }
 
 //    private fun getOpleidingen(){
@@ -58,5 +57,17 @@ class OpleidingsOnderdeelViewModel: ViewModel() {
 //            database.insert(opleiding)
 //        }
 //    }
+
+    fun getDummyOpleidingsOnderdelen(): MutableLiveData<List<OpleidingsOnderdeel>>{
+        var result = MutableLiveData<List<OpleidingsOnderdeel>>()
+        result.value = listOf(
+            OpleidingsOnderdeel(1,"Analyse 2"),
+            OpleidingsOnderdeel(2,"WebApps 4"),
+            OpleidingsOnderdeel(3,"Bachelorproef"),
+            OpleidingsOnderdeel(4,"Databanken 2"),
+            OpleidingsOnderdeel(5,"Programmeren 1")
+        )
+        return result
+    }
 
 }

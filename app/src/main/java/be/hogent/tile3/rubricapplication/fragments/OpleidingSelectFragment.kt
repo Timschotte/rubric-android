@@ -7,10 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 
 import be.hogent.tile3.rubricapplication.R
+import be.hogent.tile3.rubricapplication.adapters.OpleidingsOnderdeelListAdapter
 import be.hogent.tile3.rubricapplication.ui.OpleidingsOnderdeelViewModel
 import be.hogent.tile3.rubricapplication.databinding.FragmentOpleidingSelectBinding
 import be.hogent.tile3.rubricapplication.persistence.RubricsDatabase
@@ -29,7 +31,7 @@ class OpleidingSelectFragment : Fragment() {
 
         val opleidingsOnderdeelViewModel = ViewModelProviders.of(this).get(OpleidingsOnderdeelViewModel::class.java)
 
-        binding.opleidingViewModel = opleidingsOnderdeelViewModel
+        binding.opleidingsOnderdeelViewModel = opleidingsOnderdeelViewModel
 
 
 
@@ -40,17 +42,17 @@ class OpleidingSelectFragment : Fragment() {
             Navigation.findNavController(view).navigate(R.id.action_opleidingSelectFragment_to_rubricSelectFragment)
         }
 
-        //val adapter = OpleidingRecyclerViewAdapter()
-        //binding.opleidingenList.adapter = adapter
+        val adapter = OpleidingsOnderdeelListAdapter()
+        binding.opleidingenList.adapter = adapter
 
         System.out.println(binding.opleidingenList)
 
-//        opleidingViewModel.opleidingen.observe(viewLifecycleOwner, Observer {
-//            it?.let{
-//                System.out.println(it)
-//                adapter.data = it
-//            }
-//        })
+        opleidingsOnderdeelViewModel.opleidingsOnderdelen.observe(viewLifecycleOwner, Observer {
+            it?.let{
+                System.out.println(it)
+                adapter.submitList(it)
+            }
+        })
 
         return binding.root
 
