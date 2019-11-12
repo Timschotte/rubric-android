@@ -7,35 +7,49 @@ import androidx.recyclerview.widget.RecyclerView
 import be.hogent.tile3.rubricapplication.model.Opleiding
 import be.hogent.tile3.rubricapplication.databinding.OpleidingTextViewBinding
 
-class OpleidingRecyclerViewAdapter: ListAdapter<Opleiding, OpleidingRecyclerViewAdapter.OpleidingViewHolder>(DiffCallback){
+class OpleidingRecyclerViewAdapter {
 
-    class OpleidingViewHolder(private var binding: OpleidingTextViewBinding) : RecyclerView.ViewHolder {
+//TODO: Recyclerview voor opleidingen fixen
 
-    }
+//class OpleidingRecyclerViewAdapter: ListAdapter<Opleiding, OpleidingRecyclerViewAdapter.OpleidingViewHolder>(DiffCallback){
+//
+//    class OpleidingViewHolder(private var binding: OpleidingTextViewBinding) : RecyclerView.ViewHolder {
+//
+//   }
+//
+//    companion object DiffCallback : DiffUtil.ItemCallback<Opleiding>{
+//        override fun areItemsTheSame(oldItem: Opleiding, newItem: Opleiding): Boolean {
+//            return oldItem === newItem
+//        }
+//
+//        override fun areContentsTheSame(oldItem: Opleiding, newItem: Opleiding): Boolean {
+//            return oldItem.opleidingId == newItem.opleidingId
+//        }
+//    }
+//
+//    override fun onCreateViewHolder(
+//        parent: ViewGroup,
+//        viewType: Int
+//    ): OpleidingRecyclerViewAdapter.OpleidingViewHolder {
+//        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+//    }
+//
+//    override fun onBindViewHolder(
+//        holder: OpleidingRecyclerViewAdapter.OpleidingViewHolder,
+//        position: Int
+//    ) {
+//        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+//    }
 
-    companion object DiffCallback : DiffUtil.ItemCallback<Opleiding>{
-        override fun areItemsTheSame(oldItem: Opleiding, newItem: Opleiding): Boolean {
-            return oldItem === newItem
-        }
 
-        override fun areContentsTheSame(oldItem: Opleiding, newItem: Opleiding): Boolean {
-            return oldItem.opleidingId == newItem.opleidingId
-        }
-    }
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): OpleidingRecyclerViewAdapter.OpleidingViewHolder {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 
-    override fun onBindViewHolder(
-        holder: OpleidingRecyclerViewAdapter.OpleidingViewHolder,
-        position: Int
-    ) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+
+
+
+
+
+
 //    var data = listOf<Opleiding>()
 //        set(value) {
 //            field = value

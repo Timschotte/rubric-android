@@ -8,8 +8,6 @@ import androidx.navigation.ui.NavigationUI
 import be.hogent.tile3.rubricapplication.R
 import be.hogent.tile3.rubricapplication.fragments.CriteriumOverzichtFragment
 import be.hogent.tile3.rubricapplication.databinding.ActivityMainBinding
-import be.hogent.tile3.rubricapplication.fragments.CriteriumEvaluatieFragment
-import be.hogent.tile3.rubricapplication.fragments.MainFragment
 
 class MainActivity : AppCompatActivity(){
     /**
@@ -25,11 +23,13 @@ class MainActivity : AppCompatActivity(){
         // checken op savedInstanceState; anders maak je een nieuw fragment bij het roteren van het
         // scherm waardoor ook de viewmodels opnieuw gemaakt worden en de fragmenten dus geen
         // geen data bijhouden
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.main_container, CriteriumOverzichtFragment())
-                .commitNow()
-        }
+
+        // TODO: Kijken wat hier mee moet gebeuren
+//        if (savedInstanceState == null) {
+//            supportFragmentManager.beginTransaction()
+//                .replace(R.id.main_container, CriteriumOverzichtFragment())
+//                .commitNow()
+//        }
 
 
     }
@@ -39,8 +39,4 @@ class MainActivity : AppCompatActivity(){
         return navController.navigateUp()
     }
 
-    //fun launchRubricsActivity(view: View) {
-        //val intent = Intent(this, RubricsActivity::class.java)
-        //startActivity(intent)
-    //}
 }

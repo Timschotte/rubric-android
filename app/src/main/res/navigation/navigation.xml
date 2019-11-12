@@ -38,7 +38,11 @@
         android:id="@+id/leerlingSelectFragment"
         android:name="be.hogent.tile3.rubricapplication.fragments.LeerlingSelectFragment"
         android:label="Leerlingen"
-        tools:layout="@layout/fragment_leerling_select" />
+        tools:layout="@layout/fragment_leerling_select" >
+        <action
+            android:id="@+id/action_leerlingSelectFragment_to_placeholder"
+            app:destination="@id/placeholder" />
+    </fragment>
     <fragment
         android:id="@+id/rubricSelectFragment"
         android:name="be.hogent.tile3.rubricapplication.fragments.RubricSelectFragment"
@@ -48,4 +52,5 @@
             android:id="@+id/action_rubricSelectFragment_to_klasSelectFragment"
             app:destination="@id/klasSelectFragment" />
     </fragment>
+    <fragment android:id="@+id/placeholder" />
 </navigation>

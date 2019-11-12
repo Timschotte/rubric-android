@@ -51,17 +51,17 @@ class OpleidingSelectFragment : Fragment() {
             Navigation.findNavController(view).navigate(R.id.action_opleidingSelectFragment_to_rubricSelectFragment)
         }
 
-        val adapter = OpleidingRecyclerViewAdapter()
-        binding.opleidingenList.adapter = adapter
+        //val adapter = OpleidingRecyclerViewAdapter()
+        //binding.opleidingenList.adapter = adapter
 
         System.out.println(binding.opleidingenList)
 
-        opleidingViewModel.opleidingen.observe(viewLifecycleOwner, Observer {
-            it?.let{
-                System.out.println(it)
-                adapter.data = it
-            }
-        })
+//        opleidingViewModel.opleidingen.observe(viewLifecycleOwner, Observer {
+//            it?.let{
+//                System.out.println(it)
+//                adapter.data = it
+//            }
+//        })
 
         return binding.root
 
