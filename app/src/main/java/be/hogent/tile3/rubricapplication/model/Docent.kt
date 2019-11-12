@@ -5,11 +5,11 @@ import androidx.room.*
 @Entity(
     tableName = "docent_table",
     foreignKeys = arrayOf(ForeignKey(
-        entity = Opleiding::class,
-        parentColumns = arrayOf("opleidingId"),
-        childColumns = arrayOf("opleidingId")
+        entity = OpleidingsOnderdeel::class,
+        parentColumns = arrayOf("opleidingsOnderdeelId"),
+        childColumns = arrayOf("opleidingsOnderdeelId")
     )),
-    indices = arrayOf(Index("opleidingId"))
+    indices = arrayOf(Index("opleidingsOnderdeelId"))
 )
 data class Docent(
 
@@ -20,6 +20,6 @@ data class Docent(
     @ColumnInfo(name = "naam")
     val naam: String,
 
-    @ColumnInfo(name = "opleidingId")
+    @ColumnInfo(name = "opleidingsOnderdeelId")
     val opleidingId: Int
 )

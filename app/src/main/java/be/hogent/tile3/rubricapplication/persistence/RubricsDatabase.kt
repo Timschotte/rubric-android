@@ -1,21 +1,19 @@
 package be.hogent.tile3.rubricapplication.persistence
 
 import android.content.Context
-import android.os.AsyncTask
 import androidx.room.*
-import androidx.sqlite.db.SupportSQLiteDatabase
 import be.hogent.tile3.rubricapplication.dao.*
 import be.hogent.tile3.rubricapplication.model.*
 
 /**
  * The Room database that contains the Rubrics table
  */
-@Database(entities = arrayOf(Rubric::class, Criterium::class, Niveau::class, Opleiding::class, Docent::class, Student::class), version = 4, exportSchema = false)
+@Database(entities = arrayOf(Rubric::class, Criterium::class, Niveau::class, OpleidingsOnderdeel::class, Docent::class, Student::class), version = 5, exportSchema = false)
 abstract class RubricsDatabase : RoomDatabase() {
     abstract fun rubricDao(): RubricDao
     abstract fun criteriumDao(): CriteriumDao
     abstract fun niveauDao(): NiveauDao
-    abstract fun opleidingDao(): OpleidingDao
+    abstract fun opleidingsOnderdeelDao(): OpleidingsOnderdeelDao
     abstract fun docentDao(): DocentDao
     abstract fun studentDao(): StudentDao
 

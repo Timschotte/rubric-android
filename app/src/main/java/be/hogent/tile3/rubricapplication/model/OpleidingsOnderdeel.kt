@@ -4,13 +4,13 @@ import android.os.Parcelable
 import androidx.room.*
 import com.squareup.moshi.Json
 
-@Entity(tableName = "opleiding_table")
-data class Opleiding(
+@Entity(tableName = "opleidingsOnderdeel_table")
+data class OpleidingsOnderdeel(
 
     @PrimaryKey
-    @ColumnInfo(name = "opleidingId")
+    @ColumnInfo(name = "opleidingsOnderdeelId")
     @Json(name = "id")
-    var opleidingId: Int = 0,
+    var opleidingsOnderdeelId: Long = 0,
 
     @ColumnInfo(name = "naam")
     var naam: String

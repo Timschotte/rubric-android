@@ -10,6 +10,8 @@ interface RubricApi{
 
     @GET("rubric")
     fun getRubrics(): Deferred<List<NetworkRubric>>
-    /*fun getRubrics() : Observable<List<RubricData>>*/
+
+    @GET("opleidingsonderdeel")
+    fun getOpleidingsOnderdeel(): Deferred<List<NetworkOpleidingsOnderdeel>>
 
 }

@@ -1,29 +1,22 @@
 package be.hogent.tile3.rubricapplication.adapters
 
-import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
-import be.hogent.tile3.rubricapplication.model.Opleiding
-import be.hogent.tile3.rubricapplication.databinding.OpleidingTextViewBinding
-
 class OpleidingRecyclerViewAdapter {
 
 //TODO: Recyclerview voor opleidingen fixen
 
-//class OpleidingRecyclerViewAdapter: ListAdapter<Opleiding, OpleidingRecyclerViewAdapter.OpleidingViewHolder>(DiffCallback){
+//class OpleidingRecyclerViewAdapter: ListAdapter<OpleidingsOnderdeel, OpleidingRecyclerViewAdapter.OpleidingViewHolder>(DiffCallback){
 //
 //    class OpleidingViewHolder(private var binding: OpleidingTextViewBinding) : RecyclerView.ViewHolder {
 //
 //   }
 //
-//    companion object DiffCallback : DiffUtil.ItemCallback<Opleiding>{
-//        override fun areItemsTheSame(oldItem: Opleiding, newItem: Opleiding): Boolean {
+//    companion object DiffCallback : DiffUtil.ItemCallback<OpleidingsOnderdeel>{
+//        override fun areItemsTheSame(oldItem: OpleidingsOnderdeel, newItem: OpleidingsOnderdeel): Boolean {
 //            return oldItem === newItem
 //        }
 //
-//        override fun areContentsTheSame(oldItem: Opleiding, newItem: Opleiding): Boolean {
-//            return oldItem.opleidingId == newItem.opleidingId
+//        override fun areContentsTheSame(oldItem: OpleidingsOnderdeel, newItem: OpleidingsOnderdeel): Boolean {
+//            return oldItem.opleidingsOnderdeelId == newItem.opleidingsOnderdeelId
 //        }
 //    }
 //
@@ -50,7 +43,7 @@ class OpleidingRecyclerViewAdapter {
 
 
 
-//    var data = listOf<Opleiding>()
+//    var data = listOf<OpleidingsOnderdeel>()
 //        set(value) {
 //            field = value
 //            System.out.println(value)
