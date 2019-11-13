@@ -1,5 +1,8 @@
 package be.hogent.tile3.rubricapplication.ui
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,13 +16,12 @@ import javax.inject.Inject
 class OpleidingsOnderdeelViewModel: ViewModel() {
 
     @Inject lateinit var opleidingsOnderdeelRepository: OpleidingsOnderdeelRepository
+    @Inject lateinit var context: Context
 
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    private var _opleidingsOnderdelen = MutableLiveData<List<OpleidingsOnderdeel>>()
-    val opleidingsOnderdelen: LiveData<List<OpleidingsOnderdeel>>
-        get() = _opleidingsOnderdelen
+    var opleidingsOnderdelen: LiveData<List<OpleidingsOnderdeel>>
 
     private val _status = MutableLiveData<String>()
     val status: LiveData<String>
@@ -27,13 +29,28 @@ class OpleidingsOnderdeelViewModel: ViewModel() {
 
     init {
         App.component.inject(this)
-        _opleidingsOnderdelen = getDummyOpleidingsOnderdelen()
-        //getOpleidingen()
+        refreshRubricDatabase()
+        opleidingsOnderdelen = opleidingsOnderdeelRepository.getAllOpleidingsOnderdelen()
+        Log.i("test", opleidingsOnderdeelRepository.getAllOpleidingsOnderdelen().toString())
     }
 
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()
+    }
+
+    private fun refreshRubricDatabase() {
+        if (isNetworkAvailable()){
+            uiScope.launch {
+                opleidingsOnderdeelRepository.refreshOpleidingsOnderdelen()
+            }
+        }
+    }
+
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+        val activeNetworkInfo = connectivityManager!!.activeNetworkInfo
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected
     }
 
     private val _navigateToRubricSelect = MutableLiveData<Long>()
@@ -75,11 +92,11 @@ class OpleidingsOnderdeelViewModel: ViewModel() {
     fun getDummyOpleidingsOnderdelen(): MutableLiveData<List<OpleidingsOnderdeel>>{
         var result = MutableLiveData<List<OpleidingsOnderdeel>>()
         result.value = listOf(
-            OpleidingsOnderdeel(1,"Analyse 2"),
-            OpleidingsOnderdeel(2,"WebApps 4"),
+            OpleidingsOnderdeel(1,"Analyse"),
+            OpleidingsOnderdeel(2,"WebApps"),
             OpleidingsOnderdeel(3,"Bachelorproef"),
-            OpleidingsOnderdeel(4,"Databanken 2"),
-            OpleidingsOnderdeel(5,"Programmeren 1")
+            OpleidingsOnderdeel(4,"Databanken"),
+            OpleidingsOnderdeel(5,"Programmeren")
         )
         return result
     }

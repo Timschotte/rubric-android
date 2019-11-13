@@ -8,7 +8,7 @@ import be.hogent.tile3.rubricapplication.model.*
 /**
  * The Room database that contains the Rubrics table
  */
-@Database(entities = arrayOf(Rubric::class, Criterium::class, Niveau::class, OpleidingsOnderdeel::class, Docent::class, Student::class), version = 5, exportSchema = false)
+@Database(entities = arrayOf(Rubric::class, Criterium::class, Niveau::class, OpleidingsOnderdeel::class, Docent::class, Student::class), version = 3, exportSchema = false)
 abstract class RubricsDatabase : RoomDatabase() {
     abstract fun rubricDao(): RubricDao
     abstract fun criteriumDao(): CriteriumDao
@@ -34,6 +34,7 @@ abstract class RubricsDatabase : RoomDatabase() {
                         RubricsDatabase::class.java,
                         "Rubrics_database"
                     )
+                        .fallbackToDestructiveMigration()
                         .build()
                     INSTANCE = instance
                 }

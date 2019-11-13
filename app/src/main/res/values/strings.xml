@@ -18,4 +18,5 @@
     <string name="selecteer_actie">Wat wil je doen?</string>
     <string name="selecteer_opleiding">Selecteer een opleidingsonderdeel</string>
     <string name="volgende">Volgende</string>
+    <string name="selecteerRubricVanOpleiding">Selecteer een rubric van het opleidingsonderdeel %1$s</string>
 </resources>

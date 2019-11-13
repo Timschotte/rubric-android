@@ -159,16 +159,17 @@ class CriteriumOverzichtViewModel: ViewModel(){
     }
 }
 
-fun getDummyRubric(): MediatorLiveData<Rubric>{
-    var result = MediatorLiveData<Rubric>()
-    result.value = Rubric(
-        "r1",
-        "Dummy Rubric",
-        LOREM_11,
-        "",
-        "")
-    return result
-}
+//fun getDummyRubric(): MediatorLiveData<Rubric>{
+//    var result = MediatorLiveData<Rubric>()
+//    result.value = Rubric(
+//        "r1",
+//        "Dummy Rubric",
+//        LOREM_11,
+//        "",
+//        "")
+//    return result
+//}
+
 fun getDummyEvaluatie(): MutableLiveData<Evaluatie>{
     var result = MutableLiveData<Evaluatie>()
     result.value = Evaluatie("e1", "s1", "r1")

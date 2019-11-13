@@ -11,9 +11,9 @@ data class NetworkRubric(
     val omschrijving: String,
     val criteriumGroepen: List<NetworkCriteriumGroep>,
     val niveauSchaal: NetworkNiveauSchaal,
-    val opleidingsOnderdeel: NetworkOpleidingsOnderdeel?,
     val datumTijdCreatie: String,
-    val datumTijdLaatsteWijziging: String
+    val datumTijdLaatsteWijziging: String,
+    val opleidingsOnderdeel: NetworkOpleidingsOnderdeel
 )
 
 @JsonClass(generateAdapter = false)
@@ -32,9 +32,9 @@ data class NetworkNiveauSchaal(
 data class NetworkOpleidingsOnderdeel(
     val id: Long,
     val naam: String,
-    val docenten: List<NetworkDocent>,
-    val studenten: List<NetworkStudent>,
-    val rubrics: List<NetworkRubric>
+    val docenten: List<Int>,
+    val studenten: List<Int>,
+    val rubrics: List<Int>
 )
 
 @JsonClass(generateAdapter = false)
@@ -88,7 +88,8 @@ fun List<NetworkRubric>.asRubricDatabaseModel(): List<Rubric> {
             it.onderwerp,
             it.omschrijving,
             it.datumTijdCreatie,
-            it.datumTijdLaatsteWijziging
+            it.datumTijdLaatsteWijziging,
+            it.opleidingsOnderdeel.id
         )
     }
 }
@@ -100,16 +101,17 @@ fun List<NetworkRubric>.asDatabaseModelArray(): Array<Rubric> {
             it.onderwerp,
             it.omschrijving,
             it.datumTijdCreatie,
-            it.datumTijdLaatsteWijziging
+            it.datumTijdLaatsteWijziging,
+            it.opleidingsOnderdeel.id
         )
     }.toTypedArray()
 }
 
-fun List<NetworkOpleidingsOnderdeel>.asOpleidingsOnderdeelDatabaseModel(): List<OpleidingsOnderdeel> {
+fun List<NetworkOpleidingsOnderdeel>.asOpleidingsOnderdeelDatabaseModel(): Array<OpleidingsOnderdeel> {
     return map {
         OpleidingsOnderdeel(
             it.id,
             it.naam
         )
-    }
+    }.toTypedArray()
 }

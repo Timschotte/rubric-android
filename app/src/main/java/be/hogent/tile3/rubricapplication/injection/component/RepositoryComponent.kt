@@ -21,6 +21,7 @@ interface RepositoryComponent {
     fun inject(rubricRepository: RubricRepository)
     fun inject(opleidingsOnderdeelViewModel: OpleidingsOnderdeelViewModel)
     fun inject(opleidingsOnderdeelRepository: OpleidingsOnderdeelRepository)
+    fun inject(rubricSelectViewModel: RubricSelectViewModel)
 
     @Component.Builder
     interface Builder {
