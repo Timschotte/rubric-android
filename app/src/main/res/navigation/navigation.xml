@@ -33,6 +33,9 @@
         <action
             android:id="@+id/action_klasSelectFragment_to_leerlingSelectFragment"
             app:destination="@id/leerlingSelectFragment" />
+        <argument
+            android:name="rubricId"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/leerlingSelectFragment"

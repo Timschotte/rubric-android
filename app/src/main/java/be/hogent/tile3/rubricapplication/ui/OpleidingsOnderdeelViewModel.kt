@@ -87,18 +87,4 @@ class OpleidingsOnderdeelViewModel: ViewModel() {
 //        }
 //    }
 
-
-
-    fun getDummyOpleidingsOnderdelen(): MutableLiveData<List<OpleidingsOnderdeel>>{
-        var result = MutableLiveData<List<OpleidingsOnderdeel>>()
-        result.value = listOf(
-            OpleidingsOnderdeel(1,"Analyse"),
-            OpleidingsOnderdeel(2,"WebApps"),
-            OpleidingsOnderdeel(3,"Bachelorproef"),
-            OpleidingsOnderdeel(4,"Databanken"),
-            OpleidingsOnderdeel(5,"Programmeren")
-        )
-        return result
-    }
-
 }
