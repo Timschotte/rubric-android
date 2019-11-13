@@ -177,12 +177,6 @@ class CriteriumOverzichtFragment : Fragment() {
                 Log.i("CriteriumOverzichtFrag", "breedte criteriumOverzichtFragmentWrapper (3): ${binding.criteriumOverzichtFragmentWrapper.width}")
         })
 
-        criteriumOverzichtViewModel.rubrics.observe(this, Observer {
-            it.map {
-                Log.i("Test",it.omschrijving)
-            }
-        })
-
         binding.setLifecycleOwner(this)
 
         return binding.root

@@ -30,9 +30,9 @@ class RubricViewModel: ViewModel(){
         return rubricRepository.getAllRubrics()
     }
 
-    fun getRubric(rubricId: String): Rubric?{
-        return rubricRepository.get(rubricId)
-    }
+//    fun getRubric(rubricId: String): Rubric?{
+//        return rubricRepository.get(rubricId)
+//    }
 
     fun insertRubric(rubric: Rubric){
         rubricRepository.insert(rubric)

@@ -26,8 +26,10 @@ class DatabaseModule(private val application: Application) {
      */
     @Provides
     @Singleton
-    internal fun provideRubricRepository(rubricDao: RubricDao): RubricRepository {
-        return RubricRepository(rubricDao)
+    internal fun provideRubricRepository(rubricDao: RubricDao,
+                                         criteriumDao: CriteriumDao,
+                                         niveauDao: NiveauDao): RubricRepository {
+        return RubricRepository(rubricDao, criteriumDao, niveauDao)
     }
 
     /**

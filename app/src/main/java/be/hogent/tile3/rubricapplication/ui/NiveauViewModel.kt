@@ -19,9 +19,9 @@ class NiveauViewModel: ViewModel(){
         App.component.inject(this)
     }
 
-    fun getNiveausForCriterium(criteriumId: String): List<Niveau> {
-        return niveauRepository.getNiveausForCriterium(criteriumId)
-    }
+//    fun getNiveausForCriterium(criteriumId: String): List<Niveau> {
+//        return niveauRepository.getNiveausForCriterium(criteriumId)
+//    }
 
     fun getNiveausForRubric(rubricId: String): List<Niveau> {
         return niveauRepository.getNiveausForRubric(rubricId)

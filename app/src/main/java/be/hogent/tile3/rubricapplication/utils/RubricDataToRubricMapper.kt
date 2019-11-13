@@ -23,7 +23,11 @@ class RubricDataToRubricMapper {
             for(rubric in rubricsData){
                 for(criteriumGroep in rubric.criteriumGroepen){
                     for(criterium in criteriumGroep.criteria){
-                        result.add(Criterium(criterium.id.toString(), criterium.naam, criterium.omschrijving, criterium.gewicht.toDouble(), rubric.id.toString()))
+                        result.add(Criterium(criterium.id.toString(),
+                            criterium.naam, criterium.omschrijving,
+                            criterium.gewicht.toDouble(),
+                            criteriumGroep.id.toString(),
+                            rubric.id.toString()))
                     }
                 }
             }
@@ -37,7 +41,15 @@ class RubricDataToRubricMapper {
                 for(criteriumGroep in rubric.criteriumGroepen){
                     for(criterium in criteriumGroep.criteria){
                         for(criteriumNiveau in criterium.criteriumNiveaus)
-                        result.add(Niveau(criteriumNiveau.id.toString(), criteriumNiveau.niveau.naam, criteriumNiveau.omschrijving, criteriumNiveau.ondergrens, criteriumNiveau.bovengrens, criteriumNiveau.niveau.volgnummer, criterium.id.toString()))
+                        result.add(Niveau(criteriumNiveau.id.toString(),
+                            criteriumNiveau.niveau.naam,
+                            criteriumNiveau.omschrijving,
+                            criteriumNiveau.ondergrens,
+                            criteriumNiveau.bovengrens,
+                            criteriumNiveau.niveau.volgnummer,
+                            rubric.id.toString(),
+                            criteriumGroep.id.toString(),
+                            criterium.id.toString()))
                     }
                 }
             }

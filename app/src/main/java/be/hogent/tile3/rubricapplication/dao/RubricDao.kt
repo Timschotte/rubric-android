@@ -40,5 +40,5 @@ interface RubricDao{
     fun deleteAllRubrics()
 
     @Query("SELECT * from rubric_table WHERE rubricID = :rubricId")
-    fun getRubric(rubricId: String): Rubric?
+    fun getRubric(rubricId: String): LiveData<Rubric>
 }
