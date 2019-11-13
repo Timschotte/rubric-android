@@ -9,9 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import be.hogent.tile3.rubricapplication.model.OpleidingsOnderdeel
 import be.hogent.tile3.rubricapplication.databinding.OpleidingTextViewBinding
 
-//TODO: Recyclerview voor opleidingen fixen
-
-class OpleidingsOnderdeelListAdapter: ListAdapter<OpleidingsOnderdeel, OpleidingsOnderdeelListAdapter.OpleidingViewHolder>(OpleidingsOnderdeelDiffCallback()){
+class OpleidingsOnderdeelListAdapter(val clickListener: OpleidingsOnderdeelListener): ListAdapter<OpleidingsOnderdeel, OpleidingsOnderdeelListAdapter.OpleidingViewHolder>(OpleidingsOnderdeelDiffCallback()){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OpleidingViewHolder {
         Log.i("OpleidingsOnderdeelLA", "Creating viewholder...")
@@ -19,14 +17,14 @@ class OpleidingsOnderdeelListAdapter: ListAdapter<OpleidingsOnderdeel, Opleiding
     }
 
     override fun onBindViewHolder(holder: OpleidingViewHolder, position: Int) {
-        val item = getItem(position)
-        holder.bind(item)
+        holder.bind(getItem(position)!!, clickListener)
     }
 
     class OpleidingViewHolder private constructor(val binding: OpleidingTextViewBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: OpleidingsOnderdeel) {
+        fun bind(item: OpleidingsOnderdeel, clickListener: OpleidingsOnderdeelListener) {
             binding.opleidingsOnderdeel = item
+            binding.clickListener = clickListener
             binding.executePendingBindings()
         }
 
@@ -43,12 +41,15 @@ class OpleidingsOnderdeelListAdapter: ListAdapter<OpleidingsOnderdeel, Opleiding
 
 class OpleidingsOnderdeelDiffCallback: DiffUtil.ItemCallback<OpleidingsOnderdeel>() {
     override fun areItemsTheSame(oldItem: OpleidingsOnderdeel, newItem: OpleidingsOnderdeel): Boolean {
-        return oldItem.opleidingsOnderdeelId == newItem.opleidingsOnderdeelId
+        return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(oldItem: OpleidingsOnderdeel, newItem: OpleidingsOnderdeel): Boolean {
         return oldItem == newItem
     }
+}
 
+class OpleidingsOnderdeelListener(val clickListener: (opleidingsOnderdeelId: Long) -> Unit){
+    fun onClick(opleidingsOnderdeel: OpleidingsOnderdeel) = clickListener(opleidingsOnderdeel.id)
 }
 

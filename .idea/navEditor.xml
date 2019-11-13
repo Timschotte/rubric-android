@@ -94,7 +94,14 @@
                   </entry>
                   <entry key="placeholder">
                     <value>
-                      <LayoutPositions />
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="1038" />
+                            <option name="y" value="158" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
                     </value>
                   </entry>
                   <entry key="rubricSelectFragment">

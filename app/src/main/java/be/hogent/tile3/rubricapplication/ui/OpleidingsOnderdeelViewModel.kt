@@ -36,6 +36,18 @@ class OpleidingsOnderdeelViewModel: ViewModel() {
         viewModelJob.cancel()
     }
 
+    private val _navigateToRubricSelect = MutableLiveData<Long>()
+    val navigateToRubricSelect
+        get() = _navigateToRubricSelect
+
+    fun onOpleidingsOnderdeelClicked(id: Long) {
+        _navigateToRubricSelect.value = id
+    }
+
+    fun onOpleidingsOnderdeelNavigated(){
+        _navigateToRubricSelect. value = null
+    }
+
 //    private fun getOpleidingen(){
 //        uiScope.launch {
 //            var getOpleidingenDeferred = OpleidingApi.retrofitService.getProperties()
@@ -57,6 +69,8 @@ class OpleidingsOnderdeelViewModel: ViewModel() {
 //            database.insert(opleiding)
 //        }
 //    }
+
+
 
     fun getDummyOpleidingsOnderdelen(): MutableLiveData<List<OpleidingsOnderdeel>>{
         var result = MutableLiveData<List<OpleidingsOnderdeel>>()

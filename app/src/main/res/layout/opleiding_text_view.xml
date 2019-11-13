@@ -7,11 +7,15 @@
         <variable
             name="opleidingsOnderdeel"
             type="be.hogent.tile3.rubricapplication.model.OpleidingsOnderdeel" />
+        <variable
+            name="clickListener"
+            type="be.hogent.tile3.rubricapplication.adapters.OpleidingsOnderdeelListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> clickListener.onClick(opleidingsOnderdeel)}">
 
 
         <TextView

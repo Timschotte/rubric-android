@@ -8,9 +8,9 @@ import com.squareup.moshi.Json
 data class OpleidingsOnderdeel(
 
     @PrimaryKey
-    @ColumnInfo(name = "opleidingsOnderdeelId")
+    @ColumnInfo(name = "id")
     @Json(name = "id")
-    var opleidingsOnderdeelId: Long = 0,
+    var id: Long = 0,
 
     @ColumnInfo(name = "naam")
     var naam: String

@@ -16,7 +16,7 @@ interface OpleidingsOnderdeelDao {
     @Update
     fun update(opleidingsOnderdeel: OpleidingsOnderdeel)
 
-    @Query("SELECT * from opleidingsOnderdeel_table WHERE opleidingsOnderdeelId = :key")
+    @Query("SELECT * from opleidingsOnderdeel_table WHERE id = :key")
     fun getBy(key: Int): OpleidingsOnderdeel
 
     @Query("SELECT * from opleidingsOnderdeel_table ORDER BY naam")

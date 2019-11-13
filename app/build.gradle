@@ -9,7 +9,7 @@ apply plugin: 'kotlin-kapt'
 
 apply plugin: 'org.jetbrains.dokka-android'
 
-apply plugin: "androidx.navigation.safeargs.kotlin"
+apply plugin: "androidx.navigation.safeargs"
 
 android {
     compileSdkVersion 28

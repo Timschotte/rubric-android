@@ -4,9 +4,9 @@ import androidx.room.*
 
 @Entity( tableName = "student_table", foreignKeys = arrayOf(ForeignKey(
     entity = OpleidingsOnderdeel::class,
-    parentColumns = arrayOf("opleidingsOnderdeelId"),
-    childColumns = arrayOf("opleidingsOnderdeelId"))),
-    indices = arrayOf(Index("opleidingsOnderdeelId")))
+    parentColumns = arrayOf("id"),
+    childColumns = arrayOf("id"))),
+    indices = arrayOf(Index("id")))
 data class Student(
 
     @PrimaryKey @ColumnInfo(name = "studentId")
@@ -18,6 +18,6 @@ data class Student(
     @ColumnInfo(name = "studentNr")
     val studentenNr: String,
 
-    @ColumnInfo(name = "opleidingsOnderdeelId")
+    @ColumnInfo(name = "id")
     val opleidingId: Int
 )
