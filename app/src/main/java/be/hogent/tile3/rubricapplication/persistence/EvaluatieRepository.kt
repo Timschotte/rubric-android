@@ -7,9 +7,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class EvaluatieRepository(private val evaluatieDao: EvaluatieDao){
-    suspend fun insert(evaluatie: Evaluatie){
-        withContext(Dispatchers.IO){
-            evaluatieDao.insert(evaluatie)
+    suspend fun insert(evaluatie: Evaluatie): Long{
+        return withContext(Dispatchers.IO){
+            var id: Long = evaluatieDao.insert(evaluatie)
+            id
         }
     }
 
@@ -19,7 +20,7 @@ class EvaluatieRepository(private val evaluatieDao: EvaluatieDao){
         }
     }
 
-    suspend fun get(evaluatieId: String): Evaluatie{
+    suspend fun get(evaluatieId: Long): Evaluatie{
         return withContext(Dispatchers.IO){
             var evaluatie = evaluatieDao.get(evaluatieId)
             evaluatie

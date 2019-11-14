@@ -88,7 +88,7 @@ class CriteriumOverzichtViewModel: ViewModel(){
     private fun prepareData() {
         if (isNetworkAvailable()){
             coroutineScope.launch {
-//                rubricRepository.refreshRubrics()
+                rubricRepository.refreshRubrics()
                 initialiseerDummyEvaluatie()
             }
         }
@@ -135,14 +135,67 @@ class CriteriumOverzichtViewModel: ViewModel(){
         }
     }
 
+    fun persisteerEvaluatie(){
+        coroutineScope.launch {
+            var evaluatie: Evaluatie =
+                haalTijdelijkeEvaluatieOp()
+            var criteriumEvaluaties: List<CriteriumEvaluatie> =
+                haalTijdelijkeCriteriumEvaluatiesOp()
+            var evaluatieId = evaluatieRepository.insert(Evaluatie(
+                        evaluatie.evaluatieId,
+                        /* evaluatie.studentId, */
+                        evaluatie.rubricId)
+                )
+            criteriumEvaluaties.forEach {
+                criteriumEvaluatieRepository.insert(CriteriumEvaluatie(
+                        it.criteriumEvaluatieId,
+                        evaluatieId,
+                        it.criteriumId,
+                        it.behaaldNiveau,
+                        it.score,
+                        it.commentaar
+                    )
+                )
+            }
+            verwijderTijdelijkeEvaluatieData(evaluatie, criteriumEvaluaties)
+        }
+    }
+
+    private suspend fun haalTijdelijkeEvaluatieOp(): Evaluatie{
+        return withContext(Dispatchers.IO){
+            var evaluatie = evaluatieRepository.get(TEMP_EVALUATIE_ID)
+            evaluatie
+        }
+    }
+
+    private suspend fun haalTijdelijkeCriteriumEvaluatiesOp(): List<CriteriumEvaluatie>{
+        return withContext(Dispatchers.IO){
+            var criteriumEvaluaties = criteriumEvaluatieRepository.getAllForEvaluatie(
+                TEMP_EVALUATIE_ID)
+            criteriumEvaluaties
+        }
+    }
+
+    private suspend fun verwijderTijdelijkeEvaluatieData(
+            evaluatie: Evaluatie,
+            criteriumEvaluaties: List<CriteriumEvaluatie>
+    ){
+        withContext(Dispatchers.IO){
+            criteriumEvaluaties.forEach{
+                criteriumEvaluatieRepository.delete(it)
+            }
+            evaluatieRepository.delete(evaluatie)
+        }
+    }
+
     private suspend fun initialiseerDummyEvaluatie(){
         withContext(Dispatchers.IO){
             evaluatieRepository.insert(Evaluatie(TEMP_EVALUATIE_ID, /* "1" , */"1"))
             criteriumEvaluatieRepository.insertAll(
                 listOf(
-                    CriteriumEvaluatie("1", TEMP_EVALUATIE_ID,"1","3",null,"LoremIpsumTesterdieTest"),
-                    CriteriumEvaluatie("2", TEMP_EVALUATIE_ID,"2","7",null,"HiHiHiHaHaHa"),
-                    CriteriumEvaluatie("3", TEMP_EVALUATIE_ID,"3","9",null,"SleepDeprivationIsADrug")
+                    CriteriumEvaluatie(0L, TEMP_EVALUATIE_ID,"1","3",null,"LoremIpsumTesterdieTest"),
+                    CriteriumEvaluatie(0L, TEMP_EVALUATIE_ID,"2","7",null,"HiHiHiHaHaHa"),
+                    CriteriumEvaluatie(0L, TEMP_EVALUATIE_ID,"3","9",null,"SleepDeprivationIsADrug")
                 )
             )
         }

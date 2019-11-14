@@ -15,7 +15,7 @@ import be.hogent.tile3.rubricapplication.model.*
     Niveau::class,
     Evaluatie::class,
     CriteriumEvaluatie::class),
-    version = 10, exportSchema = false)
+    version = 12, exportSchema = false)
 abstract class RubricsDatabase : RoomDatabase() {
     abstract fun rubricDao(): RubricDao
     abstract fun criteriumDao(): CriteriumDao

@@ -17,13 +17,13 @@ interface CriteriumEvaluatieDao{
     fun update(criteriumEvaluatie: CriteriumEvaluatie)
 
     @Query("SELECT * FROM criterium_evaluatie_table WHERE criteriumEvaluatieId = :criteriumEvaluatieId")
-    fun get(criteriumEvaluatieId: String): CriteriumEvaluatie
+    fun get(criteriumEvaluatieId: Long): CriteriumEvaluatie
 
     @Query("SELECT * FROM criterium_evaluatie_table WHERE evaluatieId = :evaluatieId")
-    fun getAllForEvaluatie(evaluatieId: String): List<CriteriumEvaluatie>
+    fun getAllForEvaluatie(evaluatieId: Long): List<CriteriumEvaluatie>
 
     @Query("SELECT * FROM criterium_evaluatie_table WHERE evaluatieId = :evaluatieId AND criteriumId = :criteriumId")
-    fun getForEvaluatieAndCriterium(evaluatieId: String, criteriumId: String): CriteriumEvaluatie
+    fun getForEvaluatieAndCriterium(evaluatieId: Long, criteriumId: String): CriteriumEvaluatie
 
     @Query("SELECT * FROM criterium_evaluatie_table")
     fun getAll(): LiveData<List<CriteriumEvaluatie>>

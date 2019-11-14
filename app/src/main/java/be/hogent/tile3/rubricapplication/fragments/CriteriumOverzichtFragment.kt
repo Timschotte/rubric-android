@@ -22,15 +22,15 @@ import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import androidx.recyclerview.widget.RecyclerView
 import android.util.DisplayMetrics
-import android.widget.Toast
-import be.hogent.tile3.rubricapplication.App
-import kotlinx.android.synthetic.main.fragment_criterium_overzicht.*
-import android.content.DialogInterface
-
-
+import android.view.KeyEvent
+import androidx.fragment.app.FragmentManager
+import androidx.appcompat.app.AlertDialog
 
 
 class CriteriumOverzichtFragment : Fragment() {
+
+    private var criteriumOverzichtViewModel: CriteriumOverzichtViewModel? = null
+    private var alertDialog: AlertDialog? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,7 +43,7 @@ class CriteriumOverzichtFragment : Fragment() {
             false
         )
 
-        val criteriumOverzichtViewModel =
+        criteriumOverzichtViewModel =
             ViewModelProviders.of(this).get(CriteriumOverzichtViewModel::class.java)
 
         val adapter =
@@ -177,10 +177,48 @@ class CriteriumOverzichtFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        view.isFocusableInTouchMode = true
+        view.requestFocus()
+        view.setOnKeyListener(object : View.OnKeyListener {
+            override fun onKey(v: View, keyCode: Int, event: KeyEvent): Boolean {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() === KeyEvent.ACTION_UP) {
+                    onBackPressed()
+//                    fragmentManager!!.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                    return true
+                }
+                return false
+            }
+        })
+
         if (savedInstanceState == null) {
             childFragmentManager.beginTransaction()
                 .replace(R.id.criterium_evaluatie_fragment_container, CriteriumEvaluatieFragment())
                 .commitNow()
         }
     }
+
+    private fun onBackPressed() {
+        var builder = AlertDialog.Builder(this.context!!)
+
+        builder.setTitle(R.string.criterium_overzicht_back_dialog_titel)
+        builder.setMessage(R.string.criterium_overzicht_back_dialog_body)
+        builder.setPositiveButton(R.string.criterium_overzicht_back_dialog_opslaan){ _, _ ->
+            criteriumOverzichtViewModel?.persisteerEvaluatie()
+            fragmentManager!!.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        }
+        builder.setNeutralButton(R.string.criterium_overzicht_back_dialog_terug){ dialog, _ ->
+            dialog.cancel()
+        }
+        builder.setNegativeButton(R.string.criterium_overzicht_back_dialog_weggooien){ dialog, _ ->
+            fragmentManager!!.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        }
+        alertDialog = builder.create()
+        alertDialog?.show()
+    }
+
+    override fun onDestroy(){
+        super.onDestroy()
+        alertDialog?.dismiss()
+    }
+
 }

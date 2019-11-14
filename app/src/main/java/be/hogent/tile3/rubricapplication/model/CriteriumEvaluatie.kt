@@ -21,9 +21,9 @@ import androidx.room.*
         Index(value= ["behaaldNiveau"])),
     tableName = "criterium_evaluatie_table")
 data class CriteriumEvaluatie(
-    @PrimaryKey @ColumnInfo(name = "criteriumEvaluatieId") val criteriumEvaluatieId: String,
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "criteriumEvaluatieId") val criteriumEvaluatieId: Long = 0L,
     // TODO: weghalen evaluatieId
-    @ColumnInfo(name = "evaluatieId") val evaluatieId: String,
+    @ColumnInfo(name = "evaluatieId") val evaluatieId: Long,
     @ColumnInfo(name = "criteriumId") val criteriumId: String,
     // Merk op: we verwachten hier een waarde voor behaaldNiveau. By default is dit het centrale
     // niveau, zodat dit in de GUI bij start goed weergegeven wordt. Dit is het criteriumniveau met

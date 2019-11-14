@@ -21,7 +21,6 @@ class CriteriumEvaluatieListAdapter(val clickListener: CriteriumEvaluatieListLis
     private var positieGeselecteerdNiveau: Int = -1
 
     fun stelPositieGeselecteerdNiveauIn(positieGeselecteerdNiveau: Int){
-        Log.i("CriteriumEvaluatieLA","stelPositiGeselecteerdNiveauIn("+positieGeselecteerdNiveau+")")
         this.positieGeselecteerdNiveau = positieGeselecteerdNiveau
     }
 
@@ -31,7 +30,6 @@ class CriteriumEvaluatieListAdapter(val clickListener: CriteriumEvaluatieListLis
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int){
         holder.bind(getItem(position)!!, position, clickListener)
-        Log.i("CriteriumEvaluatieLA","binding position " + position.toString())
         if(position == positieGeselecteerdNiveau)
             holder.pasOpmaakGeselecteerdToe()
         else

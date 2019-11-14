@@ -18,7 +18,7 @@ import androidx.room.PrimaryKey
 ), tableName = "evaluatie_table"
 )
 data class Evaluatie(
-    @PrimaryKey @ColumnInfo(name = "evaluatieId") val evaluatieId: String,
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "evaluatieId") val evaluatieId: Long = 0L,
 //    @ColumnInfo(name = "studentId") val studentId: String,
     @ColumnInfo(name = "rubricId") val rubricId: String
     // TODO: toevoegen docent en data (aanmaak, wijziging)

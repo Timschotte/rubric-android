@@ -13,7 +13,8 @@ data class NetworkRubric(
     val omschrijving: String,
     val criteriumGroepen: List<NetworkCriteriumGroep>,
     val niveauSchaal: NetworkNiveauSchaal,
-    val opleidingsOnderdeel: NetworkOpleidingsOnderdeel?,
+//    val opleidingsOnderdeel: NetworkOpleidingsOnderdeel?,
+    val opleidingsOnderdeel: Int,
     val datumTijdCreatie: String,
     val datumTijdLaatsteWijziging: String
 )
