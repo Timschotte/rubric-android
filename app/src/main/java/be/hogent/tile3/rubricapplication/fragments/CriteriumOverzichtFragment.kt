@@ -24,6 +24,10 @@ import androidx.recyclerview.widget.RecyclerView
 import android.util.DisplayMetrics
 import android.widget.Toast
 import be.hogent.tile3.rubricapplication.App
+import kotlinx.android.synthetic.main.fragment_criterium_overzicht.*
+import android.content.DialogInterface
+
+
 
 
 class CriteriumOverzichtFragment : Fragment() {
@@ -44,7 +48,6 @@ class CriteriumOverzichtFragment : Fragment() {
 
         val adapter =
             CriteriumOverzichtListAdapter(CriteriaListListener { criteriumId, positie ->
-                Log.i("CriteriumOverzichtFrag","Geklikt op criterium met rubricId " + criteriumId + "en positie " + positie)
                 criteriumOverzichtViewModel?.onCriteriumClicked(criteriumId, positie)
             })
 
@@ -54,10 +57,6 @@ class CriteriumOverzichtFragment : Fragment() {
                 super.onItemRangeChanged(positionStart, itemCount)
                 var toPosition =
                     criteriumOverzichtViewModel?.positieGeselecteerdCriterium?.value ?: 0
-                Log.i(
-                    "CriteriumOverzichtFrag",
-                    "ItemRangeChanged... start: $positionStart, to: $toPosition"
-                )
                 if (itemCount > toPosition)
                     binding.rubricCriteriaListRecycler.smoothScrollToPosition(
                         toPosition
@@ -69,7 +68,6 @@ class CriteriumOverzichtFragment : Fragment() {
             ) {
                 var toPosition =
                     criteriumOverzichtViewModel?.positieGeselecteerdCriterium?.value ?: 0
-                Log.i("CriteriumOverzichtFrag", "onItemRangeInserted() called start: $positionStart, item num: $itemCount, toPosition: $toPosition")
                 binding.rubricCriteriaListRecycler.scrollToPosition(
                     criteriumOverzichtViewModel?.positieGeselecteerdCriterium?.value ?: 0)
             }
@@ -80,7 +78,6 @@ class CriteriumOverzichtFragment : Fragment() {
             ) {
                 var toPosition =
                     criteriumOverzichtViewModel?.positieGeselecteerdCriterium?.value ?: 0
-                Log.i("CriteriumOverzichtFrag", "onItemRangeRemoved() called start: $positionStart, item num: $itemCount, toPosition: $toPosition")
                 binding.rubricCriteriaListRecycler.smoothScrollToPosition(toPosition)
             }
         })
@@ -89,14 +86,12 @@ class CriteriumOverzichtFragment : Fragment() {
 
         criteriumOverzichtViewModel?.positieGeselecteerdCriterium?.observe(viewLifecycleOwner, Observer{
             it?.let{
-                Log.i("CriteriumOverzichtFrag", "positie geselecteerd criterium ontvangen: $it")
                 adapter.stelPositieGeselecteerdCriteriumIn(it)
                 adapter.notifyDataSetChanged()
             }
         })
 
         criteriumOverzichtViewModel?.rubricCriteria?.observe(viewLifecycleOwner, Observer{
-            Log.i("CriteriumOverzichtFrag", "New rubricCriteria list received, size: " + it?.size)
             it?.let{
                 adapter.submitList(it)
 //                binding.rubricCriteriaListRecycler.smoothScrollToPosition(
@@ -114,8 +109,6 @@ class CriteriumOverzichtFragment : Fragment() {
                 val displaymetrics = DisplayMetrics()
                 activity!!.windowManager.defaultDisplay.getMetrics(displaymetrics)
                 val screenWidth = displaymetrics.widthPixels
-
-                Log.i("CriteriumOverzichtFrag", "OverzichtpaneelUitgeklapt geobserveerd: $overzichtPaneelUitgeklapt")
 
             val animOverzichtBalk = ObjectAnimator.ofFloat(
                 binding.criteriumEvaluatieOverzichtBalk,
@@ -141,8 +134,6 @@ class CriteriumOverzichtFragment : Fragment() {
                     0.0F
             )
 
-                Log.i("CriteriumOverzichtFrag", "breedte criteriumOverzichtFragmentWrapper (1): ${binding.criteriumOverzichtFragmentWrapper.width}")
-
                 val animCriteriumEvaluatieFrameBreedte = ValueAnimator.ofInt(
                     binding.criteriumEvaluatieFragmentContainer.measuredWidth,
                     if(!overzichtPaneelUitgeklapt)
@@ -165,16 +156,17 @@ class CriteriumOverzichtFragment : Fragment() {
                 animCriteriumEvaluatieFrameBreedte)
             set.start()
 
-                Log.i("CriteriumOverzichtFrag", "breedte criteriumOverzichtFragmentWrapper (2): ${binding.criteriumOverzichtFragmentWrapper.width}")
-
-            if(overzichtPaneelUitgeklapt)
+            if(overzichtPaneelUitgeklapt) {
+                binding.rubricCriteriaLayout.visibility = View.VISIBLE
                 (binding.klapInKlapUitButton as ImageButton).setImageResource(android.R.drawable.ic_media_previous)
-            else
+            }
+            else {
+                binding.rubricCriteriaLayout.visibility = View.INVISIBLE
                 (binding.klapInKlapUitButton as ImageButton).setImageResource(android.R.drawable.ic_media_next)
+            }
 
             binding.criteriumEvaluatieFragmentContainer.requestLayout()
 
-                Log.i("CriteriumOverzichtFrag", "breedte criteriumOverzichtFragmentWrapper (3): ${binding.criteriumOverzichtFragmentWrapper.width}")
         })
 
         binding.setLifecycleOwner(this)

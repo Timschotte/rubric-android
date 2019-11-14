@@ -17,8 +17,6 @@ import javax.inject.Inject
 
 class CriteriumOverzichtViewModel: ViewModel(){
 
-    /* PERSISTENTIE ------------------------------------------------------------------------------*/
-
     @Inject lateinit var context: Context
     @Inject lateinit var rubricRepository: RubricRepository
     @Inject lateinit var niveauRepository: NiveauRepository
@@ -26,23 +24,8 @@ class CriteriumOverzichtViewModel: ViewModel(){
     @Inject lateinit var evaluatieRepository: EvaluatieRepository
     @Inject lateinit var criteriumEvaluatieRepository: CriteriumEvaluatieRepository
 
-    // todo: evaluatierepository maken en injecteren
-    // todo: criteriumevaluatierepository maken en injecteren
-
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
-
-    private val _huidigeEvaluatie = MutableLiveData<Evaluatie>()
-    val huidigeEvaluate: LiveData<Evaluatie>
-        get() = _huidigeEvaluatie
-
-    private val _huidigeCriteriumEvaluaties = MutableLiveData<List<CriteriumEvaluatie>>()
-    val huidigeCriteriumEvaluaties: LiveData<List<CriteriumEvaluatie>>
-        get() = _huidigeCriteriumEvaluaties
-
-    private val _geselecteerdeCriteriumEvaluatie = MutableLiveData<CriteriumEvaluatie>()
-    val geselecteerdeCriteriumEvaluatie: LiveData<CriteriumEvaluatie>
-        get() = _geselecteerdeCriteriumEvaluatie
 
     private var _huidigeRubric = MediatorLiveData<Rubric>()
 
@@ -76,8 +59,6 @@ class CriteriumOverzichtViewModel: ViewModel(){
         //------------------------------------------------------------------------------------------
         coroutineScope.launch{
             prepareData()
-            _huidigeEvaluatie.value = evaluatieRepository.get(TEMP_EVALUATIE_ID)
-            _huidigeCriteriumEvaluaties.value = criteriumEvaluatieRepository.getAllForEvaluatie(TEMP_EVALUATIE_ID)
             _huidigeRubric.addSource(
                 rubricRepository.get(rubricId),
                 _huidigeRubric::setValue
@@ -99,17 +80,12 @@ class CriteriumOverzichtViewModel: ViewModel(){
                         if(grootteRubricCriteria == null) 0 else (grootteRubricCriteria -1)
                 }
             }
-            _geselecteerdeCriteriumEvaluatie.value = _huidigeCriteriumEvaluaties.value?.singleOrNull {
-                it.criteriumId == geselecteerdCriterium.value?.criteriumId
-            }
         }
 
         App.component.inject(this)
     }
 
     private fun prepareData() {
-        Log.i("I/CriteriumOverzichtVM", "about to prepare data.....")
-        Log.i("I/CriteriumOverzichtVM", "isNetworkAvailable? " + isNetworkAvailable().toString())
         if (isNetworkAvailable()){
             coroutineScope.launch {
 //                rubricRepository.refreshRubrics()
@@ -123,41 +99,17 @@ class CriteriumOverzichtViewModel: ViewModel(){
         val activeNetworkInfo = connectivityManager!!.activeNetworkInfo
         return activeNetworkInfo != null && activeNetworkInfo.isConnected
     }
-/*
-    private fun getRubrics(){
-        coroutineScope.launch {
-            var rubricsDeferred = rubricRepository.rubricApi.getRubrics()
-            try {
-                val result = rubricsDeferred.await()
-                _rubrics.value = result
-                Log.i("Test", "Done")
-            } catch (e: Exception){
-                Log.i("Test", e.message)
-                _rubrics.value = ArrayList()
-            }
-        }
-    }*/
 
     fun onCriteriumClicked(criteriumId: String, positie: Int){
         _geselecteerdCriterium.value = rubricCriteria.value?.singleOrNull{it?.criteriumId == criteriumId}
         _positieGeselecteerdCriterium?.value = positie
-        _geselecteerdeCriteriumEvaluatie.value = _huidigeCriteriumEvaluaties.value?.singleOrNull {
-            it.criteriumId == geselecteerdCriterium.value?.criteriumId
-        }
-
-        Log.i("CriteriumOverzichtVM","Criterium " + geselecteerdCriterium.value?.naam +
-                " op positie " + positieGeselecteerdCriterium.value.toString() +
-                " werd geselecteerd.")
-        // Todo: persisteren
     }
 
     fun onUpEdgeButtonClicked(){
-        Log.i("CriteriumEvaluatieVM","Up Edge Button Clicked")
         onEdgeButtonClicked(Direction.UP)
     }
 
     fun onDownEdgeButtonClicked(){
-        Log.i("CriteriumEvaluatieVM","Down Edge Button Clicked")
         onEdgeButtonClicked(Direction.DOWN)
     }
 
@@ -185,9 +137,7 @@ class CriteriumOverzichtViewModel: ViewModel(){
 
     private suspend fun initialiseerDummyEvaluatie(){
         withContext(Dispatchers.IO){
-            Log.i("CriteriumOverzichtVM", "About to initialize dummy evaluation....")
             evaluatieRepository.insert(Evaluatie(TEMP_EVALUATIE_ID, /* "1" , */"1"))
-            Log.i("CriteriumOverzichtVM", "About to initialize dummy criteriumEvaluations....")
             criteriumEvaluatieRepository.insertAll(
                 listOf(
                     CriteriumEvaluatie("1", TEMP_EVALUATIE_ID,"1","3",null,"LoremIpsumTesterdieTest"),

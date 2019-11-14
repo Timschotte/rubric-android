@@ -57,13 +57,6 @@ class CriteriumEvaluatieFragment
                 }
             })
 
-//            criteriumOverzichtViewModel?.geselecteerdeCriteriumEvaluatie?.observe(viewLifecycleOwner, Observer{
-//                it?.let{
-//                    criteriumEvaluatieViewModel.onGeselecteerdeCriteriumEvaluatieChanged(
-//                        it.criteriumEvaluatieId)
-//                }
-//            })
-
             criteriumEvaluatieViewModel.geselecteerdCriteriumNiveau.observe(viewLifecycleOwner, Observer{
                     geselecteerdNiveau ->
                 // NumberPicker minValue en maxValue niet mogelijk via databinding

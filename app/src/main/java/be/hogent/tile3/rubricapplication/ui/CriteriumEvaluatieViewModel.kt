@@ -40,30 +40,6 @@ class CriteriumEvaluatieViewModel: ViewModel(){
         get() = _positieGeselecteerdCriteriumNiveau
 
     init{
-//        _criteriumEvaluatie.addSource(_criteriumId){ result: String ->
-//            if(!result.isNullOrEmpty()){
-//                _criteriumEvaluatie.value = criteriumEvaluatieRepository
-//                    .getForEvaluatieAndCriterium(TEMP_EVALUATIE_ID, result)
-//            }
-//        }
-//        _geselecteerdCriteriumNiveau.addSource(_criteriumNiveaus) { result: List<Niveau> ->
-//            if (!result.isNullOrEmpty()) {
-//                _geselecteerdCriteriumNiveau.value = result.singleOrNull {
-//                    it.niveauId == criteriumEvaluatie.value?.behaaldNiveau
-//                }
-//                Log.i("CriteriumEvaluatieVM", "Geselecteerd niveau: " + geselecteerdCriteriumNiveau.value?.omschrijving)
-//            }
-//        }
-//        _positieGeselecteerdCriteriumNiveau.addSource(_criteriumNiveaus){ result: List<Niveau> ->
-//            if(result != null) {
-//                _positieGeselecteerdCriteriumNiveau.value =
-//                    result.indexOf(result.singleOrNull {
-//                        it.niveauId == criteriumEvaluatie.value?.behaaldNiveau
-//                    })
-//                Log.i("CriteriumEvaluatieVM", "Positie geselecteerd niveau: " + positieGeselecteerdCriteriumNiveau.value.toString())
-//            }
-//        }
-
         App.component.inject(this)
     }
 
@@ -88,25 +64,6 @@ class CriteriumEvaluatieViewModel: ViewModel(){
                 })
         }
     }
-
-//    fun onGeselecteerdeCriteriumEvaluatieChanged(criteriumEvaluatieId: String){
-//        coroutineScope.launch {
-//            //TODO: zorgen dat criteriumEvaluatie geinitialiseerd is in overzicht
-//            //criteriumEvaluatieRepository.update(_criteriumEvaluatie.value!!)
-//
-//            _criteriumEvaluatie.value = criteriumEvaluatieRepository.get(criteriumEvaluatieId)
-//
-//            _geselecteerdCriteriumNiveau.value = _criteriumNiveaus.value?.singleOrNull {
-//                it.niveauId == criteriumEvaluatie.value?.behaaldNiveau
-//            }
-//
-//            _positieGeselecteerdCriteriumNiveau.value =
-//                _criteriumNiveaus.value?.indexOf(_criteriumNiveaus.value?.singleOrNull {
-//                    it.niveauId == criteriumEvaluatie.value?.behaaldNiveau
-//                })
-//        }
-//
-//    }
 
     private suspend fun persisteerVorigeCriteriumEvaluatie(){
         withContext(Dispatchers.IO){
@@ -157,10 +114,4 @@ class CriteriumEvaluatieViewModel: ViewModel(){
         viewModelJob.cancel()
     }
 
-}
-fun getDummyCriteriumEvaluatie(): MutableLiveData<CriteriumEvaluatie>{
-    var result = MutableLiveData<CriteriumEvaluatie>()
-    result.value =
-        CriteriumEvaluatie("1","1","1","3",null,null)
-    return result
 }
