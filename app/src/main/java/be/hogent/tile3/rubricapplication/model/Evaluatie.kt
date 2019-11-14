@@ -6,11 +6,11 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
 @Entity(foreignKeys = arrayOf(
-    ForeignKey(
-        entity = Student::class,
-        parentColumns = arrayOf("studentId"),
-        childColumns = arrayOf("studentId")
-    ),
+//    ForeignKey(
+//        entity = Student::class,
+//        parentColumns = arrayOf("studentId"),
+//        childColumns = arrayOf("studentId")
+//    ),
     ForeignKey(
         entity = Rubric::class,
         parentColumns = arrayOf("rubricId"),
@@ -19,7 +19,7 @@ import androidx.room.PrimaryKey
 )
 data class Evaluatie(
     @PrimaryKey @ColumnInfo(name = "evaluatieId") val evaluatieId: String,
-    @ColumnInfo(name = "studentId") val studentId: String,
+//    @ColumnInfo(name = "studentId") val studentId: String,
     @ColumnInfo(name = "rubricId") val rubricId: String
     // TODO: toevoegen docent en data (aanmaak, wijziging)
     // TODO: lijst criteriumevaluaties inzetten

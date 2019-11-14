@@ -1,9 +1,6 @@
 package be.hogent.tile3.rubricapplication.model
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
 
 @Entity(foreignKeys = arrayOf(
     ForeignKey(
@@ -19,7 +16,10 @@ import androidx.room.PrimaryKey
         parentColumns = arrayOf("niveauId"),
         childColumns = arrayOf("behaaldNiveau")
     )
-), tableName = "criterium_evaluatie_table")
+),
+    indices = arrayOf(Index(value = ["criteriumId"]),
+        Index(value= ["behaaldNiveau"])),
+    tableName = "criterium_evaluatie_table")
 data class CriteriumEvaluatie(
     @PrimaryKey @ColumnInfo(name = "criteriumEvaluatieId") val criteriumEvaluatieId: String,
     // TODO: weghalen evaluatieId

@@ -52,9 +52,17 @@ class CriteriumEvaluatieFragment
 
             criteriumOverzichtViewModel?.geselecteerdCriterium?.observe(viewLifecycleOwner, Observer{
                 it?.let{
-                    criteriumEvaluatieViewModel.onGeselecteerdCriteriumChanged(it.criteriumId)
+                    criteriumEvaluatieViewModel.onGeselecteerdCriteriumChanged(
+                        it.criteriumId)
                 }
             })
+
+//            criteriumOverzichtViewModel?.geselecteerdeCriteriumEvaluatie?.observe(viewLifecycleOwner, Observer{
+//                it?.let{
+//                    criteriumEvaluatieViewModel.onGeselecteerdeCriteriumEvaluatieChanged(
+//                        it.criteriumEvaluatieId)
+//                }
+//            })
 
             criteriumEvaluatieViewModel.geselecteerdCriteriumNiveau.observe(viewLifecycleOwner, Observer{
                     geselecteerdNiveau ->

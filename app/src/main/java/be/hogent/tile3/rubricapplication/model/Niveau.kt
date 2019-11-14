@@ -2,24 +2,21 @@ package be.hogent.tile3.rubricapplication.model
 
 import android.os.Parcel
 import android.os.Parcelable
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
 import com.squareup.moshi.Json
 import java.io.Serializable
 
 @Entity(
-    primaryKeys = arrayOf("niveauId", "criteriumId", "criteriumGroepId", "rubricId"),
     foreignKeys = arrayOf(
     ForeignKey(
         entity = Criterium::class,
-        parentColumns = arrayOf("criteriumId", "criteriumGroepId", "rubricId"),
-        childColumns = arrayOf("criteriumId", "criteriumGroepId", "rubricId"))
-), tableName = "niveau_table"
+        parentColumns = arrayOf("criteriumId"),
+        childColumns = arrayOf("criteriumId"))
+),  indices = arrayOf(Index(value = ["niveauId"])),
+    tableName = "niveau_table"
 )
 data class Niveau(
-    @ColumnInfo(name = "niveauId") val niveauId: String = "",
+    @PrimaryKey @ColumnInfo(name = "niveauId") val niveauId: String = "",
     @ColumnInfo(name = "titel") val titel: String = "",
     @ColumnInfo(name = "omschrijving") val omschrijving: String = "",
     @ColumnInfo(name = "ondergrens") val ondergrens: Int = 0,

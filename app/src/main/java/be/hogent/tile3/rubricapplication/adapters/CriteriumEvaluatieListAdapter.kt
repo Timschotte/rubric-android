@@ -38,6 +38,8 @@ class CriteriumEvaluatieListAdapter(val clickListener: CriteriumEvaluatieListLis
             holder.verwijderOpmaakGeselecteerd()
         if(holder.binding.niveau?.volgnummer == 0)
             holder.binding.voldoendeNiveauIcoonImageView.visibility = View.VISIBLE
+        else
+            holder.binding.voldoendeNiveauIcoonImageView.visibility = View.GONE
     }
 
     class ViewHolder private constructor (val binding: ListItemNormaalCriteriumEvaluatieBinding)

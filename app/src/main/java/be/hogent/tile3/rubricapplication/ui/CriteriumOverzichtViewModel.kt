@@ -9,32 +9,40 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.model.*
-import be.hogent.tile3.rubricapplication.persistence.CriteriumRepository
-import be.hogent.tile3.rubricapplication.persistence.NiveauRepository
-import be.hogent.tile3.rubricapplication.persistence.RubricRepository
+import be.hogent.tile3.rubricapplication.persistence.*
+import be.hogent.tile3.rubricapplication.utils.TEMP_EVALUATIE_ID
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
 
 class CriteriumOverzichtViewModel: ViewModel(){
 
-    @Inject lateinit var context: Context
+    /* PERSISTENTIE ------------------------------------------------------------------------------*/
 
+    @Inject lateinit var context: Context
     @Inject lateinit var rubricRepository: RubricRepository
     @Inject lateinit var niveauRepository: NiveauRepository
     @Inject lateinit var criteriumRepository: CriteriumRepository
+    @Inject lateinit var evaluatieRepository: EvaluatieRepository
+    @Inject lateinit var criteriumEvaluatieRepository: CriteriumEvaluatieRepository
+
     // todo: evaluatierepository maken en injecteren
     // todo: criteriumevaluatierepository maken en injecteren
-
 
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    private val _huidigeEvaluatie = getDummyEvaluatie()
-    val huidigeEvaluatie: LiveData<Evaluatie>
+    private val _huidigeEvaluatie = MutableLiveData<Evaluatie>()
+    val huidigeEvaluate: LiveData<Evaluatie>
         get() = _huidigeEvaluatie
 
-    private var _huidigeCriteriumEvaluaties = getDummyCriteriumEvaluaties()
+    private val _huidigeCriteriumEvaluaties = MutableLiveData<List<CriteriumEvaluatie>>()
+    val huidigeCriteriumEvaluaties: LiveData<List<CriteriumEvaluatie>>
+        get() = _huidigeCriteriumEvaluaties
+
+    private val _geselecteerdeCriteriumEvaluatie = MutableLiveData<CriteriumEvaluatie>()
+    val geselecteerdeCriteriumEvaluatie: LiveData<CriteriumEvaluatie>
+        get() = _geselecteerdeCriteriumEvaluatie
 
     private var _huidigeRubric = MediatorLiveData<Rubric>()
 
@@ -62,16 +70,20 @@ class CriteriumOverzichtViewModel: ViewModel(){
 
     init{
         Log.i("CriteriumOverzichtVM", "Init-block starts execution")
-        // TODO: EvaluatieId doorkrijgen, Evaluatie op basis daarvan ophalen------------------------
-        var evaluatie = Evaluatie("1","1","1")
+        // TODO: EvaluatieId doorkrijgen, Evaluatie en EvaluatieCriteria op basis daarvan ophalen
+        // TODO: Vervolgens geselecteerdEvaluatieCriterium instellen
+        var rubricId = "1"
         //------------------------------------------------------------------------------------------
         coroutineScope.launch{
+            prepareData()
+            _huidigeEvaluatie.value = evaluatieRepository.get(TEMP_EVALUATIE_ID)
+            _huidigeCriteriumEvaluaties.value = criteriumEvaluatieRepository.getAllForEvaluatie(TEMP_EVALUATIE_ID)
             _huidigeRubric.addSource(
-                rubricRepository.get(evaluatie.rubricId),
+                rubricRepository.get(rubricId),
                 _huidigeRubric::setValue
             )
             _rubricCriteria.addSource(
-                criteriumRepository.getCriteriaForRubric(evaluatie.rubricId)
+                criteriumRepository.getCriteriaForRubric(rubricId)
             ){
                 result: List<Criterium>? ->
                 if(!result.isNullOrEmpty()){
@@ -87,15 +99,21 @@ class CriteriumOverzichtViewModel: ViewModel(){
                         if(grootteRubricCriteria == null) 0 else (grootteRubricCriteria -1)
                 }
             }
+            _geselecteerdeCriteriumEvaluatie.value = _huidigeCriteriumEvaluaties.value?.singleOrNull {
+                it.criteriumId == geselecteerdCriterium.value?.criteriumId
+            }
         }
 
         App.component.inject(this)
     }
 
-    private fun refreshRubricDatabase() {
+    private fun prepareData() {
+        Log.i("I/CriteriumOverzichtVM", "about to prepare data.....")
+        Log.i("I/CriteriumOverzichtVM", "isNetworkAvailable? " + isNetworkAvailable().toString())
         if (isNetworkAvailable()){
             coroutineScope.launch {
-                rubricRepository.refreshRubrics()
+//                rubricRepository.refreshRubrics()
+                initialiseerDummyEvaluatie()
             }
         }
     }
@@ -123,6 +141,9 @@ class CriteriumOverzichtViewModel: ViewModel(){
     fun onCriteriumClicked(criteriumId: String, positie: Int){
         _geselecteerdCriterium.value = rubricCriteria.value?.singleOrNull{it?.criteriumId == criteriumId}
         _positieGeselecteerdCriterium?.value = positie
+        _geselecteerdeCriteriumEvaluatie.value = _huidigeCriteriumEvaluaties.value?.singleOrNull {
+            it.criteriumId == geselecteerdCriterium.value?.criteriumId
+        }
 
         Log.i("CriteriumOverzichtVM","Criterium " + geselecteerdCriterium.value?.naam +
                 " op positie " + positieGeselecteerdCriterium.value.toString() +
@@ -162,24 +183,23 @@ class CriteriumOverzichtViewModel: ViewModel(){
         }
     }
 
+    private suspend fun initialiseerDummyEvaluatie(){
+        withContext(Dispatchers.IO){
+            Log.i("CriteriumOverzichtVM", "About to initialize dummy evaluation....")
+            evaluatieRepository.insert(Evaluatie(TEMP_EVALUATIE_ID, /* "1" , */"1"))
+            Log.i("CriteriumOverzichtVM", "About to initialize dummy criteriumEvaluations....")
+            criteriumEvaluatieRepository.insertAll(
+                listOf(
+                    CriteriumEvaluatie("1", TEMP_EVALUATIE_ID,"1","3",null,"LoremIpsumTesterdieTest"),
+                    CriteriumEvaluatie("2", TEMP_EVALUATIE_ID,"2","7",null,"HiHiHiHaHaHa"),
+                    CriteriumEvaluatie("3", TEMP_EVALUATIE_ID,"3","9",null,"SleepDeprivationIsADrug")
+                )
+            )
+        }
+    }
+
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()
     }
-}
-
-fun getDummyEvaluatie(): MutableLiveData<Evaluatie>{
-    var result = MutableLiveData<Evaluatie>()
-    result.value = Evaluatie("1", "1", "1")
-    return result
-}
-
-fun getDummyCriteriumEvaluaties(): MutableLiveData<List<CriteriumEvaluatie>>{
-    var result = MutableLiveData<List<CriteriumEvaluatie>>()
-    result.value = listOf(
-        CriteriumEvaluatie("1","1","1","3",null,null),
-        CriteriumEvaluatie("1","1","2","7",null,null),
-        CriteriumEvaluatie("1","1","3","9",null,null)
-    )
-    return result
 }
