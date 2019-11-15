@@ -6,8 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 
 import be.hogent.tile3.rubricapplication.R
+import be.hogent.tile3.rubricapplication.databinding.FragmentKlasSelectBinding
 
 /**
  * A simple [Fragment] subclass.
@@ -18,8 +21,15 @@ class KlasSelectFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_klas_select, container, false)
+
+        val binding: FragmentKlasSelectBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_klas_select, container, false)
+
+        val args = KlasSelectFragmentArgs.fromBundle(arguments!!)
+        Toast.makeText(context, "${args.rubricId}", Toast.LENGTH_LONG).show()
+
+        return binding.root
+
+
     }
 
 

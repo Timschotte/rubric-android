@@ -20,17 +20,17 @@
 
         <TextView
             android:id="@+id/opleidingsOnderdeelNaam"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_key"
             android:padding="10dp"
             android:text=""
-            android:textAlignment="center"
+            android:textAlignment="viewStart"
+            android:textColor="@color/colorSecundaryLight"
             android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:opleidingsOnderdeelNaam="@{opleidingsOnderdeel}"
+            tools:layout_editor_absoluteX="190dp"
             tools:text="Toegepaste Informatica" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -20,17 +20,18 @@
 
         <TextView
             android:id="@+id/rubricNaam"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_key"
+            android:elevation="2dp"
             android:padding="10dp"
             android:text=""
-            android:textAlignment="center"
+            android:textAlignment="textStart"
+            android:textColor="@color/colorSecundaryLight"
             android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:rubricNaam="@{rubric}"
+            tools:layout_editor_absoluteX="122dp"
             tools:text="Toegepaste Informatica" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
