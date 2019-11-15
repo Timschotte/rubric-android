@@ -10,7 +10,7 @@ import androidx.room.*
 data class Student(
 
     @PrimaryKey @ColumnInfo(name = "studentId")
-    val studentId: String,
+    val studentId: Long,
 
     @ColumnInfo(name = "studentNaam")
     val studentNaam: String,
@@ -19,5 +19,5 @@ data class Student(
     val studentenNr: String,
 
     @ColumnInfo(name = "opleidingsOnderdeelId")
-    val opleidingsOnderdeelId: Int
+    val opleidingsOnderdeelId: Long
 )

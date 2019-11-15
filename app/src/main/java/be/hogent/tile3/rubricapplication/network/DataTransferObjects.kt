@@ -2,6 +2,7 @@ package be.hogent.tile3.rubricapplication.network
 
 import be.hogent.tile3.rubricapplication.model.OpleidingsOnderdeel
 import be.hogent.tile3.rubricapplication.model.Rubric
+import be.hogent.tile3.rubricapplication.model.Student
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = false)
@@ -32,9 +33,9 @@ data class NetworkNiveauSchaal(
 data class NetworkOpleidingsOnderdeel(
     val id: Long,
     val naam: String,
-    val docenten: List<Int>,
-    val studenten: List<Int>,
-    val rubrics: List<Int>
+    val docenten: List<Long>,
+    val studenten: List<Long>,
+    val rubrics: List<Long>
 )
 
 @JsonClass(generateAdapter = false)
@@ -65,17 +66,17 @@ data class NetworkNiveau(
 
 @JsonClass(generateAdapter = false)
 data class NetworkDocent(
-    val id: Int,
+    val id: Long,
     val naam: String,
     val opleidingsOnderdeel: NetworkOpleidingsOnderdeel
 )
 
 @JsonClass(generateAdapter = false)
 data class NetworkStudent(
-    val id: Int,
+    val id: Long,
     val naam: String,
     val studentenNummer: String,
-    val opleidingsOnderdeel: NetworkOpleidingsOnderdeel
+    val opleidingsOnderdeelId: Long
 )
 
 /**
@@ -112,6 +113,17 @@ fun List<NetworkOpleidingsOnderdeel>.asOpleidingsOnderdeelDatabaseModel(): Array
         OpleidingsOnderdeel(
             it.id,
             it.naam
+        )
+    }.toTypedArray()
+}
+
+fun List<NetworkStudent>.asStudentDatabaseModel(): Array<Student> {
+    return map {
+        Student(
+            it.id,
+            it.naam,
+            it.studentenNummer,
+            it.opleidingsOnderdeelId
         )
     }.toTypedArray()
 }

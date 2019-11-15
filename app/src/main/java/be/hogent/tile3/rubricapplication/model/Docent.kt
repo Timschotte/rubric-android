@@ -21,5 +21,5 @@ data class Docent(
     val naam: String,
 
     @ColumnInfo(name = "opleidingsOnderdeelId")
-    val opleidingsOnderdeelId: Int
+    val opleidingsOnderdeelId: Long
 )

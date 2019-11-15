@@ -10,13 +10,19 @@ interface StudentDao{
     @Insert
     fun insert(student: Student)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll(vararg databaseStudent: Student)
+
     @Update
     fun update(student: Student)
 
     @Query("SELECT * from student_table WHERE studentId = :key")
-    fun getBy(key: Int): Student
+    fun getBy(key: Long): LiveData<Student>
 
     @Query("SELECT * from student_table ORDER BY studentNaam")
     fun getAll(): LiveData<List<Student>>
+
+    @Query("SELECT * from student_table WHERE opleidingsOnderdeelId = :key ORDER BY studentNaam")
+    fun getAllStudentsFromOpleidingsOnderdeel(key: Long): LiveData<List<Student>>
 
 }

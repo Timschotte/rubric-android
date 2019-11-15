@@ -24,9 +24,6 @@ class KlasSelectFragment : Fragment() {
 
         val binding: FragmentKlasSelectBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_klas_select, container, false)
 
-        val args = KlasSelectFragmentArgs.fromBundle(arguments!!)
-        Toast.makeText(context, "${args.rubricId}", Toast.LENGTH_LONG).show()
-
         return binding.root
 
 

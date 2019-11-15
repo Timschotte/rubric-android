@@ -26,18 +26,6 @@
             app:enterAnim="@anim/nav_default_enter_anim" />
     </fragment>
     <fragment
-        android:id="@+id/klasSelectFragment"
-        android:name="be.hogent.tile3.rubricapplication.fragments.KlasSelectFragment"
-        android:label="Klassen"
-        tools:layout="@layout/fragment_klas_select">
-        <action
-            android:id="@+id/action_klasSelectFragment_to_leerlingSelectFragment"
-            app:destination="@id/leerlingSelectFragment" />
-        <argument
-            android:name="rubricId"
-            app:argType="string" />
-    </fragment>
-    <fragment
         android:id="@+id/leerlingSelectFragment"
         android:name="be.hogent.tile3.rubricapplication.fragments.LeerlingSelectFragment"
         android:label="Leerlingen"
@@ -45,17 +33,23 @@
         <action
             android:id="@+id/action_leerlingSelectFragment_to_placeholder"
             app:destination="@id/placeholder" />
+        <argument
+            android:name="rubricId"
+            app:argType="string" />
+        <argument
+            android:name="opleidingsOnderdeelId"
+            app:argType="long" />
     </fragment>
     <fragment
         android:id="@+id/rubricSelectFragment"
         android:name="be.hogent.tile3.rubricapplication.fragments.RubricSelectFragment"
         android:label="Rubrics">
-        <action
-            android:id="@+id/action_rubricSelectFragment_to_klasSelectFragment"
-            app:destination="@id/klasSelectFragment" />
         <argument
             android:name="opleidingsOnderdeelId"
             app:argType="long" />
+        <action
+            android:id="@+id/action_rubricSelectFragment_to_leerlingSelectFragment"
+            app:destination="@id/leerlingSelectFragment" />
     </fragment>
     <fragment android:id="@+id/placeholder" />
 </navigation>

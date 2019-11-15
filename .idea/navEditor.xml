@@ -8,34 +8,13 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
-                  <entry key="klasSelectFragment">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="536" />
-                            <option name="y" value="227" />
-                          </Point>
-                        </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="action_klasSelectFragment_to_leerlingSelectFragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
                   <entry key="leerlingSelectFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="761" />
-                            <option name="y" value="234" />
+                            <option name="x" value="678" />
+                            <option name="y" value="239" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -115,7 +94,7 @@
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_rubricSelectFragment_to_klasSelectFragment">
+                            <entry key="action_rubricSelectFragment_to_leerlingSelectFragment">
                               <value>
                                 <LayoutPositions />
                               </value>

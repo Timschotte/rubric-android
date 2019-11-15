@@ -6,8 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProviders
 
 import be.hogent.tile3.rubricapplication.R
+import be.hogent.tile3.rubricapplication.adapters.LeerlingListAdapter
+import be.hogent.tile3.rubricapplication.adapters.LeerlingListener
+import be.hogent.tile3.rubricapplication.databinding.FragmentLeerlingSelectBinding
+import be.hogent.tile3.rubricapplication.ui.LeerlingSelectViewModel
+import be.hogent.tile3.rubricapplication.ui.factories.LeerlingSelectViewModelFactory
 
 /**
  * A simple [Fragment] subclass.
@@ -18,8 +25,24 @@ class LeerlingSelectFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_leerling_select, container, false)
+
+        val binding: FragmentLeerlingSelectBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_leerling_select, container, false)
+        val args = LeerlingSelectFragmentArgs.fromBundle(arguments!!)
+
+        val viewModelFactory = LeerlingSelectViewModelFactory(args.rubricId, args.opleidingsOnderdeelId)
+        val leerlingSelectViewModel = ViewModelProviders.of(this, viewModelFactory).get(LeerlingSelectViewModel::class.java)
+
+        binding.leerlingSelectViewModel = leerlingSelectViewModel
+        binding.setLifecycleOwner(this)
+
+        val adapter = LeerlingListAdapter(LeerlingListener {
+                studentId -> leerlingSelectViewModel.onStudentClicked(studentId)
+        })
+        binding.leerlingList.adapter = adapter
+
+
+        return binding.root
+
     }
 
 

@@ -2,10 +2,7 @@ package be.hogent.tile3.rubricapplication.injection.module
 
 import android.app.Application
 import android.content.Context
-import be.hogent.tile3.rubricapplication.dao.CriteriumDao
-import be.hogent.tile3.rubricapplication.dao.NiveauDao
-import be.hogent.tile3.rubricapplication.dao.OpleidingsOnderdeelDao
-import be.hogent.tile3.rubricapplication.dao.RubricDao
+import be.hogent.tile3.rubricapplication.dao.*
 import be.hogent.tile3.rubricapplication.persistence.*
 import dagger.Module
 import dagger.Provides
@@ -54,6 +51,12 @@ class DatabaseModule(private val application: Application) {
         return OpleidingsOnderdeelRepository(opleidingsOnderdeelDao)
     }
 
+    @Provides
+    @Singleton
+    internal fun provideStudentRepository(studentDao: StudentDao): StudentRepository {
+        return StudentRepository(studentDao)
+    }
+
 
 
     /**
@@ -90,6 +93,12 @@ class DatabaseModule(private val application: Application) {
     @Singleton
     internal fun provideOpleidingsOnderdeelDao(rubricsDatabase: RubricsDatabase): OpleidingsOnderdeelDao {
         return rubricsDatabase.opleidingsOnderdeelDao()
+    }
+
+    @Provides
+    @Singleton
+    internal fun provideStudentDao(rubricsDatabase: RubricsDatabase): StudentDao {
+        return rubricsDatabase.studentDao()
     }
 
     /**

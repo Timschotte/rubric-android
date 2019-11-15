@@ -5,6 +5,7 @@ import be.hogent.tile3.rubricapplication.injection.module.DatabaseModule
 import be.hogent.tile3.rubricapplication.injection.module.NetworkModule
 import be.hogent.tile3.rubricapplication.persistence.OpleidingsOnderdeelRepository
 import be.hogent.tile3.rubricapplication.persistence.RubricRepository
+import be.hogent.tile3.rubricapplication.persistence.StudentRepository
 import be.hogent.tile3.rubricapplication.ui.*
 import dagger.Component
 import javax.inject.Singleton
@@ -22,6 +23,8 @@ interface RepositoryComponent {
     fun inject(opleidingsOnderdeelViewModel: OpleidingsOnderdeelViewModel)
     fun inject(opleidingsOnderdeelRepository: OpleidingsOnderdeelRepository)
     fun inject(rubricSelectViewModel: RubricSelectViewModel)
+    fun inject(leerlingSelectViewModel: LeerlingSelectViewModel)
+    fun inject(studentRepository: StudentRepository)
 
     @Component.Builder
     interface Builder {
