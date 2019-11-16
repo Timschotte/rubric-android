@@ -18,9 +18,9 @@ class CriteriumViewModel: ViewModel(){
     }
 
 
-    fun getCriteriaForRubric(rubricId: String): LiveData<List<Criterium>>{
-        return criteriumRepository.getCriteriaForRubric(rubricId)
-    }
+//    fun getCriteriaForRubric(rubricId: String): LiveData<List<Criterium>>{
+//        return criteriumRepository.getCriteriaForRubric(rubricId)
+//    }
 
     fun removeAllCriteria(){
         return criteriumRepository.deleteAllCriteria()

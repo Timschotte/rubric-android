@@ -21,8 +21,10 @@ class DatabaseModule(private val application: Application) {
      */
     @Provides
     @Singleton
-    internal fun provideRubricRepository(rubricDao: RubricDao): RubricRepository {
-        return RubricRepository(rubricDao)
+    internal fun provideRubricRepository(rubricDao: RubricDao,
+                                         criteriumDao: CriteriumDao,
+                                         niveauDao: NiveauDao): RubricRepository {
+        return RubricRepository(rubricDao, criteriumDao, niveauDao)
     }
 
     /**
@@ -59,6 +61,25 @@ class DatabaseModule(private val application: Application) {
 
 
 
+    /**
+     * Shows how to create a EvaluatieRepository
+     *  @param evaluatieDao the EvaluatieDao used to instantiate the Repository
+     */
+    @Provides
+    @Singleton
+    internal fun provideEvaluatieRepository(evaluatieDao: EvaluatieDao): EvaluatieRepository {
+        return EvaluatieRepository(evaluatieDao)
+    }
+
+    /**
+     * Shows how to create a CriteriumEvaluatieRepository
+     *  @param criteriumEvaluatieDao the CriteriumEvaluatieDao used to instantiate the Repository
+     */
+    @Provides
+    @Singleton
+    internal fun provideCriteriumEvaluatieRepository(criteriumEvaluatieDao: CriteriumEvaluatieDao): CriteriumEvaluatieRepository {
+        return CriteriumEvaluatieRepository(criteriumEvaluatieDao)
+    }
 
     /**
      * Shows how to create a RubricDao
@@ -108,6 +129,26 @@ class DatabaseModule(private val application: Application) {
         return rubricsDatabase.studentOpleidingsOnderdeelDao()
     }
 
+
+    /**
+     * Shows how to create a EvaluatieDao
+     *  @param rubricsDatabase the RubricsDatabase used to instantiate the Dao
+     */
+    @Provides
+    @Singleton
+    internal fun provideEvaluatieDao(rubricsDatabase: RubricsDatabase): EvaluatieDao {
+        return rubricsDatabase.evaluatieDao()
+    }
+
+    /**
+     * Shows how to create a CriteriumEvaluatieDao
+     *  @param rubricsDatabase the RubricsDatabase used to instantiate the Dao
+     */
+    @Provides
+    @Singleton
+    internal fun provideCriteriumEvaluatieDao(rubricsDatabase: RubricsDatabase): CriteriumEvaluatieDao {
+        return rubricsDatabase.criteriumEvaluatieDao()
+    }
 
     /**
      * Shows how to create a rubricsDatabase

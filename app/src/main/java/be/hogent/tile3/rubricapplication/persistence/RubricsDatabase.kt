@@ -8,11 +8,22 @@ import be.hogent.tile3.rubricapplication.model.*
 /**
  * The Room database that contains the Rubrics table
  */
-@Database(entities = arrayOf(Rubric::class, Criterium::class, Niveau::class, OpleidingsOnderdeel::class, Docent::class, Student::class, StudentOpleidingsOnderdeel::class), version = 5, exportSchema = false)
+@Database(entities = arrayOf(Rubric::class,
+    Criterium::class,
+    Niveau::class,
+    Evaluatie::class,
+    CriteriumEvaluatie::class,
+    OpleidingsOnderdeel::class,
+    Docent::class,
+    Student::class,
+    StudentOpleidingsOnderdeel::class),
+    version = 12, exportSchema = false)
 abstract class RubricsDatabase : RoomDatabase() {
     abstract fun rubricDao(): RubricDao
     abstract fun criteriumDao(): CriteriumDao
     abstract fun niveauDao(): NiveauDao
+    abstract fun evaluatieDao(): EvaluatieDao
+    abstract fun criteriumEvaluatieDao(): CriteriumEvaluatieDao
     abstract fun opleidingsOnderdeelDao(): OpleidingsOnderdeelDao
     abstract fun docentDao(): DocentDao
     abstract fun studentDao(): StudentDao

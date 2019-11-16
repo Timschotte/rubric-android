@@ -1,6 +1,9 @@
 package be.hogent.tile3.rubricapplication.network
 
 import be.hogent.tile3.rubricapplication.model.OpleidingsOnderdeel
+import android.util.Log
+import be.hogent.tile3.rubricapplication.model.Criterium
+import be.hogent.tile3.rubricapplication.model.Niveau
 import be.hogent.tile3.rubricapplication.model.Rubric
 import be.hogent.tile3.rubricapplication.model.Student
 import be.hogent.tile3.rubricapplication.model.StudentOpleidingsOnderdeel
@@ -83,7 +86,17 @@ data class NetworkStudent(
 /**
  * Transformeert opgehaalde lijst van netwerk naar een lijst van Rubric (in domain package)
  */
-fun List<NetworkRubric>.asRubricDatabaseModel(): List<Rubric> {
+fun NetworkRubric.asDatabaseModel(): Rubric{
+    return Rubric(
+        this.id.toString(),
+        this.onderwerp,
+        this.omschrijving,
+        this.datumTijdCreatie,
+        this.datumTijdLaatsteWijziging
+    )
+}
+
+fun List<NetworkRubric>.asDatabaseModel(): List<Rubric> {
     return map {
         Rubric(
             it.id.toString(),
@@ -136,4 +149,61 @@ fun List<NetworkStudent>.asStudentOpleidingsOnderdeelDatabaseModel(): Array<Stud
         }
     }
     return list.toTypedArray()
+}
+
+
+fun NetworkCriterium.asDatabaseModel(rubricId: String, criteriumGroepId: String): Criterium{
+    Log.i("DTO", "About to return Criterium for rubric " + rubricId + ", criteriumGroepId: " + criteriumGroepId + " and criteriumId: " + this.id.toString())
+    return Criterium(
+        this.id.toString(),
+        this.naam,
+        this.omschrijving,
+        this.gewicht,
+        criteriumGroepId,
+        rubricId
+    )
+}
+
+fun List<NetworkCriterium>.asDatabaseModelArray(rubricId: String, criteriumGroepId: String): Array<Criterium>{
+    return map{
+        Criterium(
+            it.id.toString(),
+            it.naam,
+            it.omschrijving,
+            it.gewicht,
+            criteriumGroepId,
+            rubricId
+        )
+    }.toTypedArray()
+}
+
+fun NetworkCriteriumNiveau.asDatabaseModel(rubricId: String, criteriumGroepId: String, criteriumId: String): Niveau{
+    Log.i("DTO", "About to return Niveau for rubric " + rubricId + ", criteriumGroep " + criteriumGroepId + ", criterium" + criteriumId + ", niveauId: " + this.id.toString())
+    return Niveau(
+        this.id.toString(),
+        this.niveau.naam,
+        this.omschrijving,
+        this.ondergrens,
+        this.bovengrens,
+        this.niveau.volgnummer,
+        rubricId,
+        criteriumGroepId,
+        criteriumId
+    )
+}
+
+fun List<NetworkCriteriumNiveau>.asDatabaseModelArray(rubricId: String, criteriumGroepId: String, criteriumId: String): Array<Niveau>{
+    return map{
+        Niveau(
+            it.id.toString(),
+            it.niveau.naam,
+            it.omschrijving,
+            it.ondergrens,
+            it.bovengrens,
+            it.niveau.volgnummer,
+            rubricId,
+            criteriumGroepId,
+            criteriumId
+        )
+    }.toTypedArray()
 }

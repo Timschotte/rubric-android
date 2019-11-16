@@ -6,13 +6,14 @@ import androidx.room.*
 import com.squareup.moshi.Json
 import java.io.Serializable
 
-@Entity(foreignKeys = arrayOf(
+@Entity(
+    foreignKeys = arrayOf(
     ForeignKey(
         entity = Criterium::class,
         parentColumns = arrayOf("criteriumId"),
-        childColumns = arrayOf("criteriumId"))),
-    tableName = "niveau_table",
-    indices = arrayOf(Index("criteriumId"))
+        childColumns = arrayOf("criteriumId"))
+),  indices = arrayOf(Index(value = ["niveauId"])),
+    tableName = "niveau_table"
 )
 data class Niveau(
     @PrimaryKey @ColumnInfo(name = "niveauId") val niveauId: String = "",
@@ -21,6 +22,8 @@ data class Niveau(
     @ColumnInfo(name = "ondergrens") val ondergrens: Int = 0,
     @ColumnInfo(name = "bovengrens") val bovengrens: Int = 0,
     @ColumnInfo(name = "volgnummer") val volgnummer: Int,
+    @ColumnInfo(name="rubricId") val rubricId: String,
+    @ColumnInfo(name="criteriumGroepId") val criteriumGroepId: String,
     @ColumnInfo(name = "criteriumId") val criteriumId: String
 ) : Parcelable, Serializable {
     constructor(parcel: Parcel) : this(
@@ -30,6 +33,8 @@ data class Niveau(
         parcel.readInt(),
         parcel.readInt(),
         parcel.readInt(),
+        parcel.readString(),
+        parcel.readString(),
         parcel.readString()
     ) {
     }
@@ -41,6 +46,8 @@ data class Niveau(
         parcel.writeInt(ondergrens)
         parcel.writeInt(bovengrens)
         parcel.writeInt(volgnummer)
+        parcel.writeString(rubricId)
+        parcel.writeString(criteriumGroepId)
         parcel.writeString(criteriumId)
     }
 
