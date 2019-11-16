@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 
 import be.hogent.tile3.rubricapplication.R
@@ -40,6 +41,12 @@ class LeerlingSelectFragment : Fragment() {
         })
         binding.leerlingList.adapter = adapter
 
+       leerlingSelectViewModel.studenten.observe(viewLifecycleOwner, Observer {
+            it?.let{
+                System.out.println(it)
+                adapter.submitList(it)
+            }
+        })
 
         return binding.root
 

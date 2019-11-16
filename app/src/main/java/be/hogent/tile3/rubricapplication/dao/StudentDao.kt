@@ -21,8 +21,4 @@ interface StudentDao{
 
     @Query("SELECT * from student_table ORDER BY studentNaam")
     fun getAll(): LiveData<List<Student>>
-
-    @Query("SELECT * from student_table WHERE opleidingsOnderdeelId = :key ORDER BY studentNaam")
-    fun getAllStudentsFromOpleidingsOnderdeel(key: Long): LiveData<List<Student>>
-
 }

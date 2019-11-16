@@ -2,11 +2,7 @@ package be.hogent.tile3.rubricapplication.model
 
 import androidx.room.*
 
-@Entity( tableName = "student_table", foreignKeys = arrayOf(ForeignKey(
-    entity = OpleidingsOnderdeel::class,
-    parentColumns = arrayOf("opleidingsOnderdeelId"),
-    childColumns = arrayOf("opleidingsOnderdeelId"))),
-    indices = arrayOf(Index("opleidingsOnderdeelId")))
+@Entity( tableName = "student_table")
 data class Student(
 
     @PrimaryKey @ColumnInfo(name = "studentId")
@@ -16,8 +12,5 @@ data class Student(
     val studentNaam: String,
 
     @ColumnInfo(name = "studentNr")
-    val studentenNr: String,
-
-    @ColumnInfo(name = "opleidingsOnderdeelId")
-    val opleidingsOnderdeelId: Long
+    val studentenNr: String
 )

@@ -5,15 +5,17 @@ import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.dao.StudentDao
+import be.hogent.tile3.rubricapplication.dao.StudentOpleidingsOnderdeelDao
 import be.hogent.tile3.rubricapplication.model.Student
 import be.hogent.tile3.rubricapplication.network.RubricApi
 import be.hogent.tile3.rubricapplication.network.asStudentDatabaseModel
+import be.hogent.tile3.rubricapplication.network.asStudentOpleidingsOnderdeelDatabaseModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.IOException
 import javax.inject.Inject
 
-class StudentRepository(private val studentDao: StudentDao) {
+class StudentRepository(private val studentDao: StudentDao, private val studentOpleidingsOnderdeelDao: StudentOpleidingsOnderdeelDao) {
 
     @Inject
     lateinit var rubricApi: RubricApi
@@ -34,8 +36,9 @@ class StudentRepository(private val studentDao: StudentDao) {
 
     @WorkerThread
     fun getAllStudentsFromOpleidingsOnderdeel(id: Long): LiveData<List<Student>> {
-        return studentDao.getAllStudentsFromOpleidingsOnderdeel(id)
+        return studentOpleidingsOnderdeelDao.getStudentenFromOpleidingsOnderdeel(id)
     }
+
 
     suspend fun refreshStudenten(){
         Log.i("Test", "refresh called in studentRepo")
@@ -43,6 +46,8 @@ class StudentRepository(private val studentDao: StudentDao) {
             val studenten = rubricApi.getStudenten().await()
             withContext(Dispatchers.IO){
                 studentDao.insertAll(*studenten.asStudentDatabaseModel())
+                studentOpleidingsOnderdeelDao.insertAll(*studenten.asStudentOpleidingsOnderdeelDatabaseModel())
+                System.out.printf(studenten.asStudentOpleidingsOnderdeelDatabaseModel().toString())
             }
             studenten.map {
                 Log.i("Test", it.naam + "from refreshRubric in repository")

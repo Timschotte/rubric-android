@@ -3,6 +3,7 @@ package be.hogent.tile3.rubricapplication.network
 import be.hogent.tile3.rubricapplication.model.OpleidingsOnderdeel
 import be.hogent.tile3.rubricapplication.model.Rubric
 import be.hogent.tile3.rubricapplication.model.Student
+import be.hogent.tile3.rubricapplication.model.StudentOpleidingsOnderdeel
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = false)
@@ -75,8 +76,8 @@ data class NetworkDocent(
 data class NetworkStudent(
     val id: Long,
     val naam: String,
-    val studentenNummer: String,
-    val opleidingsOnderdeelId: Long
+    val studentNummer: String,
+    val opleidingsOnderdelen: List<Long>
 )
 
 /**
@@ -122,8 +123,17 @@ fun List<NetworkStudent>.asStudentDatabaseModel(): Array<Student> {
         Student(
             it.id,
             it.naam,
-            it.studentenNummer,
-            it.opleidingsOnderdeelId
+            it.studentNummer
         )
     }.toTypedArray()
+}
+
+fun List<NetworkStudent>.asStudentOpleidingsOnderdeelDatabaseModel(): Array<StudentOpleidingsOnderdeel>{
+    val list = ArrayList<StudentOpleidingsOnderdeel>()
+    for (networkStudent in this) {
+        networkStudent.opleidingsOnderdelen.map { oo ->
+            list.add(StudentOpleidingsOnderdeel(networkStudent.id, oo))
+        }
+    }
+    return list.toTypedArray()
 }

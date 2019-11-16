@@ -14,7 +14,7 @@ interface RubricApi{
     @GET("opleidingsonderdeel")
     fun getOpleidingsOnderdeel(): Deferred<List<NetworkOpleidingsOnderdeel>>
 
-    @GET("students")
+    @GET("student")
     fun getStudenten(): Deferred<List<NetworkStudent>>
 
 

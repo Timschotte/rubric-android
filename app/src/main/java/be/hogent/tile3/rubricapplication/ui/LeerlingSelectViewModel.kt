@@ -34,7 +34,7 @@ class LeerlingSelectViewModel(private val rubricId: String, private val opleidin
         App.component.inject(this)
         refreshRubricDatabase()
         studenten = studentRepository.getAllStudentsFromOpleidingsOnderdeel(opleidingsOnderdeelId)
-        Log.i("test", studenten.toString())
+        Log.i("test2", studenten.toString())
     }
 
     private fun refreshRubricDatabase() {

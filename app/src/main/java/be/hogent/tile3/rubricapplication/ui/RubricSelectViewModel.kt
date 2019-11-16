@@ -41,7 +41,7 @@ class RubricSelectViewModel(private val opleidingsOnderdeelId: Long) : ViewModel
         opleidingsOnderdeel.addSource(opleidingsOnderdeelRepository.get(opleidingsOnderdeelId), opleidingsOnderdeel::setValue)
         refreshRubricDatabase()
         rubrics = rubricRepository.getAllRubricsFromOpleidingsOnderdeel(opleidingsOnderdeelId)
-        Log.i("test", rubrics.toString())
+        Log.i("test2", rubrics.toString())
     }
 
     private fun refreshRubricDatabase() {

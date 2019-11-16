@@ -53,9 +53,10 @@ class DatabaseModule(private val application: Application) {
 
     @Provides
     @Singleton
-    internal fun provideStudentRepository(studentDao: StudentDao): StudentRepository {
-        return StudentRepository(studentDao)
+    internal fun provideStudentRepository(studentDao: StudentDao, studentOpleidingsOnderdeelDao: StudentOpleidingsOnderdeelDao): StudentRepository {
+        return StudentRepository(studentDao, studentOpleidingsOnderdeelDao)
     }
+
 
 
 
@@ -100,6 +101,13 @@ class DatabaseModule(private val application: Application) {
     internal fun provideStudentDao(rubricsDatabase: RubricsDatabase): StudentDao {
         return rubricsDatabase.studentDao()
     }
+
+    @Provides
+    @Singleton
+    internal fun provideStudentOpleidingsOnderdeelDao(rubricsDatabase: RubricsDatabase): StudentOpleidingsOnderdeelDao {
+        return rubricsDatabase.studentOpleidingsOnderdeelDao()
+    }
+
 
     /**
      * Shows how to create a rubricsDatabase
