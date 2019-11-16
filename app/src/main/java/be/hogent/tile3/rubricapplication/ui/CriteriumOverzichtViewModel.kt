@@ -24,7 +24,7 @@ import java.lang.Exception
 import javax.inject.Inject
 
 
-class CriteriumOverzichtViewModel: ViewModel(){
+class CriteriumOverzichtViewModel(private val rubricId: String, private val studentId: Long): ViewModel(){
 
     @Inject lateinit var rubricRepository: RubricRepository
     @Inject lateinit var context: Context

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 
 import be.hogent.tile3.rubricapplication.R
 import be.hogent.tile3.rubricapplication.adapters.LeerlingListAdapter
@@ -40,6 +41,16 @@ class LeerlingSelectFragment : Fragment() {
                 studentId -> leerlingSelectViewModel.onStudentClicked(studentId)
         })
         binding.leerlingList.adapter = adapter
+
+        leerlingSelectViewModel.navigateToRubricView.observe(this, Observer { leerling ->
+            leerling?.let {
+                this.findNavController().navigate(
+                    LeerlingSelectFragmentDirections.actionLeerlingSelectFragmentToCriteriumOverzichtFragment(leerling, args.rubricId)
+                )
+                leerlingSelectViewModel.onStudentNavigated()
+            }
+        })
+
 
        leerlingSelectViewModel.studenten.observe(viewLifecycleOwner, Observer {
             it?.let{

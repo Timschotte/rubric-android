@@ -30,15 +30,15 @@
         android:name="be.hogent.tile3.rubricapplication.fragments.LeerlingSelectFragment"
         android:label="Leerlingen"
         tools:layout="@layout/fragment_leerling_select" >
-        <action
-            android:id="@+id/action_leerlingSelectFragment_to_placeholder"
-            app:destination="@id/placeholder" />
         <argument
             android:name="rubricId"
             app:argType="string" />
         <argument
             android:name="opleidingsOnderdeelId"
             app:argType="long" />
+        <action
+            android:id="@+id/action_leerlingSelectFragment_to_criteriumOverzichtFragment"
+            app:destination="@id/criteriumOverzichtFragment" />
     </fragment>
     <fragment
         android:id="@+id/rubricSelectFragment"
@@ -51,5 +51,16 @@
             android:id="@+id/action_rubricSelectFragment_to_leerlingSelectFragment"
             app:destination="@id/leerlingSelectFragment" />
     </fragment>
-    <fragment android:id="@+id/placeholder" />
+    <fragment
+        android:id="@+id/criteriumOverzichtFragment"
+        android:name="be.hogent.tile3.rubricapplication.fragments.CriteriumOverzichtFragment"
+        android:label="Evaluatie"
+        tools:layout="@layout/fragment_criterium_overzicht">
+        <argument
+            android:name="studentId"
+            app:argType="long" />
+        <argument
+            android:name="rubricId"
+            app:argType="string" />
+    </fragment>
 </navigation>
