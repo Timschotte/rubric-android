@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/mainMenuFragment">
+
+    <fragment
+        android:id="@+id/mainMenuFragment"
+        android:name="be.hogent.tile3.rubricapplication.fragments.MainMenuFragment"
+        android:label="Welkom"
+        tools:layout="@layout/fragment_main_menu">
+        <action
+            android:id="@+id/action_mainMenuFragment_to_opleidingSelectFragment"
+            app:destination="@id/opleidingSelectFragment"
+            app:enterAnim="@anim/nav_default_enter_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/opleidingSelectFragment"
+        android:name="be.hogent.tile3.rubricapplication.fragments.OpleidingSelectFragment"
+        android:label="Opleidingen"
+        tools:layout="@layout/fragment_opleiding_select">
+        <action
+            android:id="@+id/action_opleidingSelectFragment_to_rubricSelectFragment"
+            app:destination="@id/rubricSelectFragment"
+            app:enterAnim="@anim/nav_default_enter_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/leerlingSelectFragment"
+        android:name="be.hogent.tile3.rubricapplication.fragments.LeerlingSelectFragment"
+        android:label="Leerlingen"
+        tools:layout="@layout/fragment_leerling_select" >
+        <argument
+            android:name="rubricId"
+            app:argType="string" />
+        <argument
+            android:name="opleidingsOnderdeelId"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_leerlingSelectFragment_to_criteriumOverzichtFragment"
+            app:destination="@id/criteriumOverzichtFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/rubricSelectFragment"
+        android:name="be.hogent.tile3.rubricapplication.fragments.RubricSelectFragment"
+        android:label="Rubrics">
+        <argument
+            android:name="opleidingsOnderdeelId"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_rubricSelectFragment_to_leerlingSelectFragment"
+            app:destination="@id/leerlingSelectFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/criteriumOverzichtFragment"
+        android:name="be.hogent.tile3.rubricapplication.fragments.CriteriumOverzichtFragment"
+        android:label="Evaluatie"
+        tools:layout="@layout/fragment_criterium_overzicht">
+        <argument
+            android:name="studentId"
+            app:argType="long" />
+        <argument
+            android:name="rubricId"
+            app:argType="string" />
+    </fragment>
+</navigation>

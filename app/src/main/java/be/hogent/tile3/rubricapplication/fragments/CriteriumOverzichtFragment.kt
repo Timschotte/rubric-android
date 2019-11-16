@@ -22,6 +22,9 @@ import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import androidx.recyclerview.widget.RecyclerView
 import android.util.DisplayMetrics
+import android.widget.Toast
+import be.hogent.tile3.rubricapplication.App
+import be.hogent.tile3.rubricapplication.ui.factories.CriteriumOverzichtViewModelFactory
 import android.view.KeyEvent
 import androidx.fragment.app.FragmentManager
 import androidx.appcompat.app.AlertDialog
@@ -43,8 +46,12 @@ class CriteriumOverzichtFragment : Fragment() {
             false
         )
 
-        criteriumOverzichtViewModel =
-            ViewModelProviders.of(this).get(CriteriumOverzichtViewModel::class.java)
+        val args = CriteriumOverzichtFragmentArgs.fromBundle(arguments!!)
+
+        val viewModelFactory = CriteriumOverzichtViewModelFactory(args.rubricId, args.studentId)
+        val criteriumOverzichtViewModel = ViewModelProviders.of(this, viewModelFactory).get(CriteriumOverzichtViewModel::class.java)
+
+        Toast.makeText(context, "Student ID: " + args.studentId + " Rubric ID: " + args.rubricId, Toast.LENGTH_LONG).show()
 
         val adapter =
             CriteriumOverzichtListAdapter(CriteriaListListener { criteriumId, positie ->

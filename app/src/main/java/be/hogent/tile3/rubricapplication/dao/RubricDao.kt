@@ -41,4 +41,7 @@ interface RubricDao{
 
     @Query("SELECT * from rubric_table WHERE rubricID = :rubricId")
     fun getRubric(rubricId: String): LiveData<Rubric>
+
+    @Query("SELECT * from rubric_table WHERE opleidingsOnderdeelId = :opleidingsOnderdeelId")
+    fun getAllRubricsFromOpleidingsOnderdeel(opleidingsOnderdeelId: Long): LiveData<List<Rubric>>
 }

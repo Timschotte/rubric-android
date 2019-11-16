@@ -1,9 +1,12 @@
 package be.hogent.tile3.rubricapplication.network
 
+import be.hogent.tile3.rubricapplication.model.OpleidingsOnderdeel
 import android.util.Log
 import be.hogent.tile3.rubricapplication.model.Criterium
 import be.hogent.tile3.rubricapplication.model.Niveau
 import be.hogent.tile3.rubricapplication.model.Rubric
+import be.hogent.tile3.rubricapplication.model.Student
+import be.hogent.tile3.rubricapplication.model.StudentOpleidingsOnderdeel
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = false)
@@ -13,10 +16,9 @@ data class NetworkRubric(
     val omschrijving: String,
     val criteriumGroepen: List<NetworkCriteriumGroep>,
     val niveauSchaal: NetworkNiveauSchaal,
-//    val opleidingsOnderdeel: NetworkOpleidingsOnderdeel?,
-    val opleidingsOnderdeel: Int,
     val datumTijdCreatie: String,
-    val datumTijdLaatsteWijziging: String
+    val datumTijdLaatsteWijziging: String,
+    val opleidingsOnderdeel: Long
 )
 
 @JsonClass(generateAdapter = false)
@@ -35,9 +37,9 @@ data class NetworkNiveauSchaal(
 data class NetworkOpleidingsOnderdeel(
     val id: Long,
     val naam: String,
-    val docenten: List<Int>,
-    val studenten: List<Int>,
-    val rubrics: List<Int>
+    val docenten: List<Long>,
+    val studenten: List<Long>,
+    val rubrics: List<Long>
 )
 
 @JsonClass(generateAdapter = false)
@@ -66,6 +68,21 @@ data class NetworkNiveau(
     val volgnummer: Int
 )
 
+@JsonClass(generateAdapter = false)
+data class NetworkDocent(
+    val id: Long,
+    val naam: String,
+    val opleidingsOnderdeel: NetworkOpleidingsOnderdeel
+)
+
+@JsonClass(generateAdapter = false)
+data class NetworkStudent(
+    val id: Long,
+    val naam: String,
+    val studentNummer: String,
+    val opleidingsOnderdelen: List<Long>
+)
+
 /**
  * Transformeert opgehaalde lijst van netwerk naar een lijst van Rubric (in domain package)
  */
@@ -75,9 +92,11 @@ fun NetworkRubric.asDatabaseModel(): Rubric{
         this.onderwerp,
         this.omschrijving,
         this.datumTijdCreatie,
-        this.datumTijdLaatsteWijziging
+        this.datumTijdLaatsteWijziging,
+        this.opleidingsOnderdeel
     )
 }
+
 fun List<NetworkRubric>.asDatabaseModel(): List<Rubric> {
     return map {
         Rubric(
@@ -85,7 +104,8 @@ fun List<NetworkRubric>.asDatabaseModel(): List<Rubric> {
             it.onderwerp,
             it.omschrijving,
             it.datumTijdCreatie,
-            it.datumTijdLaatsteWijziging
+            it.datumTijdLaatsteWijziging,
+            it.opleidingsOnderdeel
         )
     }
 }
@@ -97,10 +117,41 @@ fun List<NetworkRubric>.asDatabaseModelArray(): Array<Rubric> {
             it.onderwerp,
             it.omschrijving,
             it.datumTijdCreatie,
-            it.datumTijdLaatsteWijziging
+            it.datumTijdLaatsteWijziging,
+            it.opleidingsOnderdeel
         )
     }.toTypedArray()
 }
+
+fun List<NetworkOpleidingsOnderdeel>.asOpleidingsOnderdeelDatabaseModel(): Array<OpleidingsOnderdeel> {
+    return map {
+        OpleidingsOnderdeel(
+            it.id,
+            it.naam
+        )
+    }.toTypedArray()
+}
+
+fun List<NetworkStudent>.asStudentDatabaseModel(): Array<Student> {
+    return map {
+        Student(
+            it.id,
+            it.naam,
+            it.studentNummer
+        )
+    }.toTypedArray()
+}
+
+fun List<NetworkStudent>.asStudentOpleidingsOnderdeelDatabaseModel(): Array<StudentOpleidingsOnderdeel>{
+    val list = ArrayList<StudentOpleidingsOnderdeel>()
+    for (networkStudent in this) {
+        networkStudent.opleidingsOnderdelen.map { oo ->
+            list.add(StudentOpleidingsOnderdeel(networkStudent.id, oo))
+        }
+    }
+    return list.toTypedArray()
+}
+
 
 fun NetworkCriterium.asDatabaseModel(rubricId: String, criteriumGroepId: String): Criterium{
     Log.i("DTO", "About to return Criterium for rubric " + rubricId + ", criteriumGroepId: " + criteriumGroepId + " and criteriumId: " + this.id.toString())

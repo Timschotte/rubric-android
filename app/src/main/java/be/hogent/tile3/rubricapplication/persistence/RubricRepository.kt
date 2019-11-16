@@ -71,6 +71,11 @@ class RubricRepository(private val rubricDao: RubricDao,
         return rubricDao.getRubric(rubricId)
     }
 
+    @WorkerThread
+    fun getAllRubricsFromOpleidingsOnderdeel(id: Long): LiveData<List<Rubric>> {
+        return rubricDao.getAllRubricsFromOpleidingsOnderdeel(id)
+    }
+
     suspend fun refreshRubrics(){
         Log.i("Test", "refresh called in rubricrepository")
         try{

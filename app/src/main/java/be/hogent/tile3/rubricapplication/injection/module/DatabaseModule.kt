@@ -47,6 +47,19 @@ class DatabaseModule(private val application: Application) {
         return NiveauRepository(niveauDao)
     }
 
+    @Provides
+    @Singleton
+    internal fun provideOpleidingsOnderdeelRepository(opleidingsOnderdeelDao: OpleidingsOnderdeelDao): OpleidingsOnderdeelRepository {
+        return OpleidingsOnderdeelRepository(opleidingsOnderdeelDao)
+    }
+
+    @Provides
+    @Singleton
+    internal fun provideStudentRepository(studentDao: StudentDao, studentOpleidingsOnderdeelDao: StudentOpleidingsOnderdeelDao): StudentRepository {
+        return StudentRepository(studentDao, studentOpleidingsOnderdeelDao)
+    }
+
+
 
     /**
      * Shows how to create a EvaluatieRepository
@@ -97,6 +110,25 @@ class DatabaseModule(private val application: Application) {
     internal fun provideNiveauDao(rubricsDatabase: RubricsDatabase): NiveauDao {
         return rubricsDatabase.niveauDao()
     }
+
+    @Provides
+    @Singleton
+    internal fun provideOpleidingsOnderdeelDao(rubricsDatabase: RubricsDatabase): OpleidingsOnderdeelDao {
+        return rubricsDatabase.opleidingsOnderdeelDao()
+    }
+
+    @Provides
+    @Singleton
+    internal fun provideStudentDao(rubricsDatabase: RubricsDatabase): StudentDao {
+        return rubricsDatabase.studentDao()
+    }
+
+    @Provides
+    @Singleton
+    internal fun provideStudentOpleidingsOnderdeelDao(rubricsDatabase: RubricsDatabase): StudentOpleidingsOnderdeelDao {
+        return rubricsDatabase.studentOpleidingsOnderdeelDao()
+    }
+
 
     /**
      * Shows how to create a EvaluatieDao

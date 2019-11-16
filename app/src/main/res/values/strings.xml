@@ -17,4 +17,12 @@
     <string name="criterium_evaluatie_omschrijving_dialog_omschrijving_default">Dit criterium heeft geen omschrijving.</string>
     <string name="list_item_criterium_van_rubric_gewicht_label_text">Gewicht: </string>
     <string name="list_item_criterium_van_rubric_gewicht_tool_text">2.5</string>
+    <string name="welkom">Welkom</string>
+    <string name="toon_overzicht_rubrics">Toon overzicht rubrics</string>
+    <string name="start_nieuwe_evaluatie">Nieuwe evaluatie</string>
+    <string name="selecteer_actie">Wat wil je doen?</string>
+    <string name="selecteer_opleiding">Selecteer een opleidingsonderdeel</string>
+    <string name="volgende">Volgende</string>
+    <string name="selecteerRubricVanOpleiding">%1$s</string>
+    <string name="selecteer_leerling">Selecteer een leerling</string>
 </resources>

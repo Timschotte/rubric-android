@@ -15,7 +15,7 @@ import kotlinx.coroutines.*
 import javax.inject.Inject
 
 
-class CriteriumOverzichtViewModel: ViewModel(){
+class CriteriumOverzichtViewModel(private val rubricId: String, private val studentId: Long): ViewModel(){
 
     @Inject lateinit var context: Context
     @Inject lateinit var rubricRepository: RubricRepository
@@ -55,7 +55,7 @@ class CriteriumOverzichtViewModel: ViewModel(){
         Log.i("CriteriumOverzichtVM", "Init-block starts execution")
         // TODO: EvaluatieId doorkrijgen, Evaluatie en EvaluatieCriteria op basis daarvan ophalen
         // TODO: Vervolgens geselecteerdEvaluatieCriterium instellen
-        var rubricId = "1"
+        var rubricId = rubricId
         //------------------------------------------------------------------------------------------
         coroutineScope.launch{
             prepareData()
