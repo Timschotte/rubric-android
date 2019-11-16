@@ -92,7 +92,8 @@ fun NetworkRubric.asDatabaseModel(): Rubric{
         this.onderwerp,
         this.omschrijving,
         this.datumTijdCreatie,
-        this.datumTijdLaatsteWijziging
+        this.datumTijdLaatsteWijziging,
+        this.opleidingsOnderdeel
     )
 }
 

@@ -19,19 +19,6 @@ class MainActivity : AppCompatActivity(){
         val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
         val navController = this.findNavController(R.id.myNavHostFragment)
         NavigationUI.setupActionBarWithNavController(this, navController)
-
-        // checken op savedInstanceState; anders maak je een nieuw fragment bij het roteren van het
-        // scherm waardoor ook de viewmodels opnieuw gemaakt worden en de fragmenten dus geen
-        // geen data bijhouden
-
-        // TODO: Kijken wat hier mee moet gebeuren
-//        if (savedInstanceState == null) {
-//            supportFragmentManager.beginTransaction()
-//                .replace(R.id.main_container, CriteriumOverzichtFragment())
-//                .commitNow()
-//        }
-
-
     }
 
     override fun onSupportNavigateUp(): Boolean {
