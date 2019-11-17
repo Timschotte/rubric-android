@@ -45,7 +45,7 @@ class CriteriumOverzichtFragment : Fragment() {
 
         val args = CriteriumOverzichtFragmentArgs.fromBundle(arguments!!)
 
-        val viewModelFactory = CriteriumOverzichtViewModelFactory(args.rubricId, args.studentId)
+        val viewModelFactory = CriteriumOverzichtViewModelFactory(args.rubricId, args.studentId, args.evaluatieId)
         val criteriumOverzichtViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(CriteriumOverzichtViewModel::class.java)
 
