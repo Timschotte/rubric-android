@@ -79,8 +79,8 @@ class RubricRepository(private val rubricDao: RubricDao,
     suspend fun refreshRubrics(){
         Log.i("Test", "refresh called in rubricrepository")
         try{
-            val rubrics = rubricApi.getRubrics().await()
             withContext(Dispatchers.IO){
+                val rubrics = rubricApi.getRubrics().await()
 //                rubricDao.insertAll(*rubrics.asDatabaseModelArray())
                 rubrics.forEach{rubric ->
                     rubricDao.insert(rubric.asDatabaseModel())
@@ -101,10 +101,11 @@ class RubricRepository(private val rubricDao: RubricDao,
                     }
                     rubricDao.insert(rubric.asDatabaseModel())
                 }
+                rubrics.map {
+                    Log.i("Test", it.omschrijving + "from refreshRubric in repository")
+                }
             }
-            rubrics.map {
-                Log.i("Test", it.omschrijving + "from refreshRubric in repository")
-            }
+
         } catch (e: IOException){
             Log.i("RubricRepository", e.message)
         }
