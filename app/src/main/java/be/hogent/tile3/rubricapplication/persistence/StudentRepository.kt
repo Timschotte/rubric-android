@@ -43,15 +43,16 @@ class StudentRepository(private val studentDao: StudentDao, private val studentO
     suspend fun refreshStudenten(){
         Log.i("Test", "refresh called in studentRepo")
         try{
-            val studenten = rubricApi.getStudenten().await()
             withContext(Dispatchers.IO){
+                val studenten = rubricApi.getStudenten().await()
                 studentDao.insertAll(*studenten.asStudentDatabaseModel())
                 studentOpleidingsOnderdeelDao.insertAll(*studenten.asStudentOpleidingsOnderdeelDatabaseModel())
                 System.out.printf(studenten.asStudentOpleidingsOnderdeelDatabaseModel().toString())
+                studenten.map {
+                    Log.i("Test", it.naam + "from refreshRubric in repository")
+                }
             }
-            studenten.map {
-                Log.i("Test", it.naam + "from refreshRubric in repository")
-            }
+
         } catch (e: IOException){
             Log.i("StudentRepository", e.message)
         }
