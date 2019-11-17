@@ -13,6 +13,8 @@ import be.hogent.tile3.rubricapplication.adapters.CriteriumEvaluatieListListener
 import be.hogent.tile3.rubricapplication.databinding.FragmentCriteriumEvaluatieBinding
 import be.hogent.tile3.rubricapplication.ui.CriteriumEvaluatieViewModel
 import android.text.InputType
+import android.util.Log
+import android.view.*
 import android.view.*
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
