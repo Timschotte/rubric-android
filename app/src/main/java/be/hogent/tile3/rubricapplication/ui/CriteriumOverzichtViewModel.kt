@@ -89,7 +89,7 @@ class CriteriumOverzichtViewModel(private val rubricId: String, private val stud
         if (isNetworkAvailable()){
             coroutineScope.launch {
                 rubricRepository.refreshRubrics()
-                initialiseerDummyEvaluatie()
+//                initialiseerDummyEvaluatie()
             }
         }
     }
@@ -143,7 +143,7 @@ class CriteriumOverzichtViewModel(private val rubricId: String, private val stud
                 haalTijdelijkeCriteriumEvaluatiesOp()
             var evaluatieId = evaluatieRepository.insert(Evaluatie(
                         evaluatie.evaluatieId,
-                        /* evaluatie.studentId, */
+                         evaluatie.studentId,
                         evaluatie.rubricId)
                 )
             criteriumEvaluaties.forEach {
@@ -190,7 +190,7 @@ class CriteriumOverzichtViewModel(private val rubricId: String, private val stud
 
     private suspend fun initialiseerDummyEvaluatie(){
         withContext(Dispatchers.IO){
-            evaluatieRepository.insert(Evaluatie(TEMP_EVALUATIE_ID, /* "1" , */"1"))
+            evaluatieRepository.insert(Evaluatie(TEMP_EVALUATIE_ID, /* "1" , */1, "1"))
             criteriumEvaluatieRepository.insertAll(
                 listOf(
                     CriteriumEvaluatie(0L, TEMP_EVALUATIE_ID,"1","3",null,"LoremIpsumTesterdieTest"),
