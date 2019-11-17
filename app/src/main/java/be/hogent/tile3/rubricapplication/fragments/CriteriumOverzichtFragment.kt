@@ -29,6 +29,7 @@ import be.hogent.tile3.rubricapplication.utils.TEMP_EVALUATIE_ID
 
 class CriteriumOverzichtFragment : Fragment() {
 
+    private var criteriumOverzichtViewModel: CriteriumOverzichtViewModel? = null
     private var alertDialog: AlertDialog? = null
 
     override fun onCreateView(
@@ -47,16 +48,6 @@ class CriteriumOverzichtFragment : Fragment() {
         val viewModelFactory = CriteriumOverzichtViewModelFactory(args.rubricId, args.studentId)
         val criteriumOverzichtViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(CriteriumOverzichtViewModel::class.java)
-
-/*        criteriumOverzichtViewModel.rubricCriteria.observe(viewLifecycleOwner, Observer {
-            it?.let{
-                if(it.isNotEmpty()){
-                    criteriumOverzichtViewModel.initialiseerEvaluatie()
-                }
-            }
-        })*/
-
-
 
         Toast.makeText(
             context,
@@ -80,7 +71,6 @@ class CriteriumOverzichtFragment : Fragment() {
                         toPosition
                     )
             }
-
             override fun onItemRangeInserted(
                 positionStart: Int,
                 itemCount: Int
@@ -268,8 +258,6 @@ class CriteriumOverzichtFragment : Fragment() {
             }
         })
     }
-
-
 
     private fun onBackPressed() {
         var builder = AlertDialog.Builder(this.context!!)
