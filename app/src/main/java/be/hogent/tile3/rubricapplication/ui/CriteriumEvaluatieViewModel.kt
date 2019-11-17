@@ -12,7 +12,7 @@ import be.hogent.tile3.rubricapplication.utils.TEMP_EVALUATIE_ID
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
-class CriteriumEvaluatieViewModel: ViewModel(){
+class CriteriumEvaluatieViewModel(private val evaluatieId: Long): ViewModel(){
 
     @Inject lateinit var niveauRepository: NiveauRepository
     @Inject lateinit var criteriumRepository: CriteriumRepository
@@ -48,8 +48,8 @@ class CriteriumEvaluatieViewModel: ViewModel(){
             /* wijzigingen opslaan */
             persisteerVorigeCriteriumEvaluatie()
 
-            /* nieuwe criteriumEvaluatie instellen */
-            _criteriumEvaluatie.value = haalCriteriumEvaluatieOp(criteriumId)
+            /* nieuwe criteriumEvaluatie instellen: ophalen uit database of default */
+            _criteriumEvaluatie.value = haalOfMaakCriteriumEvaluatieOp(criteriumId)
 
             /* criteriumNiveaus instellen*/
             _criteriumNiveaus.value = haalNiveausVoorCriteriumOp(criteriumId)
@@ -73,9 +73,10 @@ class CriteriumEvaluatieViewModel: ViewModel(){
         }
     }
 
-    private suspend fun haalCriteriumEvaluatieOp(criteriumId: String): CriteriumEvaluatie{
+    private suspend fun haalOfMaakCriteriumEvaluatieOp(criteriumId: String): CriteriumEvaluatie{
         return withContext(Dispatchers.IO){
-            criteriumEvaluatieRepository.getForEvaluatieAndCriterium(TEMP_EVALUATIE_ID, criteriumId)
+            val criteriumEvaluatie: CriteriumEvaluatie = criteriumEvaluatieRepository.getForEvaluatieAndCriterium(TEMP_EVALUATIE_ID, criteriumId)
+            criteriumEvaluatie
         }
     }
 
