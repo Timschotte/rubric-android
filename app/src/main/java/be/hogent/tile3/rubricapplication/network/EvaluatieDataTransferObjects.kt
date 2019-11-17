@@ -15,3 +15,4 @@ data class NetworkCriteriumEvaluatie(
     val criteriumId: Int,
     val behaaldNiveauId: Int
 )
+
