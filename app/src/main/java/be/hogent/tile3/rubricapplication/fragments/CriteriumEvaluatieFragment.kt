@@ -18,6 +18,8 @@ import android.util.Log
 import android.view.*
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import be.hogent.tile3.rubricapplication.ui.CriteriumOverzichtViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import javax.inject.Inject
@@ -41,12 +43,15 @@ class CriteriumEvaluatieFragment
                     = ViewModelProviders.of(it)
                         .get(CriteriumOverzichtViewModel::class.java)
 
+            val evaulatieId = criteriumOverzichtViewModel.evaluatieId
+
             val criteriumEvaluatieViewModel
-                    = ViewModelProviders.of(this)
+                    = ViewModelProviders.of(this, viewModelFactory { CriteriumEvaluatieViewModel(evaulatieId) })
                         .get(CriteriumEvaluatieViewModel::class.java)
 
             binding.criteriumEvaluatieViewModel = criteriumEvaluatieViewModel
             binding.criterium = criteriumOverzichtViewModel.geselecteerdCriterium.value
+
 
             criteriumOverzichtViewModel?.geselecteerdCriterium?.observe(viewLifecycleOwner, Observer{
                 it?.let{
@@ -140,6 +145,9 @@ class CriteriumEvaluatieFragment
         return binding.root
     }
 
-
+    protected inline fun <VM : ViewModel> viewModelFactory(crossinline f: () -> VM) =
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(aClass: Class<T>):T = f() as T
+        }
 
 }

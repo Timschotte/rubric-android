@@ -7,13 +7,13 @@ import be.hogent.tile3.rubricapplication.model.Evaluatie
 @Dao
 interface EvaluatieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(evaluatie: Evaluatie): Long
+    fun insert(evaluatie: Evaluatie): Unit
 
     @Update
     fun update(evaluatie: Evaluatie)
 
     @Query("SELECT * FROM evaluatie_table WHERE evaluatieId = :evaluatieId")
-    fun get(evaluatieId: Long): Evaluatie
+    fun get(evaluatieId: String): Evaluatie
 
     @Delete
     fun delete(evaluatie: Evaluatie)
