@@ -18,7 +18,7 @@
     <fragment
         android:id="@+id/opleidingSelectFragment"
         android:name="be.hogent.tile3.rubricapplication.fragments.OpleidingSelectFragment"
-        android:label="Opleidingen"
+        android:label="Selecteer opleidingsonderdeel"
         tools:layout="@layout/fragment_opleiding_select">
         <action
             android:id="@+id/action_opleidingSelectFragment_to_rubricSelectFragment"
@@ -28,8 +28,8 @@
     <fragment
         android:id="@+id/leerlingSelectFragment"
         android:name="be.hogent.tile3.rubricapplication.fragments.LeerlingSelectFragment"
-        android:label="Leerlingen"
-        tools:layout="@layout/fragment_leerling_select" >
+        android:label="Selecteer leerling"
+        tools:layout="@layout/fragment_leerling_select">
         <argument
             android:name="rubricId"
             app:argType="string" />
@@ -43,7 +43,7 @@
     <fragment
         android:id="@+id/rubricSelectFragment"
         android:name="be.hogent.tile3.rubricapplication.fragments.RubricSelectFragment"
-        android:label="Rubrics">
+        android:label="Selecteer rubric">
         <argument
             android:name="opleidingsOnderdeelId"
             app:argType="long" />
