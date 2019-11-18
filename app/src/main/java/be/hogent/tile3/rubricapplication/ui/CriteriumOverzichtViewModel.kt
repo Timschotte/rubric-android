@@ -10,16 +10,22 @@ import androidx.lifecycle.ViewModel
 import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.model.*
 import be.hogent.tile3.rubricapplication.persistence.*
-import be.hogent.tile3.rubricapplication.utils.TEMP_EVALUATIE_ID
 import kotlinx.coroutines.*
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 
-class CriteriumOverzichtViewModel(private val rubricId: String, private val studentId: Long, private val evaluatieId: Long?) :
+class CriteriumOverzichtViewModel(
+    private val rubricId: String,
+    private val studentId: Long,
+    val evaluatieId: String = UUID.randomUUID().toString()
+) :
     ViewModel() {
 
     @Inject
     lateinit var context: Context
+
     @Inject
     lateinit var rubricRepository: RubricRepository
     @Inject
@@ -58,22 +64,18 @@ class CriteriumOverzichtViewModel(private val rubricId: String, private val stud
     val overzichtPaneelUitgeklapt: LiveData<Boolean>
         get() = _overzichtPaneelUitgeklapt
 
-    private lateinit var evaluatie: Evaluatie;
+    private lateinit var evaluatie: Evaluatie
+
+    private val _criteriaInitialized = MutableLiveData<Boolean>().apply { postValue(false) }
+    val criteriaInitialized: LiveData<Boolean>
+        get() = _criteriaInitialized
+
 
     init {
         Log.i("CriteriumOverzichtVM", "Init-block starts execution")
-        // TODO: EvaluatieId doorkrijgen, Evaluatie en EvaluatieCriteria op basis daarvan ophalen
-        // TODO: Vervolgens geselecteerdEvaluatieCriterium instellen
 //        var rubricId = rubricId
         //------------------------------------------------------------------------------------------
 
-        if(evaluatieId == null){
-            evaluatie = Evaluatie(studentId = studentId, rubricId = rubricId )
-        } else {
-            //TODO Evaluatie ophalen uit repo
-            evaluatie = Evaluatie(studentId = studentId, rubricId = rubricId )
-
-        }
 
         coroutineScope.launch {
             prepareData()
@@ -97,6 +99,11 @@ class CriteriumOverzichtViewModel(private val rubricId: String, private val stud
                         if (grootteRubricCriteria == null) 0 else (grootteRubricCriteria - 1)
                 }
             }
+
+
+
+
+
         }
 
         App.component.inject(this)
@@ -156,80 +163,98 @@ class CriteriumOverzichtViewModel(private val rubricId: String, private val stud
 
     fun persisteerEvaluatie() {
         coroutineScope.launch {
-            var criteriumEvaluaties: List<CriteriumEvaluatie> =
-                haalTijdelijkeCriteriumEvaluatiesOp()
-            var evaluatieId = evaluatieRepository.insert(evaluatie)
+            //            var criteriumEvaluaties: List<CriteriumEvaluatie> =
+//                haalTijdelijkeCriteriumEvaluatiesOp()
+            evaluatieRepository.update(evaluatie)
 
-            criteriumEvaluaties.forEach {
-                criteriumEvaluatieRepository.insert(
-                    CriteriumEvaluatie(
-                        it.criteriumEvaluatieId,
-                        evaluatieId,
-                        it.criteriumId,
-                        it.behaaldNiveau,
-                        it.score,
-                        it.commentaar
-                    )
+//            criteriumEvaluaties.forEach {
+//                criteriumEvaluatieRepository.insert(
+//                    CriteriumEvaluatie(
+//                        evaluatie.evaluatieId,
+//                        it.criteriumId,
+//                        it.behaaldNiveau,
+//                        it.score,
+//                        it.commentaar
+//                    )
+//                )
+        }
+//
+    }
+
+    fun onCriteriaInitializedComplete(){
+        _criteriaInitialized.value = false
+    }
+
+    fun initaliseerWanneerNodig(){
+        coroutineScope.launch {
+            evaluatie = withContext(Dispatchers.IO) {
+                val tempResult = evaluatieRepository.get(evaluatieId)
+                if(tempResult == null){
+                    initialiseerNieuweEvaluatie()
+                } else {
+//                    _criteriaInitialized.value = true
+                    tempResult
+                }
+            }
+        }
+    }
+
+    private suspend fun initialiseerNieuweEvaluatie(): Evaluatie {
+        return withContext(Dispatchers.IO) {
+            //Maak de evaluatie
+            evaluatie = Evaluatie(evaluatieId, studentId, rubricId)
+            evaluatieRepository.insert(evaluatie)
+
+            //Maak de criteriumEvaluaties
+            val criteria = _rubricCriteria.value
+            val criteriumEvaluaties = ArrayList<CriteriumEvaluatie>()
+            criteria?.forEach {
+                val niveau = niveauRepository.getNiveausForCriterium(it.criteriumId)
+                    .singleOrNull { it.volgnummer == 0 }
+
+                val criteriumEvaluatie = CriteriumEvaluatie(
+                    evaluatie.evaluatieId,
+                    it.criteriumId,
+                    niveau?.niveauId,
+                    niveau?.ondergrens,
+                    ""
                 )
+                criteriumEvaluaties.add(criteriumEvaluatie)
             }
-            verwijderTijdelijkeEvaluatieData(evaluatie, criteriumEvaluaties)
-        }
-    }
-
-    private suspend fun haalTijdelijkeEvaluatieOp(): Evaluatie {
-        return withContext(Dispatchers.IO) {
-            var evaluatie = evaluatieRepository.get(TEMP_EVALUATIE_ID)
+            criteriumEvaluatieRepository.insertAll(criteriumEvaluaties)
+            val checkResult = criteriumEvaluatieRepository.getAllForEvaluatie(evaluatieId)
+//            _criteriaInitialized.value = true
             evaluatie
+
         }
     }
 
-    private suspend fun haalTijdelijkeCriteriumEvaluatiesOp(): List<CriteriumEvaluatie> {
-        return withContext(Dispatchers.IO) {
-            var criteriumEvaluaties = criteriumEvaluatieRepository.getAllForEvaluatie(
-                TEMP_EVALUATIE_ID
-            )
-            criteriumEvaluaties
-        }
-    }
-
-    private suspend fun verwijderTijdelijkeEvaluatieData(
-        evaluatie: Evaluatie,
-        criteriumEvaluaties: List<CriteriumEvaluatie>
-    ) {
+/*    private suspend fun initialiseerDummyEvaluatie() {
         withContext(Dispatchers.IO) {
-            criteriumEvaluaties.forEach {
-                criteriumEvaluatieRepository.delete(it)
-            }
-            evaluatieRepository.delete(evaluatie)
-        }
-    }
-
-    private suspend fun initialiseerDummyEvaluatie() {
-        withContext(Dispatchers.IO) {
-            evaluatieRepository.insert(Evaluatie(TEMP_EVALUATIE_ID, /* "1" , */1, "1"))
+            evaluatieRepository.insert(Evaluatie("", *//* "1" , *//*1, "1"))
             criteriumEvaluatieRepository.insertAll(
                 listOf(
                     CriteriumEvaluatie(
-                        0L,
-                        TEMP_EVALUATIE_ID,
+//                        0L,
+                        "",
                         "1",
-                        "3",
+                        3L,
                         null,
                         "LoremIpsumTesterdieTest"
                     ),
-                    CriteriumEvaluatie(0L, TEMP_EVALUATIE_ID, "2", "7", null, "HiHiHiHaHaHa"),
+                    CriteriumEvaluatie("", "2", 7L, null, "HiHiHiHaHaHa"),
                     CriteriumEvaluatie(
-                        0L,
-                        TEMP_EVALUATIE_ID,
+//                        0L,
+                        "",
                         "3",
-                        "9",
+                        9L,
                         null,
                         "SleepDeprivationIsADrug"
                     )
                 )
             )
         }
-    }
+    }*/
 
     override fun onCleared() {
         super.onCleared()

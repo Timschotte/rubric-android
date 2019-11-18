@@ -64,6 +64,6 @@
             app:argType="string" />
         <argument
             android:name="evaluatieId"
-            app:argType="long"/>
+            app:argType="string"/>
     </fragment>
 </navigation>

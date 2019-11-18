@@ -181,7 +181,7 @@ fun List<NetworkCriterium>.asDatabaseModelArray(rubricId: String, criteriumGroep
 fun NetworkCriteriumNiveau.asDatabaseModel(rubricId: String, criteriumGroepId: String, criteriumId: String): Niveau{
     Log.i("DTO", "About to return Niveau for rubric " + rubricId + ", criteriumGroep " + criteriumGroepId + ", criterium" + criteriumId + ", niveauId: " + this.id.toString())
     return Niveau(
-        this.id.toString(),
+        this.id,
         this.niveau.naam,
         this.omschrijving,
         this.ondergrens,
@@ -196,7 +196,7 @@ fun NetworkCriteriumNiveau.asDatabaseModel(rubricId: String, criteriumGroepId: S
 fun List<NetworkCriteriumNiveau>.asDatabaseModelArray(rubricId: String, criteriumGroepId: String, criteriumId: String): Array<Niveau>{
     return map{
         Niveau(
-            it.id.toString(),
+            it.id,
             it.niveau.naam,
             it.omschrijving,
             it.ondergrens,
