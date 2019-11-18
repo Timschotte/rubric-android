@@ -34,6 +34,11 @@
                     tools:text="@tools:sample/lorem"
                     android:textColor="@color/primaryTextColor"/>
             </androidx.cardview.widget.CardView>
+
+
+
+
         </TableRow>
+
     </TableLayout>
 </FrameLayout>
