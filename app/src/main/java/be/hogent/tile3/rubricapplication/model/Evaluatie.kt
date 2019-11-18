@@ -1,9 +1,7 @@
 package be.hogent.tile3.rubricapplication.model
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
+import java.util.*
 
 @Entity(foreignKeys = arrayOf(
     ForeignKey(
@@ -18,7 +16,7 @@ import androidx.room.PrimaryKey
 ), tableName = "evaluatie_table"
 )
 data class Evaluatie(
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "evaluatieId") val evaluatieId: Long = 0L,
+    @PrimaryKey @ColumnInfo(name = "evaluatieId") val evaluatieId: String,
     @ColumnInfo(name = "studentId") val studentId: Long,
     @ColumnInfo(name = "rubricId") val rubricId: String
     // TODO: toevoegen docent en data (aanmaak, wijziging)

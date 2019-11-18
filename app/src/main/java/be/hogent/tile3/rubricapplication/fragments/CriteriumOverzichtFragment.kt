@@ -29,7 +29,6 @@ import androidx.appcompat.app.AlertDialog
 
 class CriteriumOverzichtFragment : Fragment() {
 
-    private var criteriumOverzichtViewModel: CriteriumOverzichtViewModel? = null
     private var alertDialog: AlertDialog? = null
 
     override fun onCreateView(
@@ -48,6 +47,16 @@ class CriteriumOverzichtFragment : Fragment() {
         val viewModelFactory = CriteriumOverzichtViewModelFactory(args.rubricId, args.studentId, args.evaluatieId)
         val criteriumOverzichtViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(CriteriumOverzichtViewModel::class.java)
+
+        criteriumOverzichtViewModel.rubricCriteria.observe(viewLifecycleOwner, Observer {
+            it?.let{
+                if(it.isNotEmpty()){
+                    criteriumOverzichtViewModel.initaliseerWanneerNodig()
+                }
+            }
+        })
+
+
 
         Toast.makeText(
             context,

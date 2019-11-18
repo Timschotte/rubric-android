@@ -16,7 +16,7 @@ import java.io.Serializable
     tableName = "niveau_table"
 )
 data class Niveau(
-    @PrimaryKey @ColumnInfo(name = "niveauId") val niveauId: String = "",
+    @PrimaryKey @ColumnInfo(name = "niveauId") val niveauId: Long = 0L,
     @ColumnInfo(name = "titel") val titel: String = "",
     @ColumnInfo(name = "omschrijving") val omschrijving: String = "",
     @ColumnInfo(name = "ondergrens") val ondergrens: Int = 0,
@@ -27,7 +27,7 @@ data class Niveau(
     @ColumnInfo(name = "criteriumId") val criteriumId: String
 ) : Parcelable, Serializable {
     constructor(parcel: Parcel) : this(
-        parcel.readString(),
+        parcel.readLong(),
         parcel.readString(),
         parcel.readString(),
         parcel.readInt(),
@@ -40,7 +40,7 @@ data class Niveau(
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(niveauId)
+        parcel.writeLong(niveauId)
         parcel.writeString(titel)
         parcel.writeString(omschrijving)
         parcel.writeInt(ondergrens)

@@ -8,11 +8,10 @@ import be.hogent.tile3.rubricapplication.model.Niveau
 import be.hogent.tile3.rubricapplication.persistence.CriteriumEvaluatieRepository
 import be.hogent.tile3.rubricapplication.persistence.CriteriumRepository
 import be.hogent.tile3.rubricapplication.persistence.NiveauRepository
-import be.hogent.tile3.rubricapplication.utils.TEMP_EVALUATIE_ID
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
-class CriteriumEvaluatieViewModel(private val evaluatieId: Long): ViewModel(){
+class CriteriumEvaluatieViewModel(private val evaluatieId: String): ViewModel(){
 
     @Inject lateinit var niveauRepository: NiveauRepository
     @Inject lateinit var criteriumRepository: CriteriumRepository
@@ -62,6 +61,7 @@ class CriteriumEvaluatieViewModel(private val evaluatieId: Long): ViewModel(){
                 _criteriumNiveaus.value?.indexOf(_criteriumNiveaus.value?.singleOrNull {
                     it.niveauId == criteriumEvaluatie.value?.behaaldNiveau
                 })
+            println(positieGeselecteerdCriteriumNiveau.value)
         }
     }
 
@@ -75,7 +75,8 @@ class CriteriumEvaluatieViewModel(private val evaluatieId: Long): ViewModel(){
 
     private suspend fun haalOfMaakCriteriumEvaluatieOp(criteriumId: String): CriteriumEvaluatie{
         return withContext(Dispatchers.IO){
-            val criteriumEvaluatie: CriteriumEvaluatie = criteriumEvaluatieRepository.getForEvaluatieAndCriterium(TEMP_EVALUATIE_ID, criteriumId)
+            val criteriumEvaluatie: CriteriumEvaluatie = criteriumEvaluatieRepository
+                .getForEvaluatieAndCriterium(evaluatieId, criteriumId)
             criteriumEvaluatie
         }
     }
@@ -86,7 +87,7 @@ class CriteriumEvaluatieViewModel(private val evaluatieId: Long): ViewModel(){
         }
     }
 
-    fun onNiveauClicked(niveauId: String, positie: Int){
+    fun onNiveauClicked(niveauId: Long, positie: Int){
         _geselecteerdCriteriumNiveau.value = criteriumNiveaus.value?.singleOrNull{it.niveauId == niveauId}
         _positieGeselecteerdCriteriumNiveau?.value = positie
         criteriumEvaluatie.value?.behaaldNiveau = niveauId

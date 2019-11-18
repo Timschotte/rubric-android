@@ -1,5 +1,6 @@
 package be.hogent.tile3.rubricapplication.persistence
 
+import androidx.annotation.Nullable
 import androidx.lifecycle.LiveData
 import be.hogent.tile3.rubricapplication.dao.EvaluatieDao
 import be.hogent.tile3.rubricapplication.model.Evaluatie
@@ -7,10 +8,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class EvaluatieRepository(private val evaluatieDao: EvaluatieDao){
-    suspend fun insert(evaluatie: Evaluatie): Long{
+    suspend fun insert(evaluatie: Evaluatie){
         return withContext(Dispatchers.IO){
-            var id: Long = evaluatieDao.insert(evaluatie)
-            id
+            evaluatieDao.insert(evaluatie)
         }
     }
 
@@ -20,7 +20,7 @@ class EvaluatieRepository(private val evaluatieDao: EvaluatieDao){
         }
     }
 
-    suspend fun get(evaluatieId: Long): Evaluatie{
+    suspend fun get(evaluatieId: String): Evaluatie?{
         return withContext(Dispatchers.IO){
             var evaluatie = evaluatieDao.get(evaluatieId)
             evaluatie
