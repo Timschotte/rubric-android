@@ -10,6 +10,8 @@ It only holds a RecyclerView.
     android:name="CriteriumListFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginTop="12dp"
+    android:layout_marginBottom="12dp"
     tools:listitem="@layout/criterium_list_content" />

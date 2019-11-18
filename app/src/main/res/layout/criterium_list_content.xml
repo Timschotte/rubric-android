@@ -7,8 +7,10 @@
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorSecundary"
-        android:stretchColumns="*">
+        android:background="@color/secondaryColor"
+        android:stretchColumns="*"
+        >
+
 
         <TableRow
             android:id="@+id/criterium_tablerow"
@@ -19,7 +21,7 @@
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                app:cardBackgroundColor="@color/colorPrimary"
+                app:cardBackgroundColor="@color/primaryLightColor"
                 android:layout_margin="5dp"
                 app:cardCornerRadius="10dp">
                 <TextView
@@ -30,13 +32,8 @@
                     android:maxLines="6"
                     android:gravity="center"
                     tools:text="@tools:sample/lorem"
-                    android:textColor="@color/colorTextOnPrimary"/>
+                    android:textColor="@color/primaryTextColor"/>
             </androidx.cardview.widget.CardView>
-
-
-
-
         </TableRow>
-
     </TableLayout>
 </FrameLayout>
