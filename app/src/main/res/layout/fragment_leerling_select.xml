@@ -34,7 +34,7 @@
             android:padding="20dp"
             android:text="@string/selecteer_leerling"
             android:textAlignment="center"
-            android:textColor="@color/colorSecundaryLight"
+            android:textColor="@color/secondaryLightColor"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

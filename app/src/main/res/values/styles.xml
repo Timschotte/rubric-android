@@ -3,10 +3,12 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorPrimaryLight</item>
-        <item name="android:fontFamily">@font/inter_ui</item>
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorAccent">@color/secondaryColor</item>
+        <item name="android:fontFamily">@font/montserrat</item>
+        <item name="android:textColorPrimary">@color/primaryTextColor</item>
+        <item name="android:textColorSecondary">@color/secondaryTextColor</item>
     </style>
 
     <style name="card_style">
@@ -14,13 +16,13 @@
         <item name="android:layout_height">100dp</item>
         <item name="android:layout_marginTop">150dp</item>
         <item name="android:background">@drawable/card_background</item>
-        <item name="android:elevation">5dp</item>
+        <item name="android:elevation">4dp</item>
     </style>
 
     <style name="top_constraint">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">200dp</item>
-        <item name="android:background">#42abfb</item>
+        <item name="android:background">@color/primaryLightColor</item>
     </style>
 
 </resources>
