@@ -21,11 +21,14 @@ import javax.inject.Inject
 /**
  * This class is used to run queries for the Rubric Objects
  */
-class RubricRepository(private val rubricDao: RubricDao,
-                       private val criteriumDao: CriteriumDao,
-                       private val niveauDao: NiveauDao){
+class RubricRepository(
+    private val rubricDao: RubricDao,
+    private val criteriumDao: CriteriumDao,
+    private val niveauDao: NiveauDao
+) {
 
-    @Inject lateinit var rubricApi: RubricApi
+    @Inject
+    lateinit var rubricApi: RubricApi
 
     init {
         App.component.inject(this)
@@ -35,7 +38,7 @@ class RubricRepository(private val rubricDao: RubricDao,
      * Inserts a rubric in the db
      */
     @WorkerThread
-    fun insert(rubric: Rubric){
+    fun insert(rubric: Rubric) {
         rubricDao.insert(rubric)
     }
 
@@ -43,7 +46,7 @@ class RubricRepository(private val rubricDao: RubricDao,
      * Deletes a rubric from the db
      */
     @WorkerThread
-    fun delete(rubric: Rubric){
+    fun delete(rubric: Rubric) {
         rubricDao.delete(rubric)
     }
 
@@ -51,7 +54,7 @@ class RubricRepository(private val rubricDao: RubricDao,
      * Deletes all rubrics from the db
      */
     @WorkerThread
-    fun deleteAllRubrics(){
+    fun deleteAllRubrics() {
         rubricDao.deleteAllRubrics()
     }
 
@@ -76,37 +79,40 @@ class RubricRepository(private val rubricDao: RubricDao,
         return rubricDao.getAllRubricsFromOpleidingsOnderdeel(id)
     }
 
-    suspend fun refreshRubrics(){
+    suspend fun refreshRubrics() {
         Log.i("Test", "refresh called in rubricrepository")
-        try{
-            withContext(Dispatchers.IO){
-                val rubrics = rubricApi.getRubrics().await()
+        try {
+            val rubrics = rubricApi.getRubrics().await()
 //                rubricDao.insertAll(*rubrics.asDatabaseModelArray())
-                rubrics.forEach{rubric ->
-                    rubricDao.insert(rubric.asDatabaseModel())
-                    rubric.criteriumGroepen.forEach{ criteriumGroep ->
-                        criteriumGroep.criteria.forEach{ networkCriterium ->
-                            criteriumDao.insert(
-                                networkCriterium.asDatabaseModel(
+            rubrics.forEach { rubric ->
+                rubricDao.insert(rubric.asDatabaseModel())
+                rubric.criteriumGroepen.forEach { criteriumGroep ->
+                    criteriumGroep.criteria.forEach { networkCriterium ->
+                        criteriumDao.insert(
+                            networkCriterium.asDatabaseModel(
+                                rubric.id.toString(),
+                                criteriumGroep.id.toString()
+                            )
+                        )
+                        networkCriterium.criteriumNiveaus.forEach { networkCriteriumNiveau ->
+                            niveauDao.insert(
+                                networkCriteriumNiveau.asDatabaseModel(
                                     rubric.id.toString(),
-                                    criteriumGroep.id.toString()))
-                            networkCriterium.criteriumNiveaus.forEach{ networkCriteriumNiveau ->
-                                niveauDao.insert(
-                                    networkCriteriumNiveau.asDatabaseModel(
-                                        rubric.id.toString(),
-                                        criteriumGroep.id.toString(),
-                                        networkCriterium.id.toString()))
-                            }
+                                    criteriumGroep.id.toString(),
+                                    networkCriterium.id.toString()
+                                )
+                            )
                         }
                     }
-                    rubricDao.insert(rubric.asDatabaseModel())
                 }
-                rubrics.map {
-                    Log.i("Test", it.omschrijving + "from refreshRubric in repository")
-                }
+                rubricDao.insert(rubric.asDatabaseModel())
+            }
+            rubrics.map {
+                Log.i("Test", it.omschrijving + "from refreshRubric in repository")
             }
 
-        } catch (e: IOException){
+
+        } catch (e: IOException) {
             Log.i("RubricRepository", e.message)
         }
     }

@@ -23,7 +23,7 @@ import java.util.*
     tableName = "criterium_evaluatie_table")
 data class CriteriumEvaluatie(
     @PrimaryKey @ColumnInfo(name = "criteriumEvaluatieId") val criteriumEvaluatieId: String,
-    @ColumnInfo(name = "evaluatieId") val evaluatieId: String,
+    @ColumnInfo(name = "evaluatieId") var evaluatieId: String,
     @ColumnInfo(name = "criteriumId") val criteriumId: String,
     // Merk op: we verwachten hier een waarde voor behaaldNiveau. By default is dit het centrale
     // niveau, zodat dit in de GUI bij start goed weergegeven wordt. Dit is het criteriumniveau met
