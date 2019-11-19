@@ -66,7 +66,12 @@
             android:name="evaluatieId"
             app:argType="string"/>
         <action
-            android:id="@+id/action_criteriumOverzichtFragment_to_mainMenuFragment"
-            app:destination="@id/mainMenuFragment" />
+            android:id="@+id/action_criteriumOverzichtFragment_to_leerlingSelectFragment"
+            app:destination="@id/leerlingSelectFragment"
+            app:popUpTo="@+id/leerlingSelectFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="olodId"
+            app:argType="long" />
     </fragment>
 </navigation>

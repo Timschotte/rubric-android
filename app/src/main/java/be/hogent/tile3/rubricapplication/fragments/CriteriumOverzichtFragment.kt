@@ -108,9 +108,7 @@ class CriteriumOverzichtFragment : Fragment() {
             saved: Boolean ->
             run {
                 if (saved) {
-                    this.findNavController().navigate(
-                        CriteriumOverzichtFragmentDirections.actionCriteriumOverzichtFragmentToMainMenuFragment()
-                    )
+                    navigeerNaarLeerlingSelect()
                     criteriumOverzichtViewModel.navigatieNaPersisterenVoltooidCompleted()
                 }
 
@@ -222,6 +220,10 @@ class CriteriumOverzichtFragment : Fragment() {
                 persisteerEvaluatie()
                 return true
             }
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -276,16 +278,25 @@ class CriteriumOverzichtFragment : Fragment() {
         builder.setMessage(R.string.criterium_overzicht_back_dialog_body)
         builder.setPositiveButton(R.string.criterium_overzicht_back_dialog_opslaan) { _, _ ->
             persisteerEvaluatie()
-            fragmentManager!!.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+//            fragmentManager!!.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         }
         builder.setNeutralButton(R.string.criterium_overzicht_back_dialog_terug) { dialog, _ ->
             dialog.cancel()
         }
         builder.setNegativeButton(R.string.criterium_overzicht_back_dialog_weggooien) { dialog, _ ->
-            fragmentManager!!.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+//            fragmentManager!!.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            navigeerNaarLeerlingSelect()
+
         }
         alertDialog = builder.create()
         alertDialog?.show()
+    }
+
+    private fun navigeerNaarLeerlingSelect(){
+        val args = CriteriumOverzichtFragmentArgs.fromBundle(arguments!!)
+        findNavController()?.navigate(
+            CriteriumOverzichtFragmentDirections.actionCriteriumOverzichtFragmentToLeerlingSelectFragment(args.rubricId, args.olodId)
+        )
     }
 
     override fun onDestroy() {

@@ -58,13 +58,12 @@ class CriteriumEvaluatieRepository(private val criteriumEvaluatieDao: CriteriumE
         }
     }
 
-    suspend fun getForEvaluatieAndCriterium(evaluatieId: String, criteriumId: String):
+    fun getForEvaluatieAndCriterium(evaluatieId: String, criteriumId: String):
             CriteriumEvaluatie {
-        return withContext(Dispatchers.IO) {
             var criteriumEvaluatie =
                 criteriumEvaluatieDao.getForEvaluatieAndCriterium(evaluatieId, criteriumId)
-            criteriumEvaluatie
-        }
+            return criteriumEvaluatie
+
     }
 
     suspend fun delete(criteriumEvaluatie: CriteriumEvaluatie) {
