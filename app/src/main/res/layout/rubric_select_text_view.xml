@@ -27,7 +27,7 @@
             android:padding="10dp"
             android:text=""
             android:textAlignment="textStart"
-            android:textColor="@color/colorSecundaryLight"
+            android:textColor="@color/secondaryTextColor"
             android:textSize="18sp"
             app:layout_constraintTop_toTopOf="parent"
             app:rubricNaam="@{rubric}"

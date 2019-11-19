@@ -26,7 +26,7 @@
             android:padding="10dp"
             android:text=""
             android:textAlignment="viewStart"
-            android:textColor="@color/colorSecundaryLight"
+            android:textColor="@color/secondaryTextColorDark"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
