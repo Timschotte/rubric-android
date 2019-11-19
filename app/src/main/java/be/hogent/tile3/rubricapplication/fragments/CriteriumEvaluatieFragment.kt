@@ -22,7 +22,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import be.hogent.tile3.rubricapplication.ui.CriteriumOverzichtViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import javax.inject.Inject
 
 class CriteriumEvaluatieFragment
         : Fragment() {
@@ -43,10 +42,9 @@ class CriteriumEvaluatieFragment
                     = ViewModelProviders.of(it)
                         .get(CriteriumOverzichtViewModel::class.java)
 
-            val evaulatieId = criteriumOverzichtViewModel.evaluatieId
 
             val criteriumEvaluatieViewModel
-                    = ViewModelProviders.of(this, viewModelFactory { CriteriumEvaluatieViewModel(evaulatieId) })
+                    = ViewModelProviders.of(this, viewModelFactory { CriteriumEvaluatieViewModel() })
                         .get(CriteriumEvaluatieViewModel::class.java)
 
             binding.criteriumEvaluatieViewModel = criteriumEvaluatieViewModel

@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.model.*
 import be.hogent.tile3.rubricapplication.persistence.*
+import be.hogent.tile3.rubricapplication.utils.TEMP_EVALUATIE_ID
 import kotlinx.coroutines.*
 import java.util.*
 import javax.inject.Inject
@@ -18,8 +19,7 @@ import kotlin.collections.ArrayList
 
 class CriteriumOverzichtViewModel(
     private val rubricId: String,
-    private val studentId: Long,
-    val evaluatieId: String = UUID.randomUUID().toString()
+    private val studentId: Long
 ) :
     ViewModel() {
 
@@ -64,7 +64,7 @@ class CriteriumOverzichtViewModel(
     val overzichtPaneelUitgeklapt: LiveData<Boolean>
         get() = _overzichtPaneelUitgeklapt
 
-    private lateinit var evaluatie: Evaluatie
+    private var evaluatie: Evaluatie? = null
 
     private val _criteriaInitialized = MutableLiveData<Boolean>().apply { postValue(false) }
     val criteriaInitialized: LiveData<Boolean>
@@ -78,7 +78,7 @@ class CriteriumOverzichtViewModel(
 
 
         coroutineScope.launch {
-            prepareData()
+//            prepareData()
             _huidigeRubric.addSource(
                 rubricRepository.get(rubricId),
                 _huidigeRubric::setValue
@@ -101,11 +101,11 @@ class CriteriumOverzichtViewModel(
             }
 
 
+            initialiseerEvaluatie()
 
 
 
         }
-
         App.component.inject(this)
     }
 
@@ -165,7 +165,8 @@ class CriteriumOverzichtViewModel(
         coroutineScope.launch {
             //            var criteriumEvaluaties: List<CriteriumEvaluatie> =
 //                haalTijdelijkeCriteriumEvaluatiesOp()
-            evaluatieRepository.update(evaluatie)
+
+            evaluatieRepository.update(evaluatie!!)
 
 //            criteriumEvaluaties.forEach {
 //                criteriumEvaluatieRepository.insert(
@@ -185,35 +186,37 @@ class CriteriumOverzichtViewModel(
         _criteriaInitialized.value = false
     }
 
-    fun initaliseerWanneerNodig(){
-        coroutineScope.launch {
-            evaluatie = withContext(Dispatchers.IO) {
-                val tempResult = evaluatieRepository.get(evaluatieId)
-                if(tempResult == null){
-                    initialiseerNieuweEvaluatie()
-                } else {
-//                    _criteriaInitialized.value = true
-                    tempResult
+    private fun initialiseerEvaluatie(){
+        if(evaluatie == null){
+            coroutineScope.launch {
+                evaluatie = withContext(Dispatchers.IO) {
+                    evaluatieRepository.verwijderVorigeTempEvaluatie()
+                    val bestaandeEvaluatie = evaluatieRepository.getByRubricAndStudent(rubricId, studentId)
+                    if(bestaandeEvaluatie == null){
+                        initialiseerNieuweEvaluatie()
+                    } else
+                        bestaandeEvaluatie
                 }
             }
         }
+
     }
 
     private suspend fun initialiseerNieuweEvaluatie(): Evaluatie {
         return withContext(Dispatchers.IO) {
             //Maak de evaluatie
-            evaluatie = Evaluatie(evaluatieId, studentId, rubricId)
-            evaluatieRepository.insert(evaluatie)
+            val tempEvaluatie = Evaluatie(TEMP_EVALUATIE_ID, studentId, rubricId)
+            evaluatieRepository.insertTemp(tempEvaluatie)
 
             //Maak de criteriumEvaluaties
-            val criteria = _rubricCriteria.value
+            val criteria = criteriumRepository.getCriteriaListForRubric(rubricId)
             val criteriumEvaluaties = ArrayList<CriteriumEvaluatie>()
             criteria?.forEach {
                 val niveau = niveauRepository.getNiveausForCriterium(it.criteriumId)
                     .singleOrNull { it.volgnummer == 0 }
 
                 val criteriumEvaluatie = CriteriumEvaluatie(
-                    evaluatie.evaluatieId,
+                    tempEvaluatie.evaluatieId,
                     it.criteriumId,
                     niveau?.niveauId,
                     niveau?.ondergrens,
@@ -221,10 +224,9 @@ class CriteriumOverzichtViewModel(
                 )
                 criteriumEvaluaties.add(criteriumEvaluatie)
             }
-            criteriumEvaluatieRepository.insertAll(criteriumEvaluaties)
-            val checkResult = criteriumEvaluatieRepository.getAllForEvaluatie(evaluatieId)
+            criteriumEvaluatieRepository.insertAllTemp(criteriumEvaluaties)
 //            _criteriaInitialized.value = true
-            evaluatie
+            tempEvaluatie
 
         }
     }

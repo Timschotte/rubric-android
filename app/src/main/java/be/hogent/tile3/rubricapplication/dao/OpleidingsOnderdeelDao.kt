@@ -21,4 +21,7 @@ interface OpleidingsOnderdeelDao {
 
     @Query("SELECT * from opleidingsOnderdeel_table ORDER BY naam")
     fun getAll(): LiveData<List<OpleidingsOnderdeel>>
+
+    @Query("SELECT * FROM opleidingsOnderdeel_table WHERE opleidingsOnderdeelId IN (SELECT DISTINCT opleidingsOnderdeelId FROM rubric_table) ORDER BY naam")
+    fun getAllWithRubric(): LiveData<List<OpleidingsOnderdeel>>
 }
