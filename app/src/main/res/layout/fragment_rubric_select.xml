@@ -14,7 +14,7 @@ xmlns:tools="http://schemas.android.com/tools">
     android:id="@+id/rubricSelectFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryLight">
+    android:background="@color/primaryColor">
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rubricList"
@@ -23,7 +23,7 @@ xmlns:tools="http://schemas.android.com/tools">
             android:background="@drawable/card_background"
             android:textAlignment="textStart"
             android:elevation="6dp"
-        android:layout_margin="5dp"
+        android:layout_margin="10dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

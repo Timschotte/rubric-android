@@ -13,13 +13,13 @@
         android:id="@+id/leerlingSelectFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimaryLight">
+        android:background="@color/primaryColor">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/leerlingList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="5dp"
+            android:layout_margin="10dp"
             android:background="@drawable/card_background"
             android:elevation="6dp"
             android:textAlignment="textStart"
