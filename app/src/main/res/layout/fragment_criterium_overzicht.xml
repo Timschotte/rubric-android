@@ -24,15 +24,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:src="@android:drawable/ic_media_previous" />
+                android:src="@drawable/ic_chevron_left_grey_32dp" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rubricCriteriaListRecycler"
-                android:layout_width="@dimen/criteria_overzicht_width"
+            <LinearLayout
+                android:id="@+id/rubricCriteriaLayout"
+                android:layout_width="@dimen/criterium_overzicht_recycler_width"
                 android:layout_height="wrap_content"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+                android:orientation="horizontal">
 
-            </androidx.recyclerview.widget.RecyclerView>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rubricCriteriaListRecycler"
+                    android:layout_width="@dimen/criteria_overzicht_width"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+
+                </androidx.recyclerview.widget.RecyclerView>
+            </LinearLayout>
+
         </LinearLayout>
 
         <FrameLayout

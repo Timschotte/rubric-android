@@ -1,9 +1,6 @@
 package be.hogent.tile3.rubricapplication.model
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
 
 @Entity(foreignKeys = arrayOf(
     ForeignKey(
@@ -19,11 +16,14 @@ import androidx.room.PrimaryKey
         parentColumns = arrayOf("niveauId"),
         childColumns = arrayOf("behaaldNiveau")
     )
-), tableName = "criterium_evaluatie_table")
+),
+    indices = arrayOf(Index(value = ["criteriumId"]),
+        Index(value= ["behaaldNiveau"])),
+    tableName = "criterium_evaluatie_table")
 data class CriteriumEvaluatie(
-    @PrimaryKey @ColumnInfo(name = "criteriumEvaluatieId") val criteriumEvaluatieId: String,
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "criteriumEvaluatieId") val criteriumEvaluatieId: Long = 0L,
     // TODO: weghalen evaluatieId
-    @ColumnInfo(name = "evaluatieId") val evaluatieId: String,
+    @ColumnInfo(name = "evaluatieId") val evaluatieId: Long,
     @ColumnInfo(name = "criteriumId") val criteriumId: String,
     // Merk op: we verwachten hier een waarde voor behaaldNiveau. By default is dit het centrale
     // niveau, zodat dit in de GUI bij start goed weergegeven wordt. Dit is het criteriumniveau met

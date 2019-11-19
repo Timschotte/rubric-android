@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="student"
+            type="be.hogent.tile3.rubricapplication.model.Student" />
+        <variable
+            name="clickListener"
+            type="be.hogent.tile3.rubricapplication.adapters.LeerlingListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> clickListener.onClick(student)}">
+
+
+        <TextView
+            android:id="@+id/studentNaam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_key"
+            android:padding="10dp"
+            android:text=""
+            android:textAlignment="viewStart"
+            android:textColor="@color/secondaryTextColorDark"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:studentNaam="@{student}"
+            tools:text="Thomas Peeters" />
+
+        <TextView
+            android:id="@+id/studentNummer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:studentNummer="@{student}"
+            tools:text="753590at" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

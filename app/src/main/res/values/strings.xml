@@ -7,9 +7,22 @@
     <string name="criterium_evaluatie_commentaar_dialog_titel">Commentaar Toevoegen</string>
     <string name="criterium_evaluatie_commentaar_dialog_annuleer">Annuleer</string>
     <string name="criterium_evaluatie_commentaar_dialog_bevestig">Opslaan</string>
+    <string name="criterium_overzicht_back_dialog_titel">Wijzigingen Opslaan?</string>
+    <string name="criterium_overzicht_back_dialog_body">Wilt u deze evaluatie opslaan of uw wijzigingen weggooien?</string>
+    <string name="criterium_overzicht_back_dialog_weggooien">Weggooien</string>
+    <string name="criterium_overzicht_back_dialog_terug">Terug</string>
+    <string name="criterium_overzicht_back_dialog_opslaan">Opslaan</string>
     <string name="criterium_evaluatie_omschrijving_dialog_bevestig">OK</string>
     <string name="criterium_evaluatie_omschrijving_dialog_titel_default">Criteriumomschrijving</string>
     <string name="criterium_evaluatie_omschrijving_dialog_omschrijving_default">Dit criterium heeft geen omschrijving.</string>
     <string name="list_item_criterium_van_rubric_gewicht_label_text">Gewicht: </string>
     <string name="list_item_criterium_van_rubric_gewicht_tool_text">2.5</string>
+    <string name="welkom">Welkom</string>
+    <string name="toon_overzicht_rubrics">Toon overzicht rubrics</string>
+    <string name="start_nieuwe_evaluatie">Nieuwe evaluatie</string>
+    <string name="selecteer_actie">Wat wil je doen?</string>
+    <string name="selecteer_opleiding">Selecteer een opleidingsonderdeel</string>
+    <string name="volgende">Volgende</string>
+    <string name="selecteerRubricVanOpleiding">%1$s</string>
+    <string name="selecteer_leerling">Selecteer een leerling</string>
 </resources>

@@ -20,6 +20,7 @@ import android.text.InputType
 import android.util.Log
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import be.hogent.tile3.rubricapplication.ui.CriteriumOverzichtViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import javax.inject.Inject
@@ -48,10 +49,13 @@ class CriteriumEvaluatieFragment
                         .get(CriteriumEvaluatieViewModel::class.java)
 
             binding.criteriumEvaluatieViewModel = criteriumEvaluatieViewModel
-            binding.criterium = criteriumEvaluatieViewModel.criterium.value
+            binding.criterium = criteriumOverzichtViewModel.geselecteerdCriterium.value
 
             criteriumOverzichtViewModel?.geselecteerdCriterium?.observe(viewLifecycleOwner, Observer{
-                Log.i("CriteriumEvaluatieFrag","Received Criterium " + it.naam + " (" + it.criteriumId + ")")
+                it?.let{
+                    criteriumEvaluatieViewModel.onGeselecteerdCriteriumChanged(
+                        it.criteriumId)
+                }
             })
 
             criteriumEvaluatieViewModel.geselecteerdCriteriumNiveau.observe(viewLifecycleOwner, Observer{
@@ -99,6 +103,7 @@ class CriteriumEvaluatieFragment
                 input.inputType = InputType.TYPE_TEXT_FLAG_MULTI_LINE
                 input.setSingleLine(false)
                 input.setText(oudeCommentaar)
+                input.setTextColor(ContextCompat.getColor(context!!, R.color.secondaryTextColor))
                 builder.setView(input)
 
                 builder.setPositiveButton(R.string.criterium_evaluatie_commentaar_dialog_bevestig)
@@ -122,15 +127,8 @@ class CriteriumEvaluatieFragment
             }
 
             criteriumOverzichtViewModel?.positieGeselecteerdCriterium?.observe(viewLifecycleOwner, Observer{
-                if(it == 0){
-                    binding.upEdgeButton.visibility = View.GONE
-                } else if( it == criteriumOverzichtViewModel?.positieLaatsteCriterium?.value ?: 0){
-                    binding.downEdgeButton.visibility = View.GONE
-                }
-                else{
-                    binding.upEdgeButton.visibility = View.VISIBLE
-                    binding.downEdgeButton.visibility = View.VISIBLE
-                }
+                binding.upEdgeButton.visibility = if(it == 0) View.GONE else View.VISIBLE
+                binding.downEdgeButton.visibility = if(it == criteriumOverzichtViewModel?.positieLaatsteCriterium?.value ?: 0) View.GONE else View.VISIBLE
             })
 
             binding.upEdgeButton.setOnClickListener{

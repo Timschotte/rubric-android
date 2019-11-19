@@ -3,6 +3,9 @@ package be.hogent.tile3.rubricapplication.injection.module
 import be.hogent.tile3.rubricapplication.network.RubricApi
 import be.hogent.tile3.rubricapplication.utils.BASE_URL
 import com.itkacher.okhttpprofiler.OkHttpProfilerInterceptor
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import io.reactivex.schedulers.Schedulers
@@ -11,15 +14,17 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
+import javax.inject.Singleton
 
 @Module
-object NetworkModule {
+class NetworkModule {
 
 
     /**
      * Provides the Test Service implemenation
      * @param retrofit the retrofit object used to instantiate the service
      */
+    @Singleton
     @Provides
     internal fun provideRubricApi(retrofit: Retrofit): RubricApi {
         return retrofit.create(RubricApi::class.java)
@@ -29,6 +34,7 @@ object NetworkModule {
     /**
      * Return the TestResource object.
      */
+    @Singleton
     @Provides
     internal fun provideRetrofitInterface(): Retrofit {
 
@@ -42,11 +48,13 @@ object NetworkModule {
             this.addInterceptor(OkHttpProfilerInterceptor())
         }.build()
 
+        val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(client)
-            .addConverterFactory(MoshiConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
     }
 

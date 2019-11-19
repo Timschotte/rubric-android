@@ -21,17 +21,14 @@ class CriteriumOverzichtListAdapter(val clickListener: CriteriaListListener):
     private var positieGeselecteerdCriterium: Int = -1
 
     fun stelPositieGeselecteerdCriteriumIn(positieGeselecteerdNiveau: Int){
-        Log.i("CriteriumEvaluatieLA","stelPositiGeselecteerdNiveauIn("+positieGeselecteerdNiveau+")")
         this.positieGeselecteerdCriterium = positieGeselecteerdNiveau
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        Log.i("CriteriumOverzichtLA", "Creating viewholder...")
         return ViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int){
-        Log.i("CriteriumOverzichtLA", "binding viewholder for position " + position)
         holder.bind(getItem(position)!!, position, clickListener)
         if(position == positieGeselecteerdCriterium)
             holder.pasOpmaakGeselecteerdToe()
@@ -52,7 +49,6 @@ class CriteriumOverzichtListAdapter(val clickListener: CriteriaListListener):
         }
 
         fun bind(item: Criterium, position: Int, clickListener: CriteriaListListener) {
-            Log.i("CriteriumOverzichtLA", "Binding criterium " + item.naam)
             binding.criterium = item
             binding.positie = position
             binding.clickListener = clickListener

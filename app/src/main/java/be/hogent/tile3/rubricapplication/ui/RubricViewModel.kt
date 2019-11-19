@@ -3,7 +3,6 @@ package be.hogent.tile3.rubricapplication.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.tile3.rubricapplication.App
-import be.hogent.tile3.rubricapplication.base.BaseViewModel
 import be.hogent.tile3.rubricapplication.model.Criterium
 import be.hogent.tile3.rubricapplication.model.Niveau
 import be.hogent.tile3.rubricapplication.model.Rubric
@@ -30,9 +29,9 @@ class RubricViewModel: ViewModel(){
         return rubricRepository.getAllRubrics()
     }
 
-    fun getRubric(rubricId: String): Rubric?{
-        return rubricRepository.get(rubricId)
-    }
+//    fun getRubric(rubricId: String): Rubric?{
+//        return rubricRepository.get(rubricId)
+//    }
 
     fun insertRubric(rubric: Rubric){
         rubricRepository.insert(rubric)

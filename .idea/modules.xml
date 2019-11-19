@@ -2,6 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/AndroidStudioProjects-rubric-android-RubricApplication.iml" filepath="$PROJECT_DIR$/AndroidStudioProjects-rubric-android-RubricApplication.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/AndroidStudioProjects-rubric-android-app.iml" filepath="$PROJECT_DIR$/app/AndroidStudioProjects-rubric-android-app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Code-rubric-android-RubricApplication.iml" filepath="$PROJECT_DIR$/Code-rubric-android-RubricApplication.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/Code-rubric-android-app.iml" filepath="$PROJECT_DIR$/app/Code-rubric-android-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/Projecten-rubric-android-RubricApplication.iml" filepath="$PROJECT_DIR$/Projecten-rubric-android-RubricApplication.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/Projecten-rubric-android-app.iml" filepath="$PROJECT_DIR$/app/Projecten-rubric-android-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/RubricApplication.iml" filepath="$PROJECT_DIR$/RubricApplication.iml" />

@@ -22,6 +22,12 @@ interface RubricDao{
     fun insert(rubric: Rubric)
 
     /**
+     *  Insert list of rubrics
+     */
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll(vararg databaseRubrics: Rubric)
+
+    /**
      * Delete a rubric
      */
     @Delete
@@ -34,5 +40,8 @@ interface RubricDao{
     fun deleteAllRubrics()
 
     @Query("SELECT * from rubric_table WHERE rubricID = :rubricId")
-    fun getRubric(rubricId: String): Rubric?
+    fun getRubric(rubricId: String): LiveData<Rubric>
+
+    @Query("SELECT * from rubric_table WHERE opleidingsOnderdeelId = :opleidingsOnderdeelId")
+    fun getAllRubricsFromOpleidingsOnderdeel(opleidingsOnderdeelId: Long): LiveData<List<Rubric>>
 }
