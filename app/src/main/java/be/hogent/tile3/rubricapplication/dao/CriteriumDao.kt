@@ -41,4 +41,7 @@ interface CriteriumDao{
 
     @Query("SELECT * from criterium_table WHERE rubricId = :rubricId")
     fun getCriteriaForRubric(rubricId: String): LiveData<List<Criterium>>
+
+    @Query("SELECT * from criterium_table WHERE rubricId = :rubricId")
+    fun getCriteriaListForRubric(rubricId: String): List<Criterium>
 }

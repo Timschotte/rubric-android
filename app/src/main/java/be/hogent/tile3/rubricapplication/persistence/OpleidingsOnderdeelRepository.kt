@@ -48,6 +48,11 @@ class OpleidingsOnderdeelRepository(private val opleidingsOnderdeelDao: Opleidin
         }
     }
 
+    fun getAllOpleidingsOnderdelenWithRubric(): LiveData<List<OpleidingsOnderdeel>> {
+        val opleidingsOnderdelen = opleidingsOnderdeelDao.getAllWithRubric()
+        return opleidingsOnderdelen
+    }
+
     val opleidingsOnderdelen: LiveData<List<OpleidingsOnderdeel>> = opleidingsOnderdeelDao.getAll()
 
 }

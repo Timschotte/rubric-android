@@ -3,6 +3,7 @@ package be.hogent.tile3.rubricapplication.dao
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import be.hogent.tile3.rubricapplication.model.CriteriumEvaluatie
+import be.hogent.tile3.rubricapplication.utils.TEMP_EVALUATIE_ID
 
 @Dao
 interface CriteriumEvaluatieDao{
@@ -30,4 +31,7 @@ interface CriteriumEvaluatieDao{
 
     @Delete
     fun delete(criteriumEvaluatie: CriteriumEvaluatie)
+
+    @Query("DELETE FROM criterium_evaluatie_table where evaluatieId = :tempEvaluatieId")
+    fun verwijderTempCriteriumEvaluaties(tempEvaluatieId: String = TEMP_EVALUATIE_ID)
 }

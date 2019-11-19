@@ -8,10 +8,11 @@ import be.hogent.tile3.rubricapplication.model.Niveau
 import be.hogent.tile3.rubricapplication.persistence.CriteriumEvaluatieRepository
 import be.hogent.tile3.rubricapplication.persistence.CriteriumRepository
 import be.hogent.tile3.rubricapplication.persistence.NiveauRepository
+import be.hogent.tile3.rubricapplication.utils.TEMP_EVALUATIE_ID
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
-class CriteriumEvaluatieViewModel(private val evaluatieId: String): ViewModel(){
+class CriteriumEvaluatieViewModel(): ViewModel(){
 
     @Inject lateinit var niveauRepository: NiveauRepository
     @Inject lateinit var criteriumRepository: CriteriumRepository
@@ -76,7 +77,7 @@ class CriteriumEvaluatieViewModel(private val evaluatieId: String): ViewModel(){
     private suspend fun haalOfMaakCriteriumEvaluatieOp(criteriumId: String): CriteriumEvaluatie{
         return withContext(Dispatchers.IO){
             val criteriumEvaluatie: CriteriumEvaluatie = criteriumEvaluatieRepository
-                .getForEvaluatieAndCriterium(evaluatieId, criteriumId)
+                .getForEvaluatieAndCriterium(TEMP_EVALUATIE_ID, criteriumId)
             criteriumEvaluatie
         }
     }

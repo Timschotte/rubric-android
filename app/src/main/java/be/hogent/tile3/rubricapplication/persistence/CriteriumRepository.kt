@@ -51,4 +51,8 @@ class CriteriumRepository(private val criteriumDao: CriteriumDao){
     fun getCriteriaForRubric(rubricId: String): LiveData<List<Criterium>>{
         return criteriumDao.getCriteriaForRubric(rubricId)
     }
+
+    fun getCriteriaListForRubric(rubricId: String): List<Criterium> {
+        return criteriumDao.getCriteriaListForRubric(rubricId)
+    }
 }

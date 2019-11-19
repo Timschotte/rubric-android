@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.model.OpleidingsOnderdeel
 import be.hogent.tile3.rubricapplication.persistence.OpleidingsOnderdeelRepository
+import be.hogent.tile3.rubricapplication.persistence.RubricRepository
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
@@ -16,6 +17,7 @@ import javax.inject.Inject
 class OpleidingsOnderdeelViewModel: ViewModel() {
 
     @Inject lateinit var opleidingsOnderdeelRepository: OpleidingsOnderdeelRepository
+    @Inject lateinit var rubricRepository: RubricRepository
     @Inject lateinit var context: Context
 
     private var viewModelJob = Job()
@@ -30,8 +32,8 @@ class OpleidingsOnderdeelViewModel: ViewModel() {
     init {
         App.component.inject(this)
         refreshRubricDatabase()
-        opleidingsOnderdelen = opleidingsOnderdeelRepository.getAllOpleidingsOnderdelen()
-        Log.i("test", opleidingsOnderdeelRepository.getAllOpleidingsOnderdelen().toString())
+        opleidingsOnderdelen = opleidingsOnderdeelRepository.getAllOpleidingsOnderdelenWithRubric()
+        Log.i("test", opleidingsOnderdeelRepository.getAllOpleidingsOnderdelenWithRubric().toString())
     }
 
     override fun onCleared() {
@@ -42,6 +44,7 @@ class OpleidingsOnderdeelViewModel: ViewModel() {
     private fun refreshRubricDatabase() {
         if (isNetworkAvailable()){
             uiScope.launch {
+                rubricRepository.refreshRubrics()
                 opleidingsOnderdeelRepository.refreshOpleidingsOnderdelen()
             }
         }
