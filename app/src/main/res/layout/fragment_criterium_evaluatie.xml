@@ -74,14 +74,15 @@
 
         <NumberPicker
             android:id="@+id/scoreNumberPicker"
+            android:theme="@style/AppTheme.Picker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onValueChange="@{(picker, oldV, newV) -> criteriumEvaluatieViewModel.onScoreChanged(oldV, newV)}"
-            app:numberPickerValue="@{criteriumEvaluatieViewModel.geselecteerdCriteriumNiveau}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/criteriumNiveausHorizontalScroll" />
+            app:layout_constraintTop_toBottomOf="@+id/criteriumNiveausHorizontalScroll"
+            app:numberPickerValue="@{criteriumEvaluatieViewModel.geselecteerdCriteriumNiveau}" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/voegCommentaarToeFloatingActionButton"
