@@ -48,13 +48,13 @@ class CriteriumOverzichtFragment : Fragment() {
         val criteriumOverzichtViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(CriteriumOverzichtViewModel::class.java)
 
-        criteriumOverzichtViewModel.rubricCriteria.observe(viewLifecycleOwner, Observer {
+/*        criteriumOverzichtViewModel.rubricCriteria.observe(viewLifecycleOwner, Observer {
             it?.let{
                 if(it.isNotEmpty()){
-                    criteriumOverzichtViewModel.initaliseerWanneerNodig()
+                    criteriumOverzichtViewModel.initialiseerEvaluatie()
                 }
             }
-        })
+        })*/
 
 
 
