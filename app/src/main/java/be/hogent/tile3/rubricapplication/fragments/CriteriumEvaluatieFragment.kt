@@ -1,7 +1,6 @@
 package be.hogent.tile3.rubricapplication.fragments
 
 
-import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
@@ -14,7 +13,6 @@ import be.hogent.tile3.rubricapplication.adapters.CriteriumEvaluatieListListener
 import be.hogent.tile3.rubricapplication.databinding.FragmentCriteriumEvaluatieBinding
 import be.hogent.tile3.rubricapplication.ui.CriteriumEvaluatieViewModel
 import android.text.InputType
-import android.util.Log
 import android.view.*
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
@@ -57,6 +55,11 @@ class CriteriumEvaluatieFragment
                         it.criteriumId)
                 }
             })
+
+            criteriumEvaluatieViewModel.criteriumNiveaus.observe(viewLifecycleOwner, Observer {
+                criteriumEvaluatieViewModel.setGeselecteerdCriteriumNiveau()
+            })
+
 
             criteriumEvaluatieViewModel.geselecteerdCriteriumNiveau.observe(viewLifecycleOwner, Observer{
                     geselecteerdNiveau ->

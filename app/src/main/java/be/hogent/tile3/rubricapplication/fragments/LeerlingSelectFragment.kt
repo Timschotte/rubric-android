@@ -46,7 +46,7 @@ class LeerlingSelectFragment : Fragment() {
         leerlingSelectViewModel.navigateToRubricView.observe(this, Observer { leerling ->
             leerling?.let {
                 this.findNavController().navigate(
-                    LeerlingSelectFragmentDirections.actionLeerlingSelectFragmentToCriteriumOverzichtFragment(leerling, args.rubricId, TEMP_EVALUATIE_ID)
+                    LeerlingSelectFragmentDirections.actionLeerlingSelectFragmentToCriteriumOverzichtFragment(leerling, args.rubricId, TEMP_EVALUATIE_ID, args.opleidingsOnderdeelId)
                 )
                 leerlingSelectViewModel.onStudentNavigated()
             }
