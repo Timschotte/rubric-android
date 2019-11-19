@@ -18,10 +18,10 @@ import android.util.Log
 import android.view.*
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import be.hogent.tile3.rubricapplication.ui.CriteriumOverzichtViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import javax.inject.Inject
 
 class CriteriumEvaluatieFragment
         : Fragment() {
@@ -42,12 +42,14 @@ class CriteriumEvaluatieFragment
                     = ViewModelProviders.of(it)
                         .get(CriteriumOverzichtViewModel::class.java)
 
+
             val criteriumEvaluatieViewModel
-                    = ViewModelProviders.of(this)
+                    = ViewModelProviders.of(this, viewModelFactory { CriteriumEvaluatieViewModel() })
                         .get(CriteriumEvaluatieViewModel::class.java)
 
             binding.criteriumEvaluatieViewModel = criteriumEvaluatieViewModel
             binding.criterium = criteriumOverzichtViewModel.geselecteerdCriterium.value
+
 
             criteriumOverzichtViewModel?.geselecteerdCriterium?.observe(viewLifecycleOwner, Observer{
                 it?.let{
@@ -101,7 +103,6 @@ class CriteriumEvaluatieFragment
                 input.inputType = InputType.TYPE_TEXT_FLAG_MULTI_LINE
                 input.setSingleLine(false)
                 input.setText(oudeCommentaar)
-                input.setTextColor(ContextCompat.getColor(context!!, R.color.secondaryTextColor))
                 builder.setView(input)
 
                 builder.setPositiveButton(R.string.criterium_evaluatie_commentaar_dialog_bevestig)
@@ -142,6 +143,9 @@ class CriteriumEvaluatieFragment
         return binding.root
     }
 
-
+    protected inline fun <VM : ViewModel> viewModelFactory(crossinline f: () -> VM) =
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(aClass: Class<T>):T = f() as T
+        }
 
 }

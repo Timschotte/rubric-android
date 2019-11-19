@@ -2,7 +2,6 @@ package be.hogent.tile3.rubricapplication.fragments
 
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.widget.ImageButton
 import androidx.databinding.DataBindingUtil
@@ -21,7 +20,6 @@ import androidx.recyclerview.widget.RecyclerView
 import android.util.DisplayMetrics
 import android.view.*
 import android.widget.Toast
-import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.ui.factories.CriteriumOverzichtViewModelFactory
 import androidx.fragment.app.FragmentManager
 import androidx.appcompat.app.AlertDialog
@@ -44,17 +42,17 @@ class CriteriumOverzichtFragment : Fragment() {
 
         val args = CriteriumOverzichtFragmentArgs.fromBundle(arguments!!)
 
-        val viewModelFactory = CriteriumOverzichtViewModelFactory(args.rubricId, args.studentId, args.evaluatieId)
+        val viewModelFactory = CriteriumOverzichtViewModelFactory(args.rubricId, args.studentId)
         val criteriumOverzichtViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(CriteriumOverzichtViewModel::class.java)
 
-        criteriumOverzichtViewModel.rubricCriteria.observe(viewLifecycleOwner, Observer {
+/*        criteriumOverzichtViewModel.rubricCriteria.observe(viewLifecycleOwner, Observer {
             it?.let{
                 if(it.isNotEmpty()){
-                    criteriumOverzichtViewModel.initaliseerWanneerNodig()
+                    criteriumOverzichtViewModel.initialiseerEvaluatie()
                 }
             }
-        })
+        })*/
 
 
 
