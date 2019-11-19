@@ -72,6 +72,10 @@ class CriteriumOverzichtViewModel(
     val criteriaInitialized: LiveData<Boolean>
         get() = _criteriaInitialized
 
+    private val _persisterenVoltooid = MutableLiveData<Boolean>().apply { postValue(false) }
+    val persisterenVoltooid: LiveData<Boolean>
+        get() = _persisterenVoltooid
+
 
     init {
         Log.i("CriteriumOverzichtVM", "Init-block starts execution")
@@ -165,6 +169,7 @@ class CriteriumOverzichtViewModel(
     fun persisteerEvaluatie() {
         coroutineScope.launch {
             evaluatieRepository.persisteerTemp(_evaluatie.value!!)
+            _persisterenVoltooid.value = true
         }
 //
     }
@@ -196,6 +201,10 @@ class CriteriumOverzichtViewModel(
             evaluatieRepository.createTempFromBestaande(bestaandeEvaluatie)
 
         }
+    }
+
+    fun navigatieNaPersisterenVoltooidCompleted(){
+        _persisterenVoltooid.value = false
     }
 
     private suspend fun initialiseerNieuweEvaluatie(): Evaluatie {

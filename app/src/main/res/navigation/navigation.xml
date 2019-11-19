@@ -65,5 +65,8 @@
         <argument
             android:name="evaluatieId"
             app:argType="string"/>
+        <action
+            android:id="@+id/action_criteriumOverzichtFragment_to_mainMenuFragment"
+            app:destination="@id/mainMenuFragment" />
     </fragment>
 </navigation>

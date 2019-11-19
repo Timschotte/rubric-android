@@ -23,6 +23,8 @@ import android.widget.Toast
 import be.hogent.tile3.rubricapplication.ui.factories.CriteriumOverzichtViewModelFactory
 import androidx.fragment.app.FragmentManager
 import androidx.appcompat.app.AlertDialog
+import androidx.navigation.fragment.findNavController
+import be.hogent.tile3.rubricapplication.utils.TEMP_EVALUATIE_ID
 
 
 class CriteriumOverzichtFragment : Fragment() {
@@ -101,6 +103,19 @@ class CriteriumOverzichtFragment : Fragment() {
         })
 
         binding.rubricCriteriaListRecycler.adapter = adapter
+
+        criteriumOverzichtViewModel?.persisterenVoltooid.observe(viewLifecycleOwner, Observer {
+            saved: Boolean ->
+            run {
+                if (saved) {
+                    this.findNavController().navigate(
+                        CriteriumOverzichtFragmentDirections.actionCriteriumOverzichtFragmentToMainMenuFragment()
+                    )
+                    criteriumOverzichtViewModel.navigatieNaPersisterenVoltooidCompleted()
+                }
+
+            }
+        })
 
         criteriumOverzichtViewModel?.positieGeselecteerdCriterium?.observe(
             viewLifecycleOwner,
