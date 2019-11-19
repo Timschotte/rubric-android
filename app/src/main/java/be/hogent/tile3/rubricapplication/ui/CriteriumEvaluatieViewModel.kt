@@ -97,19 +97,27 @@ class CriteriumEvaluatieViewModel(): ViewModel(){
                 " is het geselecteerde niveau " + criteriumEvaluatie.value?.behaaldNiveau +
                 " met een score van " + criteriumEvaluatie.value?.score +
                 " en commentaar \"" + criteriumEvaluatie.value?.commentaar + "\"")
-        // Todo: persisteren
+        coroutineScope.launch {
+            persisteerVorigeCriteriumEvaluatie()
+        }
     }
 
     fun onScoreChanged(oudeScore: Int, nieuweScore: Int){
         Log.i("CriteriumEvaluatieVM", "Numberpicker score veranderd van " + oudeScore + " naar " + nieuweScore)
         criteriumEvaluatie.value?.score = nieuweScore
         // Todo: persisteren
+        coroutineScope.launch {
+            persisteerVorigeCriteriumEvaluatie()
+        }
     }
 
     fun onCommentaarChanged(oudeCommentaar: String, nieuweCommentaar: String){
         Log.i("CriteriumEvaluatieVM", "Oude commentaar: " + oudeCommentaar + "\nNieuwe commentaar: " + nieuweCommentaar)
         criteriumEvaluatie.value?.commentaar = nieuweCommentaar
         // Todo: persisteren
+        coroutineScope.launch {
+            persisteerVorigeCriteriumEvaluatie()
+        }
     }
 
     override fun onCleared() {
