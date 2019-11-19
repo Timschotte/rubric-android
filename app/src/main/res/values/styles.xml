@@ -11,7 +11,7 @@
         <item name="android:textColorSecondary">@color/secondaryTextColor</item>
     </style>
 
-    <style name="AppTheme.Picker" parent="AppTheme">
+    <style name="AppTheme.TextColorReverse" parent="AppTheme">
         <item name="android:textColorPrimary">@color/secondaryTextColor</item>
     </style>
 

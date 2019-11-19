@@ -16,6 +16,7 @@ import android.text.InputType
 import android.view.*
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import be.hogent.tile3.rubricapplication.ui.CriteriumOverzichtViewModel
@@ -47,7 +48,6 @@ class CriteriumEvaluatieFragment
 
             binding.criteriumEvaluatieViewModel = criteriumEvaluatieViewModel
             binding.criterium = criteriumOverzichtViewModel.geselecteerdCriterium.value
-
 
             criteriumOverzichtViewModel?.geselecteerdCriterium?.observe(viewLifecycleOwner, Observer{
                 it?.let{
@@ -106,6 +106,7 @@ class CriteriumEvaluatieFragment
                 input.inputType = InputType.TYPE_TEXT_FLAG_MULTI_LINE
                 input.setSingleLine(false)
                 input.setText(oudeCommentaar)
+                input.setTextColor(ContextCompat.getColor(context!!, R.color.secondaryTextColor))
                 builder.setView(input)
 
                 builder.setPositiveButton(R.string.criterium_evaluatie_commentaar_dialog_bevestig)
@@ -142,7 +143,6 @@ class CriteriumEvaluatieFragment
             }
         }
 
-//        setHasOptionsMenu(true)
         return binding.root
     }
 

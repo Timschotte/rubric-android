@@ -74,7 +74,7 @@
 
         <NumberPicker
             android:id="@+id/scoreNumberPicker"
-            android:theme="@style/AppTheme.Picker"
+            android:theme="@style/AppTheme.TextColorReverse"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onValueChange="@{(picker, oldV, newV) -> criteriumEvaluatieViewModel.onScoreChanged(oldV, newV)}"
