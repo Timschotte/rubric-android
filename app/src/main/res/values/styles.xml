@@ -11,6 +11,10 @@
         <item name="android:textColorSecondary">@color/secondaryTextColor</item>
     </style>
 
+    <style name="AppTheme.Picker" parent="AppTheme">
+        <item name="android:textColorPrimary">@color/secondaryTextColor</item>
+    </style>
+
     <style name="card_style">
         <item name="android:layout_width">300dp</item>
         <item name="android:layout_height">100dp</item>
@@ -24,5 +28,7 @@
         <item name="android:layout_height">200dp</item>
         <item name="android:background">@color/primaryColor</item>
     </style>
+
+
 
 </resources>
