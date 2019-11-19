@@ -64,7 +64,9 @@ class CriteriumOverzichtViewModel(
     val overzichtPaneelUitgeklapt: LiveData<Boolean>
         get() = _overzichtPaneelUitgeklapt
 
-    private var evaluatie: Evaluatie? = null
+    private val _evaluatie = MutableLiveData<Evaluatie>()
+    val evaluatie: LiveData<Evaluatie>
+        get() = _evaluatie
 
     private val _criteriaInitialized = MutableLiveData<Boolean>().apply { postValue(false) }
     val criteriaInitialized: LiveData<Boolean>
@@ -78,7 +80,7 @@ class CriteriumOverzichtViewModel(
 
 
         coroutineScope.launch {
-//            prepareData()
+            //            prepareData()
             _huidigeRubric.addSource(
                 rubricRepository.get(rubricId),
                 _huidigeRubric::setValue
@@ -104,7 +106,6 @@ class CriteriumOverzichtViewModel(
             initialiseerEvaluatie()
 
 
-
         }
         App.component.inject(this)
     }
@@ -112,7 +113,7 @@ class CriteriumOverzichtViewModel(
     private fun prepareData() {
         if (isNetworkAvailable()) {
             coroutineScope.launch {
-                rubricRepository.refreshRubrics()
+                //                rubricRepository.refreshRubrics()
 //                initialiseerDummyEvaluatie()
             }
         }
@@ -163,43 +164,38 @@ class CriteriumOverzichtViewModel(
 
     fun persisteerEvaluatie() {
         coroutineScope.launch {
-            //            var criteriumEvaluaties: List<CriteriumEvaluatie> =
-//                haalTijdelijkeCriteriumEvaluatiesOp()
-
-            evaluatieRepository.update(evaluatie!!)
-
-//            criteriumEvaluaties.forEach {
-//                criteriumEvaluatieRepository.insert(
-//                    CriteriumEvaluatie(
-//                        evaluatie.evaluatieId,
-//                        it.criteriumId,
-//                        it.behaaldNiveau,
-//                        it.score,
-//                        it.commentaar
-//                    )
-//                )
+            evaluatieRepository.persisteerTemp(_evaluatie.value!!)
         }
 //
     }
 
-    fun onCriteriaInitializedComplete(){
+    fun onCriteriaInitializedComplete() {
         _criteriaInitialized.value = false
     }
 
-    private fun initialiseerEvaluatie(){
-        if(evaluatie == null){
+    private fun initialiseerEvaluatie() {
+        if (_evaluatie.value == null) {
             coroutineScope.launch {
-                evaluatie = withContext(Dispatchers.IO) {
+                _evaluatie.value = withContext(Dispatchers.IO) {
                     evaluatieRepository.verwijderVorigeTempEvaluatie()
-                    val bestaandeEvaluatie = evaluatieRepository.getByRubricAndStudent(rubricId, studentId)
-                    if(bestaandeEvaluatie == null){
+                    val bestaandeEvaluatie =
+                        evaluatieRepository.getByRubricAndStudent(rubricId, studentId)
+                    if (bestaandeEvaluatie == null) {
                         initialiseerNieuweEvaluatie()
                     } else
-                        bestaandeEvaluatie
+                        initialiseerBestaandeEvaluatie(bestaandeEvaluatie)
                 }
             }
         }
 
+    }
+
+    private suspend fun initialiseerBestaandeEvaluatie(bestaandeEvaluatie: Evaluatie): Evaluatie {
+        return withContext(Dispatchers.IO) {
+            //Maak de evaluatie
+            evaluatieRepository.createTempFromBestaande(bestaandeEvaluatie)
+
+        }
     }
 
     private suspend fun initialiseerNieuweEvaluatie(): Evaluatie {

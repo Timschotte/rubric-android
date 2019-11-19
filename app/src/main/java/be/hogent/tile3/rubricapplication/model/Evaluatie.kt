@@ -16,7 +16,7 @@ import java.util.*
 ), tableName = "evaluatie_table"
 )
 data class Evaluatie(
-    @PrimaryKey @ColumnInfo(name = "evaluatieId") val evaluatieId: String,
+    @PrimaryKey @ColumnInfo(name = "evaluatieId") var evaluatieId: String,
     @ColumnInfo(name = "studentId") val studentId: Long,
     @ColumnInfo(name = "rubricId") val rubricId: String
     // TODO: toevoegen docent en data (aanmaak, wijziging)
