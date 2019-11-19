@@ -21,7 +21,7 @@
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                app:cardBackgroundColor="@color/primaryLightColor"
+                app:cardBackgroundColor="@color/primaryColor"
                 android:layout_margin="5dp"
                 app:cardCornerRadius="10dp">
                 <TextView
