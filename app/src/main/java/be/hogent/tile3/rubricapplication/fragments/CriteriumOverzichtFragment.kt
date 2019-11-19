@@ -234,11 +234,22 @@ class CriteriumOverzichtFragment : Fragment() {
             }
         })
 
-        if (savedInstanceState == null) {
-            childFragmentManager.beginTransaction()
-                .replace(R.id.criterium_evaluatie_fragment_container, CriteriumEvaluatieFragment())
-                .commitNow()
-        }
+
+        val args = CriteriumOverzichtFragmentArgs.fromBundle(arguments!!)
+
+        val viewModelFactory = CriteriumOverzichtViewModelFactory(args.rubricId, args.studentId)
+        val criteriumOverzichtViewModel = ViewModelProviders.of(this, viewModelFactory)
+            .get(CriteriumOverzichtViewModel::class.java)
+
+        criteriumOverzichtViewModel.evaluatie.observe(this, Observer {
+            it?.let {
+                if (savedInstanceState == null) {
+                    childFragmentManager.beginTransaction()
+                        .replace(R.id.criterium_evaluatie_fragment_container, CriteriumEvaluatieFragment())
+                        .commitNow()
+                }
+            }
+        })
     }
 
 

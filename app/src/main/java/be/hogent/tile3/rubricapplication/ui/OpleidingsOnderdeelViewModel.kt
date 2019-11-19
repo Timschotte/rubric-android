@@ -14,11 +14,14 @@ import kotlinx.coroutines.*
 import javax.inject.Inject
 
 
-class OpleidingsOnderdeelViewModel: ViewModel() {
+class OpleidingsOnderdeelViewModel : ViewModel() {
 
-    @Inject lateinit var opleidingsOnderdeelRepository: OpleidingsOnderdeelRepository
-    @Inject lateinit var rubricRepository: RubricRepository
-    @Inject lateinit var context: Context
+    @Inject
+    lateinit var opleidingsOnderdeelRepository: OpleidingsOnderdeelRepository
+    @Inject
+    lateinit var rubricRepository: RubricRepository
+    @Inject
+    lateinit var context: Context
 
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
@@ -33,7 +36,10 @@ class OpleidingsOnderdeelViewModel: ViewModel() {
         App.component.inject(this)
         refreshRubricDatabase()
         opleidingsOnderdelen = opleidingsOnderdeelRepository.getAllOpleidingsOnderdelenWithRubric()
-        Log.i("test", opleidingsOnderdeelRepository.getAllOpleidingsOnderdelenWithRubric().toString())
+        Log.i(
+            "test",
+            opleidingsOnderdeelRepository.getAllOpleidingsOnderdelenWithRubric().toString()
+        )
     }
 
     override fun onCleared() {
@@ -42,16 +48,20 @@ class OpleidingsOnderdeelViewModel: ViewModel() {
     }
 
     private fun refreshRubricDatabase() {
-        if (isNetworkAvailable()){
+        if (isNetworkAvailable()) {
             uiScope.launch {
-                rubricRepository.refreshRubrics()
-                opleidingsOnderdeelRepository.refreshOpleidingsOnderdelen()
+                withContext(Dispatchers.IO) {
+                    opleidingsOnderdeelRepository.refreshOpleidingsOnderdelen()
+                    rubricRepository.refreshRubrics()
+
+                }
             }
         }
     }
 
     private fun isNetworkAvailable(): Boolean {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
         val activeNetworkInfo = connectivityManager!!.activeNetworkInfo
         return activeNetworkInfo != null && activeNetworkInfo.isConnected
     }
@@ -64,8 +74,8 @@ class OpleidingsOnderdeelViewModel: ViewModel() {
         _navigateToRubricSelect.value = id
     }
 
-    fun onOpleidingsOnderdeelNavigated(){
-        _navigateToRubricSelect. value = null
+    fun onOpleidingsOnderdeelNavigated() {
+        _navigateToRubricSelect.value = null
     }
 
 //    private fun getOpleidingen(){
