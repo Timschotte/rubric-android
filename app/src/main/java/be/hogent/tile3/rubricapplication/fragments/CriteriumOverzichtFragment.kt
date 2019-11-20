@@ -2,11 +2,7 @@ package be.hogent.tile3.rubricapplication.fragments
 
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -22,17 +18,17 @@ import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import androidx.recyclerview.widget.RecyclerView
 import android.util.DisplayMetrics
+import android.view.*
 import android.widget.Toast
-import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.ui.factories.CriteriumOverzichtViewModelFactory
-import android.view.KeyEvent
 import androidx.fragment.app.FragmentManager
 import androidx.appcompat.app.AlertDialog
+import androidx.navigation.fragment.findNavController
+import be.hogent.tile3.rubricapplication.utils.TEMP_EVALUATIE_ID
 
 
 class CriteriumOverzichtFragment : Fragment() {
 
-    private var criteriumOverzichtViewModel: CriteriumOverzichtViewModel? = null
     private var alertDialog: AlertDialog? = null
 
     override fun onCreateView(
@@ -49,16 +45,31 @@ class CriteriumOverzichtFragment : Fragment() {
         val args = CriteriumOverzichtFragmentArgs.fromBundle(arguments!!)
 
         val viewModelFactory = CriteriumOverzichtViewModelFactory(args.rubricId, args.studentId)
-        val criteriumOverzichtViewModel = ViewModelProviders.of(this, viewModelFactory).get(CriteriumOverzichtViewModel::class.java)
+        val criteriumOverzichtViewModel = ViewModelProviders.of(this, viewModelFactory)
+            .get(CriteriumOverzichtViewModel::class.java)
 
-        Toast.makeText(context, "Student ID: " + args.studentId + " Rubric ID: " + args.rubricId, Toast.LENGTH_LONG).show()
+/*        criteriumOverzichtViewModel.rubricCriteria.observe(viewLifecycleOwner, Observer {
+            it?.let{
+                if(it.isNotEmpty()){
+                    criteriumOverzichtViewModel.initialiseerEvaluatie()
+                }
+            }
+        })*/
+
+
+
+        Toast.makeText(
+            context,
+            "Student ID: " + args.studentId + " Rubric ID: " + args.rubricId,
+            Toast.LENGTH_LONG
+        ).show()
 
         val adapter =
             CriteriumOverzichtListAdapter(CriteriaListListener { criteriumId, positie ->
                 criteriumOverzichtViewModel?.onCriteriumClicked(criteriumId, positie)
             })
 
-        adapter.registerAdapterDataObserver( object : RecyclerView.AdapterDataObserver() {
+        adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
 
             override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
                 super.onItemRangeChanged(positionStart, itemCount)
@@ -76,7 +87,8 @@ class CriteriumOverzichtFragment : Fragment() {
                 var toPosition =
                     criteriumOverzichtViewModel?.positieGeselecteerdCriterium?.value ?: 0
                 binding.rubricCriteriaListRecycler.scrollToPosition(
-                    criteriumOverzichtViewModel?.positieGeselecteerdCriterium?.value ?: 0)
+                    criteriumOverzichtViewModel?.positieGeselecteerdCriterium?.value ?: 0
+                )
             }
 
             override fun onItemRangeRemoved(
@@ -91,15 +103,28 @@ class CriteriumOverzichtFragment : Fragment() {
 
         binding.rubricCriteriaListRecycler.adapter = adapter
 
-        criteriumOverzichtViewModel?.positieGeselecteerdCriterium?.observe(viewLifecycleOwner, Observer{
-            it?.let{
-                adapter.stelPositieGeselecteerdCriteriumIn(it)
-                adapter.notifyDataSetChanged()
+        criteriumOverzichtViewModel?.persisterenVoltooid.observe(viewLifecycleOwner, Observer {
+            saved: Boolean ->
+            run {
+                if (saved) {
+                    navigeerNaarLeerlingSelect()
+                    criteriumOverzichtViewModel.navigatieNaPersisterenVoltooidCompleted()
+                }
+
             }
         })
 
-        criteriumOverzichtViewModel?.rubricCriteria?.observe(viewLifecycleOwner, Observer{
-            it?.let{
+        criteriumOverzichtViewModel?.positieGeselecteerdCriterium?.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    adapter.stelPositieGeselecteerdCriteriumIn(it)
+                    adapter.notifyDataSetChanged()
+                }
+            })
+
+        criteriumOverzichtViewModel?.rubricCriteria?.observe(viewLifecycleOwner, Observer {
+            it?.let {
                 adapter.submitList(it)
 //                binding.rubricCriteriaListRecycler.smoothScrollToPosition(
 //                    criteriumOverzichtViewModel?.positieGeselecteerdCriterium?.value ?: 0)
@@ -111,74 +136,102 @@ class CriteriumOverzichtFragment : Fragment() {
         }
 
         criteriumOverzichtViewModel?.overzichtPaneelUitgeklapt?.observe(viewLifecycleOwner,
-            Observer{ overzichtPaneelUitgeklapt: Boolean ->
+            Observer { overzichtPaneelUitgeklapt: Boolean ->
 
                 val displaymetrics = DisplayMetrics()
                 activity!!.windowManager.defaultDisplay.getMetrics(displaymetrics)
                 val screenWidth = displaymetrics.widthPixels
 
-            val animOverzichtBalk = ObjectAnimator.ofFloat(
-                binding.criteriumEvaluatieOverzichtBalk,
-                "translationX",
-                binding.criteriumEvaluatieOverzichtBalk.translationX,
-                if(!overzichtPaneelUitgeklapt)
-                binding.criteriumEvaluatieOverzichtBalk.translationX + resources
-                    .getDimensionPixelOffset(R.dimen.criteria_overzicht_translationX)
-                    .toFloat()
-                else
-                    0.0F
-            )
+                val animOverzichtBalk = ObjectAnimator.ofFloat(
+                    binding.criteriumEvaluatieOverzichtBalk,
+                    "translationX",
+                    binding.criteriumEvaluatieOverzichtBalk.translationX,
+                    if (!overzichtPaneelUitgeklapt)
+                        binding.criteriumEvaluatieOverzichtBalk.translationX + resources
+                            .getDimensionPixelOffset(R.dimen.criteria_overzicht_translationX)
+                            .toFloat()
+                    else
+                        0.0F
+                )
 
-            val animCriteriumEvaluatieFramePositie = ObjectAnimator.ofFloat(
-                binding.criteriumEvaluatieFragmentContainer,
-                "translationX",
-                binding.criteriumEvaluatieFragmentContainer.translationX,
-                if(!overzichtPaneelUitgeklapt)
-                    binding.criteriumEvaluatieFragmentContainer.translationX + resources
-                        .getDimensionPixelOffset(R.dimen.criteria_overzicht_translationX)
-                        .toFloat()
-                else
-                    0.0F
-            )
+                val animCriteriumEvaluatieFramePositie = ObjectAnimator.ofFloat(
+                    binding.criteriumEvaluatieFragmentContainer,
+                    "translationX",
+                    binding.criteriumEvaluatieFragmentContainer.translationX,
+                    if (!overzichtPaneelUitgeklapt)
+                        binding.criteriumEvaluatieFragmentContainer.translationX + resources
+                            .getDimensionPixelOffset(R.dimen.criteria_overzicht_translationX)
+                            .toFloat()
+                    else
+                        0.0F
+                )
 
                 val animCriteriumEvaluatieFrameBreedte = ValueAnimator.ofInt(
                     binding.criteriumEvaluatieFragmentContainer.measuredWidth,
-                    if(!overzichtPaneelUitgeklapt)
+                    if (!overzichtPaneelUitgeklapt)
                         screenWidth - resources.getDimensionPixelOffset(R.dimen.criteria_overzicht_ingeklapt_breedte)
                     else
                         screenWidth - resources.getDimensionPixelOffset(R.dimen.criteria_overzicht_width)
                 )
 
-            animCriteriumEvaluatieFrameBreedte.addUpdateListener { valueAnimator ->
-                val animWaarde = valueAnimator.animatedValue as Int
-                val layoutParams = binding.criteriumEvaluatieFragmentContainer.layoutParams
-                layoutParams.width = animWaarde
-                binding.criteriumEvaluatieFragmentContainer.layoutParams = layoutParams
-            }
+                animCriteriumEvaluatieFrameBreedte.addUpdateListener { valueAnimator ->
+                    val animWaarde = valueAnimator.animatedValue as Int
+                    val layoutParams = binding.criteriumEvaluatieFragmentContainer.layoutParams
+                    layoutParams.width = animWaarde
+                    binding.criteriumEvaluatieFragmentContainer.layoutParams = layoutParams
+                }
 
-            val set = AnimatorSet()
-            set.duration = 500L
-            set.playTogether(animOverzichtBalk,
-                animCriteriumEvaluatieFramePositie,
-                animCriteriumEvaluatieFrameBreedte)
-            set.start()
+                val set = AnimatorSet()
+                set.duration = 500L
+                set.playTogether(
+                    animOverzichtBalk,
+                    animCriteriumEvaluatieFramePositie,
+                    animCriteriumEvaluatieFrameBreedte
+                )
+                set.start()
 
-            if(overzichtPaneelUitgeklapt) {
-                binding.rubricCriteriaLayout.visibility = View.VISIBLE
-                (binding.klapInKlapUitButton as ImageButton).setImageResource(android.R.drawable.ic_media_previous)
-            }
-            else {
-                binding.rubricCriteriaLayout.visibility = View.INVISIBLE
-                (binding.klapInKlapUitButton as ImageButton).setImageResource(android.R.drawable.ic_media_next)
-            }
+                if (overzichtPaneelUitgeklapt) {
+                    binding.rubricCriteriaLayout.visibility = View.VISIBLE
+                    (binding.klapInKlapUitButton as ImageButton).setImageResource(android.R.drawable.ic_media_previous)
+                } else {
+                    binding.rubricCriteriaLayout.visibility = View.INVISIBLE
+                    (binding.klapInKlapUitButton as ImageButton).setImageResource(android.R.drawable.ic_media_next)
+                }
 
-            binding.criteriumEvaluatieFragmentContainer.requestLayout()
+                binding.criteriumEvaluatieFragmentContainer.requestLayout()
 
-        })
+            })
 
         binding.setLifecycleOwner(this)
 
+        setHasOptionsMenu(true)
         return binding.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.criterium_evaluatie_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_evaluatie_opslaan -> {
+                persisteerEvaluatie()
+                return true
+            }
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun persisteerEvaluatie(){
+        val criteriumOverzichtViewModel
+                = ViewModelProviders.of(this)
+            .get(CriteriumOverzichtViewModel::class.java)
+        criteriumOverzichtViewModel.persisteerEvaluatie()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -197,11 +250,22 @@ class CriteriumOverzichtFragment : Fragment() {
             }
         })
 
-        if (savedInstanceState == null) {
-            childFragmentManager.beginTransaction()
-                .replace(R.id.criterium_evaluatie_fragment_container, CriteriumEvaluatieFragment())
-                .commitNow()
-        }
+
+        val args = CriteriumOverzichtFragmentArgs.fromBundle(arguments!!)
+
+        val viewModelFactory = CriteriumOverzichtViewModelFactory(args.rubricId, args.studentId)
+        val criteriumOverzichtViewModel = ViewModelProviders.of(this, viewModelFactory)
+            .get(CriteriumOverzichtViewModel::class.java)
+
+        criteriumOverzichtViewModel.evaluatie.observe(this, Observer {
+            it?.let {
+                if (savedInstanceState == null) {
+                    childFragmentManager.beginTransaction()
+                        .replace(R.id.criterium_evaluatie_fragment_container, CriteriumEvaluatieFragment())
+                        .commitNow()
+                }
+            }
+        })
     }
 
     private fun onBackPressed() {
@@ -209,21 +273,30 @@ class CriteriumOverzichtFragment : Fragment() {
 
         builder.setTitle(R.string.criterium_overzicht_back_dialog_titel)
         builder.setMessage(R.string.criterium_overzicht_back_dialog_body)
-        builder.setPositiveButton(R.string.criterium_overzicht_back_dialog_opslaan){ _, _ ->
-            criteriumOverzichtViewModel?.persisteerEvaluatie()
-            fragmentManager!!.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        builder.setPositiveButton(R.string.criterium_overzicht_back_dialog_opslaan) { _, _ ->
+            persisteerEvaluatie()
+//            fragmentManager!!.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         }
-        builder.setNeutralButton(R.string.criterium_overzicht_back_dialog_terug){ dialog, _ ->
+        builder.setNeutralButton(R.string.criterium_overzicht_back_dialog_terug) { dialog, _ ->
             dialog.cancel()
         }
-        builder.setNegativeButton(R.string.criterium_overzicht_back_dialog_weggooien){ dialog, _ ->
-            fragmentManager!!.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        builder.setNegativeButton(R.string.criterium_overzicht_back_dialog_weggooien) { dialog, _ ->
+//            fragmentManager!!.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            navigeerNaarLeerlingSelect()
+
         }
         alertDialog = builder.create()
         alertDialog?.show()
     }
 
-    override fun onDestroy(){
+    private fun navigeerNaarLeerlingSelect(){
+        val args = CriteriumOverzichtFragmentArgs.fromBundle(arguments!!)
+        findNavController()?.navigate(
+            CriteriumOverzichtFragmentDirections.actionCriteriumOverzichtFragmentToLeerlingSelectFragment(args.rubricId, args.olodId)
+        )
+    }
+
+    override fun onDestroy() {
         super.onDestroy()
         alertDialog?.dismiss()
     }

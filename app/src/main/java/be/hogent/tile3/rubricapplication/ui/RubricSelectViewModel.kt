@@ -47,7 +47,7 @@ class RubricSelectViewModel(private val opleidingsOnderdeelId: Long) : ViewModel
     private fun refreshRubricDatabase() {
         if (isNetworkAvailable()){
             uiScope.launch {
-                rubricRepository.refreshRubrics()
+//                rubricRepository.refreshRubrics()
             }
         }
     }

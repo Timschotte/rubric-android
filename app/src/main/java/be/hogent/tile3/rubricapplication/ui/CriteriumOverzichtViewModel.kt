@@ -12,17 +12,30 @@ import be.hogent.tile3.rubricapplication.model.*
 import be.hogent.tile3.rubricapplication.persistence.*
 import be.hogent.tile3.rubricapplication.utils.TEMP_EVALUATIE_ID
 import kotlinx.coroutines.*
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 
-class CriteriumOverzichtViewModel(private val rubricId: String, private val studentId: Long): ViewModel(){
+class CriteriumOverzichtViewModel(
+    private val rubricId: String,
+    private val studentId: Long
+) :
+    ViewModel() {
 
-    @Inject lateinit var context: Context
-    @Inject lateinit var rubricRepository: RubricRepository
-    @Inject lateinit var niveauRepository: NiveauRepository
-    @Inject lateinit var criteriumRepository: CriteriumRepository
-    @Inject lateinit var evaluatieRepository: EvaluatieRepository
-    @Inject lateinit var criteriumEvaluatieRepository: CriteriumEvaluatieRepository
+    @Inject
+    lateinit var context: Context
+
+    @Inject
+    lateinit var rubricRepository: RubricRepository
+    @Inject
+    lateinit var niveauRepository: NiveauRepository
+    @Inject
+    lateinit var criteriumRepository: CriteriumRepository
+    @Inject
+    lateinit var evaluatieRepository: EvaluatieRepository
+    @Inject
+    lateinit var criteriumEvaluatieRepository: CriteriumEvaluatieRepository
 
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
@@ -47,81 +60,99 @@ class CriteriumOverzichtViewModel(private val rubricId: String, private val stud
     val positieLaatsteCriterium: LiveData<Int>
         get() = _positieLaatsteCriterium
 
-    private val _overzichtPaneelUitgeklapt = MutableLiveData<Boolean>().apply{ postValue(true)}
+    private val _overzichtPaneelUitgeklapt = MutableLiveData<Boolean>().apply { postValue(true) }
     val overzichtPaneelUitgeklapt: LiveData<Boolean>
         get() = _overzichtPaneelUitgeklapt
 
-    init{
+    private val _evaluatie = MutableLiveData<Evaluatie>()
+    val evaluatie: LiveData<Evaluatie>
+        get() = _evaluatie
+
+    private val _criteriaInitialized = MutableLiveData<Boolean>().apply { postValue(false) }
+    val criteriaInitialized: LiveData<Boolean>
+        get() = _criteriaInitialized
+
+    private val _persisterenVoltooid = MutableLiveData<Boolean>().apply { postValue(false) }
+    val persisterenVoltooid: LiveData<Boolean>
+        get() = _persisterenVoltooid
+
+
+    init {
         Log.i("CriteriumOverzichtVM", "Init-block starts execution")
-        // TODO: EvaluatieId doorkrijgen, Evaluatie en EvaluatieCriteria op basis daarvan ophalen
-        // TODO: Vervolgens geselecteerdEvaluatieCriterium instellen
-        var rubricId = rubricId
+//        var rubricId = rubricId
         //------------------------------------------------------------------------------------------
-        coroutineScope.launch{
-            prepareData()
+
+
+        coroutineScope.launch {
+            //            prepareData()
             _huidigeRubric.addSource(
                 rubricRepository.get(rubricId),
                 _huidigeRubric::setValue
             )
             _rubricCriteria.addSource(
                 criteriumRepository.getCriteriaForRubric(rubricId)
-            ){
-                result: List<Criterium>? ->
-                if(!result.isNullOrEmpty()){
+            ) { result: List<Criterium>? ->
+                if (!result.isNullOrEmpty()) {
                     _rubricCriteria.value = result
                 }
             }
-            _geselecteerdCriterium.addSource(_rubricCriteria){ result: List<Criterium>? ->
-                result?.let{
+            _geselecteerdCriterium.addSource(_rubricCriteria) { result: List<Criterium>? ->
+                result?.let {
                     _geselecteerdCriterium.value = result[0]
                     _positieGeselecteerdCriterium.value = 0
                     var grootteRubricCriteria: Int? = result.size
                     _positieLaatsteCriterium.value =
-                        if(grootteRubricCriteria == null) 0 else (grootteRubricCriteria -1)
+                        if (grootteRubricCriteria == null) 0 else (grootteRubricCriteria - 1)
                 }
             }
-        }
 
+
+            initialiseerEvaluatie()
+
+
+        }
         App.component.inject(this)
     }
 
     private fun prepareData() {
-        if (isNetworkAvailable()){
+        if (isNetworkAvailable()) {
             coroutineScope.launch {
-                rubricRepository.refreshRubrics()
-                initialiseerDummyEvaluatie()
+                //                rubricRepository.refreshRubrics()
+//                initialiseerDummyEvaluatie()
             }
         }
     }
 
     private fun isNetworkAvailable(): Boolean {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
         val activeNetworkInfo = connectivityManager!!.activeNetworkInfo
         return activeNetworkInfo != null && activeNetworkInfo.isConnected
     }
 
-    fun onCriteriumClicked(criteriumId: String, positie: Int){
-        _geselecteerdCriterium.value = rubricCriteria.value?.singleOrNull{it?.criteriumId == criteriumId}
+    fun onCriteriumClicked(criteriumId: String, positie: Int) {
+        _geselecteerdCriterium.value =
+            rubricCriteria.value?.singleOrNull { it?.criteriumId == criteriumId }
         _positieGeselecteerdCriterium?.value = positie
     }
 
-    fun onUpEdgeButtonClicked(){
+    fun onUpEdgeButtonClicked() {
         onEdgeButtonClicked(Direction.UP)
     }
 
-    fun onDownEdgeButtonClicked(){
+    fun onDownEdgeButtonClicked() {
         onEdgeButtonClicked(Direction.DOWN)
     }
 
-    private enum class Direction{
+    private enum class Direction {
         UP,
         DOWN
     }
 
-    private fun onEdgeButtonClicked(direction: Direction){
+    private fun onEdgeButtonClicked(direction: Direction) {
         var oudePositie: Int? = positieGeselecteerdCriterium.value
-        var nieuwePositie: Int = if(oudePositie == null) 0 else {
-            if(direction == Direction.UP) oudePositie -1 else oudePositie +1
+        var nieuwePositie: Int = if (oudePositie == null) 0 else {
+            if (direction == Direction.UP) oudePositie - 1 else oudePositie + 1
         }
 
         _geselecteerdCriterium.value = rubricCriteria.value?.get(nieuwePositie)
@@ -129,77 +160,108 @@ class CriteriumOverzichtViewModel(private val rubricId: String, private val stud
         _positieGeselecteerdCriterium?.value = nieuwePositie
     }
 
-    fun onKlapInKlapUitButtonClicked(){
+    fun onKlapInKlapUitButtonClicked() {
         _overzichtPaneelUitgeklapt.value?.let {
             _overzichtPaneelUitgeklapt.value = !it
         }
     }
 
-    fun persisteerEvaluatie(){
+    fun persisteerEvaluatie() {
         coroutineScope.launch {
-            var evaluatie: Evaluatie =
-                haalTijdelijkeEvaluatieOp()
-            var criteriumEvaluaties: List<CriteriumEvaluatie> =
-                haalTijdelijkeCriteriumEvaluatiesOp()
-            var evaluatieId = evaluatieRepository.insert(Evaluatie(
-                        evaluatie.evaluatieId,
-                        /* evaluatie.studentId, */
-                        evaluatie.rubricId)
-                )
-            criteriumEvaluaties.forEach {
-                criteriumEvaluatieRepository.insert(CriteriumEvaluatie(
-                        it.criteriumEvaluatieId,
-                        evaluatieId,
-                        it.criteriumId,
-                        it.behaaldNiveau,
-                        it.score,
-                        it.commentaar
-                    )
-                )
+            evaluatieRepository.persisteerTemp(_evaluatie.value!!)
+            _persisterenVoltooid.value = true
+        }
+//
+    }
+
+    fun onCriteriaInitializedComplete() {
+        _criteriaInitialized.value = false
+    }
+
+    private fun initialiseerEvaluatie() {
+        if (_evaluatie.value == null) {
+            coroutineScope.launch {
+                _evaluatie.value = withContext(Dispatchers.IO) {
+                    evaluatieRepository.verwijderVorigeTempEvaluatie()
+                    val bestaandeEvaluatie =
+                        evaluatieRepository.getByRubricAndStudent(rubricId, studentId)
+                    if (bestaandeEvaluatie == null) {
+                        initialiseerNieuweEvaluatie()
+                    } else
+                        initialiseerBestaandeEvaluatie(bestaandeEvaluatie)
+                }
             }
-            verwijderTijdelijkeEvaluatieData(evaluatie, criteriumEvaluaties)
+        }
+
+    }
+
+    private suspend fun initialiseerBestaandeEvaluatie(bestaandeEvaluatie: Evaluatie): Evaluatie {
+        return withContext(Dispatchers.IO) {
+            //Maak de evaluatie
+            evaluatieRepository.createTempFromBestaande(bestaandeEvaluatie)
+
         }
     }
 
-    private suspend fun haalTijdelijkeEvaluatieOp(): Evaluatie{
-        return withContext(Dispatchers.IO){
-            var evaluatie = evaluatieRepository.get(TEMP_EVALUATIE_ID)
-            evaluatie
-        }
+    fun navigatieNaPersisterenVoltooidCompleted(){
+        _persisterenVoltooid.value = false
     }
 
-    private suspend fun haalTijdelijkeCriteriumEvaluatiesOp(): List<CriteriumEvaluatie>{
-        return withContext(Dispatchers.IO){
-            var criteriumEvaluaties = criteriumEvaluatieRepository.getAllForEvaluatie(
-                TEMP_EVALUATIE_ID)
-            criteriumEvaluaties
-        }
-    }
+    private suspend fun initialiseerNieuweEvaluatie(): Evaluatie {
+        return withContext(Dispatchers.IO) {
+            //Maak de evaluatie
+            val tempEvaluatie = Evaluatie(TEMP_EVALUATIE_ID, studentId, rubricId)
+            evaluatieRepository.insertTemp(tempEvaluatie)
 
-    private suspend fun verwijderTijdelijkeEvaluatieData(
-            evaluatie: Evaluatie,
-            criteriumEvaluaties: List<CriteriumEvaluatie>
-    ){
-        withContext(Dispatchers.IO){
-            criteriumEvaluaties.forEach{
-                criteriumEvaluatieRepository.delete(it)
+            //Maak de criteriumEvaluaties
+            val criteria = criteriumRepository.getCriteriaListForRubric(rubricId)
+            val criteriumEvaluaties = ArrayList<CriteriumEvaluatie>()
+            criteria?.forEach {
+                val niveau = niveauRepository.getNiveausForCriterium(it.criteriumId)
+                    .singleOrNull { it.volgnummer == 0 }
+
+                val criteriumEvaluatie = CriteriumEvaluatie(
+                    tempEvaluatie.evaluatieId,
+                    it.criteriumId,
+                    niveau?.niveauId,
+                    niveau?.ondergrens,
+                    ""
+                )
+                criteriumEvaluaties.add(criteriumEvaluatie)
             }
-            evaluatieRepository.delete(evaluatie)
+            criteriumEvaluatieRepository.insertAllTemp(criteriumEvaluaties)
+//            _criteriaInitialized.value = true
+            tempEvaluatie
+
         }
     }
 
-    private suspend fun initialiseerDummyEvaluatie(){
-        withContext(Dispatchers.IO){
-            evaluatieRepository.insert(Evaluatie(TEMP_EVALUATIE_ID, /* "1" , */"1"))
+/*    private suspend fun initialiseerDummyEvaluatie() {
+        withContext(Dispatchers.IO) {
+            evaluatieRepository.insert(Evaluatie("", *//* "1" , *//*1, "1"))
             criteriumEvaluatieRepository.insertAll(
                 listOf(
-                    CriteriumEvaluatie(0L, TEMP_EVALUATIE_ID,"1","3",null,"LoremIpsumTesterdieTest"),
-                    CriteriumEvaluatie(0L, TEMP_EVALUATIE_ID,"2","7",null,"HiHiHiHaHaHa"),
-                    CriteriumEvaluatie(0L, TEMP_EVALUATIE_ID,"3","9",null,"SleepDeprivationIsADrug")
+                    CriteriumEvaluatie(
+//                        0L,
+                        "",
+                        "1",
+                        3L,
+                        null,
+                        "LoremIpsumTesterdieTest"
+                    ),
+                    CriteriumEvaluatie("", "2", 7L, null, "HiHiHiHaHaHa"),
+                    CriteriumEvaluatie(
+//                        0L,
+                        "",
+                        "3",
+                        9L,
+                        null,
+                        "SleepDeprivationIsADrug"
+                    )
                 )
             )
         }
-    }
+    }*/
 
     override fun onCleared() {
         super.onCleared()

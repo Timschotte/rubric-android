@@ -1,12 +1,8 @@
 package be.hogent.tile3.rubricapplication.fragments
 
 
-import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -17,13 +13,14 @@ import be.hogent.tile3.rubricapplication.adapters.CriteriumEvaluatieListListener
 import be.hogent.tile3.rubricapplication.databinding.FragmentCriteriumEvaluatieBinding
 import be.hogent.tile3.rubricapplication.ui.CriteriumEvaluatieViewModel
 import android.text.InputType
-import android.util.Log
+import android.view.*
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import be.hogent.tile3.rubricapplication.ui.CriteriumOverzichtViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import javax.inject.Inject
 
 class CriteriumEvaluatieFragment
         : Fragment() {
@@ -44,8 +41,9 @@ class CriteriumEvaluatieFragment
                     = ViewModelProviders.of(it)
                         .get(CriteriumOverzichtViewModel::class.java)
 
+
             val criteriumEvaluatieViewModel
-                    = ViewModelProviders.of(this)
+                    = ViewModelProviders.of(this, viewModelFactory { CriteriumEvaluatieViewModel() })
                         .get(CriteriumEvaluatieViewModel::class.java)
 
             binding.criteriumEvaluatieViewModel = criteriumEvaluatieViewModel
@@ -57,6 +55,11 @@ class CriteriumEvaluatieFragment
                         it.criteriumId)
                 }
             })
+
+            criteriumEvaluatieViewModel.criteriumNiveaus.observe(viewLifecycleOwner, Observer {
+                criteriumEvaluatieViewModel.setGeselecteerdCriteriumNiveau()
+            })
+
 
             criteriumEvaluatieViewModel.geselecteerdCriteriumNiveau.observe(viewLifecycleOwner, Observer{
                     geselecteerdNiveau ->
@@ -142,5 +145,10 @@ class CriteriumEvaluatieFragment
 
         return binding.root
     }
+
+    protected inline fun <VM : ViewModel> viewModelFactory(crossinline f: () -> VM) =
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(aClass: Class<T>):T = f() as T
+        }
 
 }

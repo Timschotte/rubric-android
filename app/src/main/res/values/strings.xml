@@ -25,4 +25,5 @@
     <string name="volgende">Volgende</string>
     <string name="selecteerRubricVanOpleiding">%1$s</string>
     <string name="selecteer_leerling">Selecteer een leerling</string>
+    <string name="opslaan">Opslaan</string>
 </resources>

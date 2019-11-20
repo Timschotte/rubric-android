@@ -67,8 +67,8 @@ class DatabaseModule(private val application: Application) {
      */
     @Provides
     @Singleton
-    internal fun provideEvaluatieRepository(evaluatieDao: EvaluatieDao): EvaluatieRepository {
-        return EvaluatieRepository(evaluatieDao)
+    internal fun provideEvaluatieRepository(evaluatieDao: EvaluatieDao, criteriumEvaluatieDao: CriteriumEvaluatieDao): EvaluatieRepository {
+        return EvaluatieRepository(evaluatieDao, criteriumEvaluatieDao)
     }
 
     /**

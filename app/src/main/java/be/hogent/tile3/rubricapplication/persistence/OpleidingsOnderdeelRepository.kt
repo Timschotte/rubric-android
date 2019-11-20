@@ -34,16 +34,22 @@ class OpleidingsOnderdeelRepository(private val opleidingsOnderdeelDao: Opleidin
     suspend fun refreshOpleidingsOnderdelen(){
         Log.i("Test", "refresh called in opleidingsOnderdeelRepo")
         try{
-            val opleidingsOnderdelen = rubricApi.getOpleidingsOnderdeel().await()
-            withContext(Dispatchers.IO){
+                val opleidingsOnderdelen = rubricApi.getOpleidingsOnderdeel().await()
+
                 opleidingsOnderdeelDao.insertAll(*opleidingsOnderdelen.asOpleidingsOnderdeelDatabaseModel())
-            }
-            opleidingsOnderdelen.map {
-                Log.i("Test", it.naam + "from refreshRubric in repository")
-            }
+                opleidingsOnderdelen.map {
+                    Log.i("Test", it.naam + "from refreshRubric in repository")
+                }
+
+
         } catch (e: IOException){
             Log.i("RubricRepository", e.message)
         }
+    }
+
+    fun getAllOpleidingsOnderdelenWithRubric(): LiveData<List<OpleidingsOnderdeel>> {
+        val opleidingsOnderdelen = opleidingsOnderdeelDao.getAllWithRubric()
+        return opleidingsOnderdelen
     }
 
     val opleidingsOnderdelen: LiveData<List<OpleidingsOnderdeel>> = opleidingsOnderdeelDao.getAll()

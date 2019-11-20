@@ -7,17 +7,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.tile3.rubricapplication.App
-import be.hogent.tile3.rubricapplication.model.Rubric
 import be.hogent.tile3.rubricapplication.model.Student
-import be.hogent.tile3.rubricapplication.persistence.OpleidingsOnderdeelRepository
 import be.hogent.tile3.rubricapplication.persistence.StudentRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
-class LeerlingSelectViewModel(private val rubricId: String, private val opleidingsOnderdeelId: Long) : ViewModel() {
+class LeerlingSelectViewModel(
+    private val rubricId: String,
+    private val opleidingsOnderdeelId: Long
+) : ViewModel() {
 
     @Inject
     lateinit var studentRepository: StudentRepository
@@ -28,9 +26,9 @@ class LeerlingSelectViewModel(private val rubricId: String, private val opleidin
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    var studenten: LiveData<List<Student>>
+    val studenten: LiveData<List<Student>>
 
-    init{
+    init {
         App.component.inject(this)
         refreshRubricDatabase()
         studenten = studentRepository.getAllStudentsFromOpleidingsOnderdeel(opleidingsOnderdeelId)
@@ -38,15 +36,17 @@ class LeerlingSelectViewModel(private val rubricId: String, private val opleidin
     }
 
     private fun refreshRubricDatabase() {
-        if (isNetworkAvailable()){
+        if (isNetworkAvailable()) {
             uiScope.launch {
                 studentRepository.refreshStudenten()
             }
         }
     }
 
+
     private fun isNetworkAvailable(): Boolean {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
         val activeNetworkInfo = connectivityManager!!.activeNetworkInfo
         return activeNetworkInfo != null && activeNetworkInfo.isConnected
     }
@@ -60,8 +60,8 @@ class LeerlingSelectViewModel(private val rubricId: String, private val opleidin
         _navigateToRubricView.value = id
     }
 
-    fun onStudentNavigated(){
-        _navigateToRubricView. value = null
+    fun onStudentNavigated() {
+        _navigateToRubricView.value = null
     }
 
 }

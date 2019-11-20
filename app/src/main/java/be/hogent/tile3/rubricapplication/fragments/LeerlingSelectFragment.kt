@@ -17,6 +17,7 @@ import be.hogent.tile3.rubricapplication.adapters.LeerlingListener
 import be.hogent.tile3.rubricapplication.databinding.FragmentLeerlingSelectBinding
 import be.hogent.tile3.rubricapplication.ui.LeerlingSelectViewModel
 import be.hogent.tile3.rubricapplication.ui.factories.LeerlingSelectViewModelFactory
+import be.hogent.tile3.rubricapplication.utils.TEMP_EVALUATIE_ID
 
 /**
  * A simple [Fragment] subclass.
@@ -45,7 +46,7 @@ class LeerlingSelectFragment : Fragment() {
         leerlingSelectViewModel.navigateToRubricView.observe(this, Observer { leerling ->
             leerling?.let {
                 this.findNavController().navigate(
-                    LeerlingSelectFragmentDirections.actionLeerlingSelectFragmentToCriteriumOverzichtFragment(leerling, args.rubricId)
+                    LeerlingSelectFragmentDirections.actionLeerlingSelectFragmentToCriteriumOverzichtFragment(leerling, args.rubricId, TEMP_EVALUATIE_ID, args.opleidingsOnderdeelId)
                 )
                 leerlingSelectViewModel.onStudentNavigated()
             }
