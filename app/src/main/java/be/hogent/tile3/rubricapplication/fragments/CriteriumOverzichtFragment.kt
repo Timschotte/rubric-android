@@ -18,6 +18,7 @@ import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import androidx.recyclerview.widget.RecyclerView
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import be.hogent.tile3.rubricapplication.ui.factories.CriteriumOverzichtViewModelFactory
@@ -57,6 +58,12 @@ class CriteriumOverzichtFragment : Fragment() {
         })*/
 
 
+        criteriumOverzichtViewModel.rubricEvaluatie.observe(viewLifecycleOwner, Observer{
+            it?.let{
+                Log.i("Test4", it.toString())
+                 it.niveausCriteria.forEach{Log.i("Test4", it.toString())}
+            }
+        })
 
         Toast.makeText(
             context,
@@ -123,9 +130,9 @@ class CriteriumOverzichtFragment : Fragment() {
                 }
             })
 
-        criteriumOverzichtViewModel?.rubricCriteria?.observe(viewLifecycleOwner, Observer {
+        criteriumOverzichtViewModel?.rubricEvaluatie?.observe(viewLifecycleOwner, Observer {
             it?.let {
-                adapter.submitList(it)
+                adapter.submitList(it.criteria)
 //                binding.rubricCriteriaListRecycler.smoothScrollToPosition(
 //                    criteriumOverzichtViewModel?.positieGeselecteerdCriterium?.value ?: 0)
             }
