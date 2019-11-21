@@ -43,80 +43,81 @@ class CriteriumEvaluatieViewModel(): ViewModel(){
         App.component.inject(this)
     }
 
-    fun onGeselecteerdCriteriumChanged(criteriumId: String){
-        coroutineScope.launch {
-            /* wijzigingen opslaan */
-            persisteerVorigeCriteriumEvaluatie()
+//    fun onGeselecteerdCriteriumChanged(criteriumId: String){
+//        coroutineScope.launch {
+//            /* wijzigingen opslaan */
+//            persisteerVorigeCriteriumEvaluatie()
+//
+//            /* nieuwe criteriumEvaluatie instellen: ophalen uit database of default */
+//            _criteriumEvaluatie.value = haalOfMaakCriteriumEvaluatieOp(criteriumId)
+//
+//
+//            /* criteriumNiveaus instellen*/
+//            _criteriumNiveaus.value = haalNiveausVoorCriteriumOp(criteriumId)
+//
+//
+//            println(positieGeselecteerdCriteriumNiveau.value)
+//        }
+//    }
 
-            /* nieuwe criteriumEvaluatie instellen: ophalen uit database of default */
-            _criteriumEvaluatie.value = haalOfMaakCriteriumEvaluatieOp(criteriumId)
+//    fun setGeselecteerdCriteriumNiveau(){
+//        _geselecteerdCriteriumNiveau.value = _criteriumNiveaus.value?.singleOrNull {
+//            it.niveauId == _criteriumEvaluatie.value?.behaaldNiveau
+//        }
+//
+//        _positieGeselecteerdCriteriumNiveau.value =
+//            _criteriumNiveaus.value?.indexOf(_criteriumNiveaus.value?.singleOrNull {
+//                it.niveauId == _criteriumEvaluatie.value?.behaaldNiveau
+//            })
+//    }
 
-            /* criteriumNiveaus instellen*/
-            _criteriumNiveaus.value = haalNiveausVoorCriteriumOp(criteriumId)
-
-
-            println(positieGeselecteerdCriteriumNiveau.value)
-        }
-    }
-
-    fun setGeselecteerdCriteriumNiveau(){
-        _geselecteerdCriteriumNiveau.value = _criteriumNiveaus.value?.singleOrNull {
-            it.niveauId == _criteriumEvaluatie.value?.behaaldNiveau
-        }
-
-        _positieGeselecteerdCriteriumNiveau.value =
-            _criteriumNiveaus.value?.indexOf(_criteriumNiveaus.value?.singleOrNull {
-                it.niveauId == _criteriumEvaluatie.value?.behaaldNiveau
-            })
-    }
-
-    private suspend fun persisteerVorigeCriteriumEvaluatie(){
-        var criteriumEvaluatie = _criteriumEvaluatie.value
-        withContext(Dispatchers.IO){
-            if(criteriumEvaluatie != null)
-                criteriumEvaluatieRepository.update(criteriumEvaluatie)
-        }
-    }
-
-    private suspend fun haalOfMaakCriteriumEvaluatieOp(criteriumId: String): CriteriumEvaluatie{
-        return withContext(Dispatchers.IO){
-            val criteriumEvaluatie: CriteriumEvaluatie = criteriumEvaluatieRepository
-                .getForEvaluatieAndCriterium(TEMP_EVALUATIE_ID, criteriumId)
-            criteriumEvaluatie
-        }
-    }
-
-    private suspend fun haalNiveausVoorCriteriumOp (criteriumId: String): List<Niveau>{
-        return withContext(Dispatchers.IO) {
-            niveauRepository.getNiveausForCriterium(criteriumId)
-        }
-    }
-
-    fun onNiveauClicked(niveauId: Long, positie: Int){
-        _geselecteerdCriteriumNiveau.value = criteriumNiveaus.value?.singleOrNull{it.niveauId == niveauId}
-        _positieGeselecteerdCriteriumNiveau?.value = positie
-        _criteriumEvaluatie.value?.behaaldNiveau = niveauId
-        _criteriumEvaluatie.value?.score = geselecteerdCriteriumNiveau.value?.ondergrens ?: 0
-        Log.i("CriteriumEvaluatieVM","Voor criterium " +
-                " is het geselecteerde niveau " + criteriumEvaluatie.value?.behaaldNiveau +
-                " met een score van " + criteriumEvaluatie.value?.score +
-                " en commentaar \"" + criteriumEvaluatie.value?.commentaar + "\"")
-
-    }
-
-    fun onScoreChanged(oudeScore: Int, nieuweScore: Int){
-        Log.i("CriteriumEvaluatieVM", "Numberpicker score veranderd van " + oudeScore + " naar " + nieuweScore)
-        _criteriumEvaluatie.value?.score = nieuweScore
-        // Todo: persisteren
-
-    }
-
-    fun onCommentaarChanged(oudeCommentaar: String, nieuweCommentaar: String){
-        Log.i("CriteriumEvaluatieVM", "Oude commentaar: " + oudeCommentaar + "\nNieuwe commentaar: " + nieuweCommentaar)
-        _criteriumEvaluatie.value?.commentaar = nieuweCommentaar
-        // Todo: persisteren
-
-    }
+//    private suspend fun persisteerVorigeCriteriumEvaluatie(){
+//        var criteriumEvaluatie = _criteriumEvaluatie.value
+//        withContext(Dispatchers.IO){
+//            if(criteriumEvaluatie != null)
+//                criteriumEvaluatieRepository.update(criteriumEvaluatie)
+//        }
+//    }
+//
+//    private suspend fun haalOfMaakCriteriumEvaluatieOp(criteriumId: String): CriteriumEvaluatie{
+//        return withContext(Dispatchers.IO){
+//            val criteriumEvaluatie: CriteriumEvaluatie = criteriumEvaluatieRepository
+//                .getForEvaluatieAndCriterium(TEMP_EVALUATIE_ID, criteriumId)
+//            criteriumEvaluatie
+//        }
+//    }
+//
+//    private suspend fun haalNiveausVoorCriteriumOp (criteriumId: String): List<Niveau>{
+//        return withContext(Dispatchers.IO) {
+//            niveauRepository.getNiveausForCriterium(criteriumId)
+//        }
+//    }
+//
+//    fun onNiveauClicked(niveauId: Long, positie: Int){
+//        _geselecteerdCriteriumNiveau.value = criteriumNiveaus.value?.singleOrNull{it.niveauId == niveauId}
+//        _positieGeselecteerdCriteriumNiveau?.value = positie
+//        _criteriumEvaluatie.value?.behaaldNiveau = niveauId
+//        _criteriumEvaluatie.value?.score = geselecteerdCriteriumNiveau.value?.ondergrens ?: 0
+//        Log.i("CriteriumEvaluatieVM","Voor criterium " +
+//                " is het geselecteerde niveau " + criteriumEvaluatie.value?.behaaldNiveau +
+//                " met een score van " + criteriumEvaluatie.value?.score +
+//                " en commentaar \"" + criteriumEvaluatie.value?.commentaar + "\"")
+//
+//    }
+//
+//    fun onScoreChanged(oudeScore: Int, nieuweScore: Int){
+//        Log.i("CriteriumEvaluatieVM", "Numberpicker score veranderd van " + oudeScore + " naar " + nieuweScore)
+//        _criteriumEvaluatie.value?.score = nieuweScore
+//        // Todo: persisteren
+//
+//    }
+//
+//    fun onCommentaarChanged(oudeCommentaar: String, nieuweCommentaar: String){
+//        Log.i("CriteriumEvaluatieVM", "Oude commentaar: " + oudeCommentaar + "\nNieuwe commentaar: " + nieuweCommentaar)
+//        _criteriumEvaluatie.value?.commentaar = nieuweCommentaar
+//        // Todo: persisteren
+//
+//    }
 
     override fun onCleared() {
         super.onCleared()

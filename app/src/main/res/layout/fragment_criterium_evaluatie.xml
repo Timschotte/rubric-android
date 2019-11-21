@@ -10,8 +10,8 @@
             name="criterium"
             type="be.hogent.tile3.rubricapplication.model.Criterium" />
         <variable
-            name="criteriumEvaluatieViewModel"
-            type="be.hogent.tile3.rubricapplication.ui.CriteriumEvaluatieViewModel" />
+            name="criteriumOverzichtViewModel"
+            type="be.hogent.tile3.rubricapplication.ui.CriteriumOverzichtViewModel" />
     </data>
 
 
@@ -77,12 +77,12 @@
             android:theme="@style/AppTheme.TextColorReverse"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onValueChange="@{(picker, oldV, newV) -> criteriumEvaluatieViewModel.onScoreChanged(oldV, newV)}"
+            android:onValueChange="@{(picker, oldV, newV) -> criteriumOverzichtViewModel.onScoreChanged(oldV, newV)}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/criteriumNiveausHorizontalScroll"
-            app:numberPickerValue="@{criteriumEvaluatieViewModel.geselecteerdCriteriumNiveau}" />
+            app:numberPickerValue="@{criteriumOverzichtViewModel.geselecteerdCriteriumNiveau}" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/voegCommentaarToeFloatingActionButton"
