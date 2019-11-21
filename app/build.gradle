@@ -129,6 +129,11 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
+    //KTX dependencies
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0-beta01" // viewModelScope
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0-alpha01" // LifecycleScope
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0-alpha01" // liveData
+
 }
 dokka {
     outputFormat = 'html'

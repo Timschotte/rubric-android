@@ -7,6 +7,7 @@ import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.dao.CriteriumDao
 import be.hogent.tile3.rubricapplication.dao.NiveauDao
 import be.hogent.tile3.rubricapplication.dao.RubricDao
+import be.hogent.tile3.rubricapplication.model.EvaluatieRubric
 import be.hogent.tile3.rubricapplication.model.Rubric
 import be.hogent.tile3.rubricapplication.network.RubricApi
 import be.hogent.tile3.rubricapplication.network.asDatabaseModel
@@ -77,6 +78,10 @@ class RubricRepository(
     @WorkerThread
     fun getAllRubricsFromOpleidingsOnderdeel(id: Long): LiveData<List<Rubric>> {
         return rubricDao.getAllRubricsFromOpleidingsOnderdeel(id)
+    }
+
+    fun getEvaluatieRubric(rubricId: String): EvaluatieRubric{
+        return rubricDao.getEvaluatieRubric(rubricId)
     }
 
     suspend fun refreshRubrics() {

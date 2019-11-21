@@ -3,10 +3,7 @@ package be.hogent.tile3.rubricapplication.ui
 import android.content.Context
 import android.net.ConnectivityManager
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.model.*
 import be.hogent.tile3.rubricapplication.persistence.*
@@ -40,11 +37,31 @@ class CriteriumOverzichtViewModel(
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    private var _huidigeRubric = MediatorLiveData<Rubric>()
+    private val _rubricEvaluatie: LiveData<EvaluatieRubric> = liveData {
+        coroutineScope.launch {
+            val data = getEvaluatieRubric(rubricId)
+            _geselecteerdCriterium.value = data.criteria[0]
+            _positieGeselecteerdCriterium.value = 0
+            var grootteRubricCriteria: Int? = data.criteria.size
+            _positieLaatsteCriterium.value =
+                if (grootteRubricCriteria == null) 0 else (grootteRubricCriteria - 1)
+            emit(data)
+        }
+    }
+    val rubricEvaluatie: LiveData<EvaluatieRubric>
+        get() = _rubricEvaluatie
 
-    private val _rubricCriteria = MediatorLiveData<List<Criterium>?>()
-    val rubricCriteria: LiveData<List<Criterium>?>
-        get() = _rubricCriteria
+    private suspend fun getEvaluatieRubric(rubricId: String): EvaluatieRubric{
+        return withContext(Dispatchers.IO){
+            rubricRepository.getEvaluatieRubric(rubricId)
+        }
+    }
+
+//    private var _huidigeRubric = MediatorLiveData<Rubric>()
+//
+//    private val _rubricCriteria = MediatorLiveData<List<Criterium>?>()
+//    val rubricCriteria: LiveData<List<Criterium>?>
+//        get() = _rubricCriteria
 
     private val _geselecteerdCriterium = MediatorLiveData<Criterium>()
     val geselecteerdCriterium: LiveData<Criterium>
@@ -84,27 +101,27 @@ class CriteriumOverzichtViewModel(
 
 
         coroutineScope.launch {
-            //            prepareData()
-            _huidigeRubric.addSource(
-                rubricRepository.get(rubricId),
-                _huidigeRubric::setValue
-            )
-            _rubricCriteria.addSource(
-                criteriumRepository.getCriteriaForRubric(rubricId)
-            ) { result: List<Criterium>? ->
-                if (!result.isNullOrEmpty()) {
-                    _rubricCriteria.value = result
-                }
-            }
-            _geselecteerdCriterium.addSource(_rubricCriteria) { result: List<Criterium>? ->
-                result?.let {
-                    _geselecteerdCriterium.value = result[0]
-                    _positieGeselecteerdCriterium.value = 0
-                    var grootteRubricCriteria: Int? = result.size
-                    _positieLaatsteCriterium.value =
-                        if (grootteRubricCriteria == null) 0 else (grootteRubricCriteria - 1)
-                }
-            }
+//            //            prepareData()
+//            _huidigeRubric.addSource(
+//                rubricRepository.get(rubricId),
+//                _huidigeRubric::setValue
+//            )
+//            _rubricCriteria.addSource(
+//                criteriumRepository.getCriteriaForRubric(rubricId)
+//            ) { result: List<Criterium>? ->
+//                if (!result.isNullOrEmpty()) {
+//                    _rubricCriteria.value = result
+//                }
+//            }
+//            _geselecteerdCriterium.addSource(_rubricCriteria) { result: List<Criterium>? ->
+//                result?.let {
+//                    _geselecteerdCriterium.value = result[0]
+//                    _positieGeselecteerdCriterium.value = 0
+//                    var grootteRubricCriteria: Int? = result.size
+//                    _positieLaatsteCriterium.value =
+//                        if (grootteRubricCriteria == null) 0 else (grootteRubricCriteria - 1)
+//                }
+//            }
 
 
             initialiseerEvaluatie()
@@ -132,7 +149,7 @@ class CriteriumOverzichtViewModel(
 
     fun onCriteriumClicked(criteriumId: String, positie: Int) {
         _geselecteerdCriterium.value =
-            rubricCriteria.value?.singleOrNull { it?.criteriumId == criteriumId }
+            rubricEvaluatie.value?.criteria?.singleOrNull { it?.criteriumId == criteriumId }
         _positieGeselecteerdCriterium?.value = positie
     }
 
@@ -155,7 +172,7 @@ class CriteriumOverzichtViewModel(
             if (direction == Direction.UP) oudePositie - 1 else oudePositie + 1
         }
 
-        _geselecteerdCriterium.value = rubricCriteria.value?.get(nieuwePositie)
+        _geselecteerdCriterium.value = rubricEvaluatie.value?.criteria?.get(nieuwePositie)
 
         _positieGeselecteerdCriterium?.value = nieuwePositie
     }

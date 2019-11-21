@@ -64,4 +64,6 @@ data class Niveau(
             return arrayOfNulls(size)
         }
     }
+
+    override fun toString() = "Niveau ${niveauId}: ${titel} voor criterium ${criteriumId} met waarde $ondergrens-$bovengrens, positie $volgnummer"
 }
