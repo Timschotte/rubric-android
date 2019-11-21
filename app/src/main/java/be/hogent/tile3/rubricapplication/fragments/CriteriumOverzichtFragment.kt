@@ -20,12 +20,9 @@ import androidx.recyclerview.widget.RecyclerView
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
-import android.widget.Toast
 import be.hogent.tile3.rubricapplication.ui.factories.CriteriumOverzichtViewModelFactory
-import androidx.fragment.app.FragmentManager
 import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.findNavController
-import be.hogent.tile3.rubricapplication.utils.TEMP_EVALUATIE_ID
 
 
 class CriteriumOverzichtFragment : Fragment() {
@@ -58,22 +55,16 @@ class CriteriumOverzichtFragment : Fragment() {
         })*/
 
 
-        criteriumOverzichtViewModel.rubricEvaluatie.observe(viewLifecycleOwner, Observer{
+        criteriumOverzichtViewModel.evaluatieRubric.observe(viewLifecycleOwner, Observer{
             it?.let{
                 Log.i("Test4", it.toString())
                  it.niveausCriteria.forEach{Log.i("Test4", it.toString())}
             }
         })
 
-        Toast.makeText(
-            context,
-            "Student ID: " + args.studentId + " Rubric ID: " + args.rubricId,
-            Toast.LENGTH_LONG
-        ).show()
-
         val adapter =
             CriteriumOverzichtListAdapter(CriteriaListListener { criteriumId, positie ->
-                criteriumOverzichtViewModel?.onCriteriumClicked(criteriumId, positie)
+                criteriumOverzichtViewModel?.onGeselecteerdCriteriumGewijzigd(criteriumId, positie)
             })
 
         adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
@@ -130,7 +121,7 @@ class CriteriumOverzichtFragment : Fragment() {
                 }
             })
 
-        criteriumOverzichtViewModel?.rubricEvaluatie?.observe(viewLifecycleOwner, Observer {
+        criteriumOverzichtViewModel?.evaluatieRubric?.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapter.submitList(it.criteria)
 //                binding.rubricCriteriaListRecycler.smoothScrollToPosition(

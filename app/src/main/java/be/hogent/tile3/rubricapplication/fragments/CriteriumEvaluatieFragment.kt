@@ -42,26 +42,27 @@ class CriteriumEvaluatieFragment
                         .get(CriteriumOverzichtViewModel::class.java)
 
 
-            val criteriumEvaluatieViewModel
-                    = ViewModelProviders.of(this, viewModelFactory { CriteriumEvaluatieViewModel() })
-                        .get(CriteriumEvaluatieViewModel::class.java)
+//            val criteriumEvaluatieViewModel
+//                    = ViewModelProviders.of(this, viewModelFactory { CriteriumEvaluatieViewModel() })
+//                        .get(CriteriumEvaluatieViewModel::class.java)
 
-            binding.criteriumEvaluatieViewModel = criteriumEvaluatieViewModel
+            binding.criteriumOverzichtViewModel = criteriumOverzichtViewModel
             binding.criterium = criteriumOverzichtViewModel.geselecteerdCriterium.value
 
-            criteriumOverzichtViewModel?.geselecteerdCriterium?.observe(viewLifecycleOwner, Observer{
-                it?.let{
-                    criteriumEvaluatieViewModel.onGeselecteerdCriteriumChanged(
-                        it.criteriumId)
-                }
-            })
+//            criteriumOverzichtViewModel?.geselecteerdCriterium?.observe(viewLifecycleOwner, Observer{
+//                it?.let{
+////                    criteriumEvaluatieViewModel.onGeselecteerdCriteriumChanged(
+////                        it.criteriumId)
+////                }
+//            })
 
-            criteriumEvaluatieViewModel.criteriumNiveaus.observe(viewLifecycleOwner, Observer {
-                criteriumEvaluatieViewModel.setGeselecteerdCriteriumNiveau()
-            })
+//            criteriumEvaluatieViewModel.criteriumNiveaus.observe(viewLifecycleOwner, Observer {
+//                criteriumEvaluatieViewModel.setGeselecteerdCriteriumNiveau()
+//            })
 
 
-            criteriumEvaluatieViewModel.geselecteerdCriteriumNiveau.observe(viewLifecycleOwner, Observer{
+            criteriumOverzichtViewModel.geselecteerdCriteriumNiveau.observe(viewLifecycleOwner, Observer{
+//            criteriumEvaluatieViewModel.geselecteerdCriteriumNiveau.observe(viewLifecycleOwner, Observer{
                     geselecteerdNiveau ->
                 // NumberPicker minValue en maxValue niet mogelijk via databinding
                 geselecteerdNiveau?.let {
@@ -73,22 +74,28 @@ class CriteriumEvaluatieFragment
 
             val adapter =
                 CriteriumEvaluatieListAdapter(CriteriumEvaluatieListListener { niveauId, position ->
-                    criteriumEvaluatieViewModel.onNiveauClicked(niveauId, position)
+                    criteriumOverzichtViewModel.onNiveauClicked(niveauId, position)
                 })
 
             binding.criteriumNiveausRecycler.isNestedScrollingEnabled = false
 
             binding.criteriumNiveausRecycler.adapter = adapter
 
-            criteriumEvaluatieViewModel.criteriumNiveaus.observe(viewLifecycleOwner, Observer {
-                if(!it.isNullOrEmpty()){
-                    it.let {
-                        adapter.submitList(it)
-                    }
+            criteriumOverzichtViewModel.criteriumNiveaus.observe(viewLifecycleOwner, Observer{
+                it?.let{
+                    adapter.submitList(it)
                 }
             })
+//            criteriumEvaluatieViewModel.criteriumNiveaus.observe(viewLifecycleOwner, Observer {
+//                if(!it.isNullOrEmpty()){
+//                    it.let {
+//                        adapter.submitList(it)
+//                    }
+//                }
+//            })
 
-            criteriumEvaluatieViewModel.positieGeselecteerdCriteriumNiveau?.observe(viewLifecycleOwner, Observer{
+            criteriumOverzichtViewModel.positieGeselecteerdCriteriumNiveau?.observe(viewLifecycleOwner, Observer{
+//            criteriumEvaluatieViewModel.positieGeselecteerdCriteriumNiveau?.observe(viewLifecycleOwner, Observer{
                 it?.let{
                     adapter.stelPositieGeselecteerdNiveauIn(it)
                     adapter.notifyDataSetChanged()
@@ -97,7 +104,7 @@ class CriteriumEvaluatieFragment
 
             binding.voegCommentaarToeFloatingActionButton.setOnClickListener {
                 var oudeCommentaar =
-                    criteriumEvaluatieViewModel.criteriumEvaluatie.value?.commentaar ?: ""
+                    criteriumOverzichtViewModel.criteriumEvaluatie.value?.commentaar ?: ""
 
                 val builder = AlertDialog.Builder(this.context!!)
                 builder.setTitle(R.string.criterium_evaluatie_commentaar_dialog_titel)
@@ -110,7 +117,7 @@ class CriteriumEvaluatieFragment
                 builder.setView(input)
 
                 builder.setPositiveButton(R.string.criterium_evaluatie_commentaar_dialog_bevestig)
-                { _, _ -> criteriumEvaluatieViewModel.onCommentaarChanged(
+                { _, _ -> criteriumOverzichtViewModel.onCommentaarChanged(
                     oudeCommentaar,
                     input.text.toString()) }
                 builder.setNegativeButton(R.string.criterium_evaluatie_commentaar_dialog_annuleer)
