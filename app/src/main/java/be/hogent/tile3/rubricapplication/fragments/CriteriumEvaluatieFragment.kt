@@ -11,14 +11,11 @@ import be.hogent.tile3.rubricapplication.R
 import be.hogent.tile3.rubricapplication.adapters.CriteriumEvaluatieListAdapter
 import be.hogent.tile3.rubricapplication.adapters.CriteriumEvaluatieListListener
 import be.hogent.tile3.rubricapplication.databinding.FragmentCriteriumEvaluatieBinding
-import be.hogent.tile3.rubricapplication.ui.CriteriumEvaluatieViewModel
 import android.text.InputType
 import android.view.*
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import be.hogent.tile3.rubricapplication.ui.CriteriumOverzichtViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
@@ -41,28 +38,10 @@ class CriteriumEvaluatieFragment
                     = ViewModelProviders.of(it)
                         .get(CriteriumOverzichtViewModel::class.java)
 
-
-//            val criteriumEvaluatieViewModel
-//                    = ViewModelProviders.of(this, viewModelFactory { CriteriumEvaluatieViewModel() })
-//                        .get(CriteriumEvaluatieViewModel::class.java)
-
             binding.criteriumOverzichtViewModel = criteriumOverzichtViewModel
             binding.criterium = criteriumOverzichtViewModel.geselecteerdCriterium.value
 
-//            criteriumOverzichtViewModel?.geselecteerdCriterium?.observe(viewLifecycleOwner, Observer{
-//                it?.let{
-////                    criteriumEvaluatieViewModel.onGeselecteerdCriteriumChanged(
-////                        it.criteriumId)
-////                }
-//            })
-
-//            criteriumEvaluatieViewModel.criteriumNiveaus.observe(viewLifecycleOwner, Observer {
-//                criteriumEvaluatieViewModel.setGeselecteerdCriteriumNiveau()
-//            })
-
-
             criteriumOverzichtViewModel.geselecteerdCriteriumNiveau.observe(viewLifecycleOwner, Observer{
-//            criteriumEvaluatieViewModel.geselecteerdCriteriumNiveau.observe(viewLifecycleOwner, Observer{
                     geselecteerdNiveau ->
                 // NumberPicker minValue en maxValue niet mogelijk via databinding
                 geselecteerdNiveau?.let {
@@ -86,19 +65,17 @@ class CriteriumEvaluatieFragment
                     adapter.submitList(it)
                 }
             })
-//            criteriumEvaluatieViewModel.criteriumNiveaus.observe(viewLifecycleOwner, Observer {
-//                if(!it.isNullOrEmpty()){
-//                    it.let {
-//                        adapter.submitList(it)
-//                    }
-//                }
-//            })
 
             criteriumOverzichtViewModel.positieGeselecteerdCriteriumNiveau?.observe(viewLifecycleOwner, Observer{
-//            criteriumEvaluatieViewModel.positieGeselecteerdCriteriumNiveau?.observe(viewLifecycleOwner, Observer{
                 it?.let{
                     adapter.stelPositieGeselecteerdNiveauIn(it)
                     adapter.notifyDataSetChanged()
+                }
+            })
+
+            criteriumOverzichtViewModel.criteriumEvaluatie?.observe(viewLifecycleOwner, Observer{
+                it?.let{
+                    binding.scoreNumberPicker.value = it.score ?: binding.scoreNumberPicker.minValue
                 }
             })
 
@@ -152,10 +129,5 @@ class CriteriumEvaluatieFragment
 
         return binding.root
     }
-
-    protected inline fun <VM : ViewModel> viewModelFactory(crossinline f: () -> VM) =
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(aClass: Class<T>):T = f() as T
-        }
 
 }
