@@ -18,7 +18,8 @@ data class NetworkRubric(
     val niveauSchaal: NetworkNiveauSchaal,
     val datumTijdCreatie: String,
     val datumTijdLaatsteWijziging: String,
-    val opleidingsOnderdeel: Long
+    //val opleidingsOnderdeel: Long
+    val opleidingsOnderdeel: NetworkOpleidingsOnderdeel
 )
 
 @JsonClass(generateAdapter = false)
@@ -93,7 +94,7 @@ fun NetworkRubric.asDatabaseModel(): Rubric{
         this.omschrijving,
         this.datumTijdCreatie,
         this.datumTijdLaatsteWijziging,
-        this.opleidingsOnderdeel
+        this.opleidingsOnderdeel.id
     )
 }
 
@@ -105,7 +106,7 @@ fun List<NetworkRubric>.asDatabaseModel(): List<Rubric> {
             it.omschrijving,
             it.datumTijdCreatie,
             it.datumTijdLaatsteWijziging,
-            it.opleidingsOnderdeel
+            it.opleidingsOnderdeel.id
         )
     }
 }
@@ -118,7 +119,7 @@ fun List<NetworkRubric>.asDatabaseModelArray(): Array<Rubric> {
             it.omschrijving,
             it.datumTijdCreatie,
             it.datumTijdLaatsteWijziging,
-            it.opleidingsOnderdeel
+            it.opleidingsOnderdeel.id
         )
     }.toTypedArray()
 }

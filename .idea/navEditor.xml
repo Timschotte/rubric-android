@@ -17,6 +17,15 @@
                             <option name="y" value="213" />
                           </Point>
                         </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_criteriumOverzichtFragment_to_leerlingSelectFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
                       </LayoutPositions>
                     </value>
                   </entry>
