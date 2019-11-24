@@ -72,23 +72,22 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
         </androidx.core.widget.NestedScrollView>
 
+
         <LinearLayout
             android:id="@+id/chipGroupHolder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/criteriumNiveausHorizontalScroll">
+
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chipHolder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:singleSelection="true"
-                />
+                app:singleSelection="true" />
         </LinearLayout>
-
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/voegCommentaarToeFloatingActionButton"
