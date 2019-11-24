@@ -238,6 +238,7 @@ class CriteriumOverzichtViewModel(
         _positieGeselecteerdCriteriumNiveau?.value = positie
         _criteriumEvaluatie.value?.behaaldNiveau = niveauId
         _criteriumEvaluatie.value?.score = geselecteerdCriteriumNiveau.value?.ondergrens ?: 0
+        Log.i("TestCriteriumOverzicht", "Evaluatie wordt gepersisteerd")
         persisteerCriteriumEvaluatie(criteriumEvaluatie.value)
     }
 

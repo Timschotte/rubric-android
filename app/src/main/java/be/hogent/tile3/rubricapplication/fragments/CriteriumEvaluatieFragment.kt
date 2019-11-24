@@ -50,7 +50,7 @@ class CriteriumEvaluatieFragment
                     binding.scoreNumberPicker.maxValue = geselecteerdNiveau.bovengrens*/
                     binding.chipHolder.removeAllViews()
                     for (i in geselecteerdNiveau.ondergrens..geselecteerdNiveau.bovengrens){
-                        var chip = Chip(context)
+                        var chip = layoutInflater.inflate(R.layout.chip_item_evaluatie, null, false) as Chip
                         chip.text = i.toString()
                         chip.setOnClickListener { c -> criteriumOverzichtViewModel.onScoreChanged(0, Integer.parseInt(chip.text.toString())) }
                         binding.chipHolder.addView(chip)
