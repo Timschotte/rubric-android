@@ -85,6 +85,7 @@ class CriteriumEvaluatieFragment
             criteriumOverzichtViewModel.criteriumEvaluatie?.observe(viewLifecycleOwner, Observer{
                 it?.let{
                     /*binding.scoreNumberPicker.value = it.score ?: binding.scoreNumberPicker.minValue*/
+                    //Werkte niet met numberpicker, ik laat dit momenteel zo
                 }
             })
 
