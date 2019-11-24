@@ -58,7 +58,7 @@
             android:id="@+id/criteriumNiveausHorizontalScroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@id/scoreNumberPicker"
+            app:layout_constraintBottom_toTopOf="@id/chipGroupHolder"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/upEdgeButton">
@@ -71,18 +71,22 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
         </androidx.core.widget.NestedScrollView>
 
-
-        <NumberPicker
-            android:id="@+id/scoreNumberPicker"
-            android:theme="@style/AppTheme.TextColorReverse"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/chipGroupHolder"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onValueChange="@{(picker, oldV, newV) -> criteriumOverzichtViewModel.onScoreChanged(oldV, newV)}"
+            android:gravity="center_horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/criteriumNiveausHorizontalScroll"
-            app:numberPickerValue="@{criteriumOverzichtViewModel.geselecteerdCriteriumNiveau}" />
+            app:layout_constraintTop_toBottomOf="@+id/criteriumNiveausHorizontalScroll">
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipHolder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+        </LinearLayout>
+
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/voegCommentaarToeFloatingActionButton"

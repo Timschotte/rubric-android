@@ -243,6 +243,7 @@ class CriteriumOverzichtViewModel(
 
     fun onScoreChanged(oudeScore: Int, nieuweScore: Int){
         _criteriumEvaluatie.value?.score = nieuweScore
+        Log.i("Test", nieuweScore.toString())
         persisteerCriteriumEvaluatie(criteriumEvaluatie.value)
     }
 
