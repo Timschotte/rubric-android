@@ -7,6 +7,7 @@ import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.dao.CriteriumDao
 import be.hogent.tile3.rubricapplication.dao.NiveauDao
 import be.hogent.tile3.rubricapplication.dao.RubricDao
+import be.hogent.tile3.rubricapplication.model.EvaluatieRubric
 import be.hogent.tile3.rubricapplication.model.Rubric
 import be.hogent.tile3.rubricapplication.network.RubricApi
 import be.hogent.tile3.rubricapplication.network.asDatabaseModel
@@ -21,11 +22,14 @@ import javax.inject.Inject
 /**
  * This class is used to run queries for the Rubric Objects
  */
-class RubricRepository(private val rubricDao: RubricDao,
-                       private val criteriumDao: CriteriumDao,
-                       private val niveauDao: NiveauDao){
+class RubricRepository(
+    private val rubricDao: RubricDao,
+    private val criteriumDao: CriteriumDao,
+    private val niveauDao: NiveauDao
+) {
 
-    @Inject lateinit var rubricApi: RubricApi
+    @Inject
+    lateinit var rubricApi: RubricApi
 
     init {
         App.component.inject(this)
@@ -35,7 +39,7 @@ class RubricRepository(private val rubricDao: RubricDao,
      * Inserts a rubric in the db
      */
     @WorkerThread
-    fun insert(rubric: Rubric){
+    fun insert(rubric: Rubric) {
         rubricDao.insert(rubric)
     }
 
@@ -43,7 +47,7 @@ class RubricRepository(private val rubricDao: RubricDao,
      * Deletes a rubric from the db
      */
     @WorkerThread
-    fun delete(rubric: Rubric){
+    fun delete(rubric: Rubric) {
         rubricDao.delete(rubric)
     }
 
@@ -51,7 +55,7 @@ class RubricRepository(private val rubricDao: RubricDao,
      * Deletes all rubrics from the db
      */
     @WorkerThread
-    fun deleteAllRubrics(){
+    fun deleteAllRubrics() {
         rubricDao.deleteAllRubrics()
     }
 
@@ -76,36 +80,44 @@ class RubricRepository(private val rubricDao: RubricDao,
         return rubricDao.getAllRubricsFromOpleidingsOnderdeel(id)
     }
 
-    suspend fun refreshRubrics(){
+    fun getEvaluatieRubric(rubricId: String): EvaluatieRubric{
+        return rubricDao.getEvaluatieRubric(rubricId)
+    }
+
+    suspend fun refreshRubrics() {
         Log.i("Test", "refresh called in rubricrepository")
-        try{
+        try {
             val rubrics = rubricApi.getRubrics().await()
-            withContext(Dispatchers.IO){
 //                rubricDao.insertAll(*rubrics.asDatabaseModelArray())
-                rubrics.forEach{rubric ->
-                    rubricDao.insert(rubric.asDatabaseModel())
-                    rubric.criteriumGroepen.forEach{ criteriumGroep ->
-                        criteriumGroep.criteria.forEach{ networkCriterium ->
-                            criteriumDao.insert(
-                                networkCriterium.asDatabaseModel(
+            rubrics.forEach { rubric ->
+                rubricDao.insert(rubric.asDatabaseModel())
+                rubric.criteriumGroepen.forEach { criteriumGroep ->
+                    criteriumGroep.criteria.forEach { networkCriterium ->
+                        criteriumDao.insert(
+                            networkCriterium.asDatabaseModel(
+                                rubric.id.toString(),
+                                criteriumGroep.id.toString()
+                            )
+                        )
+                        networkCriterium.criteriumNiveaus.forEach { networkCriteriumNiveau ->
+                            niveauDao.insert(
+                                networkCriteriumNiveau.asDatabaseModel(
                                     rubric.id.toString(),
-                                    criteriumGroep.id.toString()))
-                            networkCriterium.criteriumNiveaus.forEach{ networkCriteriumNiveau ->
-                                niveauDao.insert(
-                                    networkCriteriumNiveau.asDatabaseModel(
-                                        rubric.id.toString(),
-                                        criteriumGroep.id.toString(),
-                                        networkCriterium.id.toString()))
-                            }
+                                    criteriumGroep.id.toString(),
+                                    networkCriterium.id.toString()
+                                )
+                            )
                         }
                     }
-                    rubricDao.insert(rubric.asDatabaseModel())
                 }
+                rubricDao.insert(rubric.asDatabaseModel())
             }
             rubrics.map {
                 Log.i("Test", it.omschrijving + "from refreshRubric in repository")
             }
-        } catch (e: IOException){
+
+
+        } catch (e: IOException) {
             Log.i("RubricRepository", e.message)
         }
     }

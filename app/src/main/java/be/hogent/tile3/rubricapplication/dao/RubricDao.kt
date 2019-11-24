@@ -2,6 +2,7 @@ package be.hogent.tile3.rubricapplication.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import be.hogent.tile3.rubricapplication.model.EvaluatieRubric
 import be.hogent.tile3.rubricapplication.model.Rubric
 
 /**
@@ -44,4 +45,8 @@ interface RubricDao{
 
     @Query("SELECT * from rubric_table WHERE opleidingsOnderdeelId = :opleidingsOnderdeelId")
     fun getAllRubricsFromOpleidingsOnderdeel(opleidingsOnderdeelId: Long): LiveData<List<Rubric>>
+
+    @Transaction
+    @Query("SELECT * FROM rubric_table WHERE rubricId = :rubricId")
+    fun getEvaluatieRubric(rubricId: String): EvaluatieRubric
 }

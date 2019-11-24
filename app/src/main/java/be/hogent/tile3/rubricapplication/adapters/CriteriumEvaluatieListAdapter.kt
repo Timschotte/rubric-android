@@ -92,6 +92,6 @@ class CriteriumNiveauListDiffCallback: DiffUtil.ItemCallback<Niveau>(){
     }
 }
 
-class CriteriumEvaluatieListListener(val clickListener: (niveauId: String, position: Int) -> Unit){
+class CriteriumEvaluatieListListener(val clickListener: (niveauId: Long, position: Int) -> Unit){
     fun onClick(niveau: Niveau, position: Int) = clickListener(niveau.niveauId, position)
 }

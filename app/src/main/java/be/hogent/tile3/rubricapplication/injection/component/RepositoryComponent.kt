@@ -18,7 +18,6 @@ interface RepositoryComponent {
     fun inject(criteriumViewModel: CriteriumViewModel)
     fun inject(niveauViewModel: NiveauViewModel)
     fun inject(criteriumOverzichtViewModel: CriteriumOverzichtViewModel)
-    fun inject(criteriumEvaluatieViewModel: CriteriumEvaluatieViewModel)
     fun inject(rubricRepository: RubricRepository)
     fun inject(opleidingsOnderdeelViewModel: OpleidingsOnderdeelViewModel)
     fun inject(opleidingsOnderdeelRepository: OpleidingsOnderdeelRepository)
