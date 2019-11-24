@@ -54,6 +54,9 @@ class CriteriumEvaluatieFragment
                         chip.text = i.toString()
                         chip.setOnClickListener { c -> criteriumOverzichtViewModel.onScoreChanged(0, Integer.parseInt(chip.text.toString())) }
                         binding.chipHolder.addView(chip)
+                        if (i == criteriumOverzichtViewModel.criteriumEvaluatie.value?.score){
+                            chip.isChecked = true
+                        }
                     }
 
                 }
@@ -86,6 +89,7 @@ class CriteriumEvaluatieFragment
                 it?.let{
                     /*binding.scoreNumberPicker.value = it.score ?: binding.scoreNumberPicker.minValue*/
                     //Werkte niet met numberpicker, ik laat dit momenteel zo
+
                 }
             })
 
