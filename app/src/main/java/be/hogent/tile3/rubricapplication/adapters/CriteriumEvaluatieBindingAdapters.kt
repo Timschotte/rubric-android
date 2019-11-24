@@ -15,7 +15,7 @@ fun NumberPicker.setInitialValue(geselecteerdNiveau: Niveau?){
     }
 }
 
-@BindingAdapter("criteriumNaamAlsTitel", "studentenNaam")
-fun TextView.setCriteriumNaamAlsTitel(criteriumNaamAlsTitel: Criterium?, studentenNaam: Student?){
-    text = criteriumNaamAlsTitel?.naam + " - " + studentenNaam?.studentNaam
+@BindingAdapter("criterium", "student")
+fun TextView.setCriteriumNaamAlsTitel(criterium: Criterium?, student: Student?){
+    text = criterium?.naam + " - " + student?.studentNaam
 }
