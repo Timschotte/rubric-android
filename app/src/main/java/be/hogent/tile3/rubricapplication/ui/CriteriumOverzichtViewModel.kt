@@ -14,14 +14,13 @@ import kotlin.collections.ArrayList
 
 class CriteriumOverzichtViewModel(
     private val rubricId: String,
-    private val studentId: Long
+    val student: Student
 ) :
     ViewModel() {
 
     /* PRIVATE VARIABLES -------------------------------------------------------------------------*/
     /*--------------------------------------------------------------------------------------------*/
 
-    var student:LiveData<Student>
 
     // Context
     @Inject lateinit var context: Context
@@ -110,8 +109,6 @@ class CriteriumOverzichtViewModel(
     /*--------------------------------------------------------------------------------------------*/
     init {
         App.component.inject(this)
-        student = studentRepository.get(studentId)
-        Log.i("TestCriteriumOverzich", "student is " + student.value?.studentNaam)
     }
 
     private suspend fun getEvaluatieRubric(rubricId: String): EvaluatieRubric{
@@ -136,9 +133,9 @@ class CriteriumOverzichtViewModel(
             Log.i("Test4", it.toString())
         }
         // 1: nieuwe evaluatie, of bestaande evaluatie?
-        var evaluatie: Evaluatie? = geefEvaluatie(rubricId, studentId)
+        var evaluatie: Evaluatie? = geefEvaluatie(rubricId, student.studentId)
         // 2: temp evaluatie aanmaken
-        slaTempEvaluatieOp(Evaluatie(TEMP_EVALUATIE_ID, studentId, rubricId))
+        slaTempEvaluatieOp(Evaluatie(TEMP_EVALUATIE_ID, student.studentId, rubricId))
         // 3: temp criteriumEvaluaties aanmaken, persisteren & instellen
         var bestaandeCriteriumEvaluaties: MutableList<CriteriumEvaluatie>? = null
         if(evaluatie != null){

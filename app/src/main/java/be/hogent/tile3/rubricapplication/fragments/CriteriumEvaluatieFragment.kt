@@ -41,7 +41,7 @@ class CriteriumEvaluatieFragment
 
             binding.criteriumOverzichtViewModel = criteriumOverzichtViewModel
             binding.criterium = criteriumOverzichtViewModel.geselecteerdCriterium.value
-            binding.student = criteriumOverzichtViewModel.student.value
+            binding.student = criteriumOverzichtViewModel.student
 
             criteriumOverzichtViewModel.geselecteerdCriteriumNiveau.observe(viewLifecycleOwner, Observer{
                     geselecteerdNiveau ->

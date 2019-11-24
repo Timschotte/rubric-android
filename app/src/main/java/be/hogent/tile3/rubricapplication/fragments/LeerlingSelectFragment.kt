@@ -39,7 +39,7 @@ class LeerlingSelectFragment : Fragment() {
         binding.setLifecycleOwner(this)
 
         val adapter = LeerlingListAdapter(LeerlingListener {
-                studentId -> leerlingSelectViewModel.onStudentClicked(studentId)
+                student -> leerlingSelectViewModel.onStudentClicked(student)
         })
         binding.leerlingList.adapter = adapter
 

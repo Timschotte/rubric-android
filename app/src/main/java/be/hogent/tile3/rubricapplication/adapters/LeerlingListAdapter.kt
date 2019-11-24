@@ -49,6 +49,6 @@ class LeerlingDiffCallback: DiffUtil.ItemCallback<Student>() {
     }
 }
 
-class LeerlingListener(val clickListener: (studentId: Long) -> Unit){
-    fun onClick(student: Student) = clickListener(student.studentId)
+class LeerlingListener(val clickListener: (student: Student) -> Unit){
+    fun onClick(student: Student) = clickListener(student)
 }
