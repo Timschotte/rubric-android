@@ -24,7 +24,6 @@ class StudentRepository(private val studentDao: StudentDao, private val studentO
         App.component.inject(this)
     }
 
-    @WorkerThread
     fun get(id: Long): LiveData<Student> {
         return studentDao.getBy(id)
     }

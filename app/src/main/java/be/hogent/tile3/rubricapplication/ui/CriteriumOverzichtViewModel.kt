@@ -21,6 +21,8 @@ class CriteriumOverzichtViewModel(
     /* PRIVATE VARIABLES -------------------------------------------------------------------------*/
     /*--------------------------------------------------------------------------------------------*/
 
+    var student:LiveData<Student>
+
     // Context
     @Inject lateinit var context: Context
 
@@ -30,6 +32,7 @@ class CriteriumOverzichtViewModel(
     @Inject lateinit var criteriumRepository: CriteriumRepository
     @Inject lateinit var evaluatieRepository: EvaluatieRepository
     @Inject lateinit var criteriumEvaluatieRepository: CriteriumEvaluatieRepository
+    @Inject lateinit var studentRepository: StudentRepository
 
     // Coroutine variables
     private var viewModelJob = Job()
@@ -107,6 +110,8 @@ class CriteriumOverzichtViewModel(
     /*--------------------------------------------------------------------------------------------*/
     init {
         App.component.inject(this)
+        student = studentRepository.get(studentId)
+        Log.i("TestCriteriumOverzich", "student is " + student.value?.studentNaam)
     }
 
     private suspend fun getEvaluatieRubric(rubricId: String): EvaluatieRubric{
@@ -196,6 +201,7 @@ class CriteriumOverzichtViewModel(
             criteriumEvaluatieRepository.insertAll(obj)
         }
     }
+
 
 
 
