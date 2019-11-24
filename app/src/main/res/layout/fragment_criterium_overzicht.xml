@@ -16,8 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@drawable/criterium_overzicht_rand"
-            android:orientation="vertical"
-            android:paddingRight="8dp">
+            android:orientation="vertical">
 
             <ImageButton
                 android:id="@+id/klap_in_klap_uit_button"
@@ -28,8 +27,8 @@
 
             <LinearLayout
                 android:id="@+id/rubricCriteriaLayout"
-                android:layout_width="@dimen/criterium_overzicht_recycler_width"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal">
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -45,9 +44,9 @@
 
         <FrameLayout
             android:id="@+id/criterium_evaluatie_fragment_container"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="start" />
+            android:layout_gravity="center" />
 
     </LinearLayout>
 
