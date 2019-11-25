@@ -22,8 +22,7 @@
         android:id="@+id/criteriumEvaluatieConstraint"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/upEdgeButton"
             android:layout_width="match_parent"
             android:layout_height="@dimen/criterium_evaluatie_edge_button_height"
@@ -32,36 +31,39 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-
             <ImageView
                 android:id="@+id/upEdgeButtonArrowsImage"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/criterium_evaluatie_edge_button_image_height"
-                android:layout_weight="1"
-                android:src="@drawable/arrow_up_icon" />
-        </LinearLayout>
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:tint="@color/secondaryColor"
+                android:src="@drawable/ic_keyboard_arrow_up_black_24dp" />
+        </RelativeLayout>
 
         <TextView
-        android:id="@+id/criteriumNaamTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:fontFamily="serif"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:criterium="@{criterium}"
-            app:student="@{student}"
-        app:layout_constraintBottom_toTopOf="@+id/criteriumNiveausHorizontalScroll"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/upEdgeButton"
-        app:layout_constraintVertical_bias="0.3" />
+            android:id="@+id/criteriumNaamTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="64dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:fontFamily="@font/montserrat"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:criterium="@{criterium}"
+            app:layout_constraintBottom_toTopOf="@+id/criteriumNiveausHorizontalScroll"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/upEdgeButton"
+            app:layout_constraintVertical_bias="0.3"
+            app:student="@{student}" />
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/criteriumNiveausHorizontalScroll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingStart="20dp"
             android:paddingEnd="20dp"
             app:layout_constraintBottom_toTopOf="@id/chipGroupHolder"
             app:layout_constraintEnd_toEndOf="parent"
@@ -82,7 +84,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/voegCommentaarToeFloatingActionButton"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/criteriumNiveausHorizontalScroll">
 
@@ -99,26 +101,28 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:src="@android:drawable/ic_menu_edit"
-            app:backgroundTint="@color/secondaryDarkColor"
-            app:tint="@color/primaryTextColor"
+            app:backgroundTint="@color/secondaryColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.95"
+            app:layout_constraintHorizontal_bias="0.09"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.90" />
+            app:layout_constraintVertical_bias="0.901"
+            app:tint="@color/secondaryLightColor" />
 
         <ImageButton
             android:id="@+id/toonCriteriumOmschrijvingImageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
             android:src="@drawable/ic_info_outline_gery_32dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.05"
+            app:layout_constraintHorizontal_bias="0.86"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.9" />
+            app:layout_constraintVertical_bias="0.907"
+            app:tint="@color/secondaryDarkColor" />
 
         <LinearLayout
             android:id="@+id/downEdgeButton"
@@ -133,9 +137,10 @@
             <ImageView
                 android:id="@+id/downEdgeButtonArrowsImage"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/criterium_evaluatie_edge_button_image_height"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/arrow_down_icon" />
+                android:tint="@color/secondaryColor"
+                android:src="@drawable/ic_keyboard_arrow_down_black_24dp" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

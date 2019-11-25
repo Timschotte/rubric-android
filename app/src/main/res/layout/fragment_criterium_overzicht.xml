@@ -16,14 +16,18 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@drawable/criterium_overzicht_rand"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="0dp"
+            android:paddingStart="12dp">
 
             <ImageButton
                 android:id="@+id/klap_in_klap_uit_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:src="@drawable/ic_chevron_left_grey_32dp" />
+                android:src="@drawable/ic_keyboard_arrow_left_black_42dp"
+                android:tint="@color/secondaryColor"
+                android:background="?android:attr/selectableItemBackground"/>
 
             <LinearLayout
                 android:id="@+id/rubricCriteriaLayout"
@@ -36,17 +40,32 @@
                     android:layout_width="@dimen/criteria_overzicht_width"
                     android:layout_height="wrap_content"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
-
                 </androidx.recyclerview.widget.RecyclerView>
             </LinearLayout>
 
         </LinearLayout>
-
-        <FrameLayout
-            android:id="@+id/criterium_evaluatie_fragment_container"
+        <RelativeLayout
+            android:id="@+id/criterium_evaluatie_fragment_wrapper"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center" />
+            android:layout_height="wrap_content">
+            <ImageButton
+                android:id="@+id/klap_in_klap_uit_button2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:src="@drawable/ic_keyboard_arrow_right_black_24dp"
+                android:tint="@color/secondaryColor"
+                android:elevation="1dp"
+                android:background="?android:attr/selectableItemBackground"
+                />
+            <FrameLayout
+                android:id="@+id/criterium_evaluatie_fragment_container"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:visibility="invisible"/>
+        </RelativeLayout>
+
 
     </LinearLayout>
 

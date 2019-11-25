@@ -34,7 +34,7 @@ class OpleidingSelectFragment : Fragment() {
         val opleidingsOnderdeelViewModel = ViewModelProviders.of(this).get(OpleidingsOnderdeelViewModel::class.java)
 
         binding.opleidingsOnderdeelViewModel = opleidingsOnderdeelViewModel
-        binding.setLifecycleOwner(this)
+        binding.lifecycleOwner = this
 
         val adapter = OpleidingsOnderdeelListAdapter(OpleidingsOnderdeelListener { 
             opleidingsOnderdeelId -> opleidingsOnderdeelViewModel.onOpleidingsOnderdeelClicked(opleidingsOnderdeelId)

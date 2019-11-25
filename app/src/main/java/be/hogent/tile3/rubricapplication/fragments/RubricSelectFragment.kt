@@ -34,7 +34,7 @@ class RubricSelectFragment : Fragment() {
         val rubricSelectViewModel = ViewModelProviders.of(this, viewModelFactory).get(RubricSelectViewModel::class.java)
 
         binding.rubricSelectViewModel = rubricSelectViewModel
-        binding.setLifecycleOwner(this)
+        binding.lifecycleOwner = this
 
         val adapter = RubricSelectListAdapter(RubricListener {
                 rubricId -> rubricSelectViewModel.onRubricClicked(rubricId)
