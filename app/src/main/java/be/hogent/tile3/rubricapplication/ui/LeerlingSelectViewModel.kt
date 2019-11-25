@@ -51,13 +51,13 @@ class LeerlingSelectViewModel(
         return activeNetworkInfo != null && activeNetworkInfo.isConnected
     }
 
-    private val _navigateToRubricView = MutableLiveData<Long>()
+    private val _navigateToRubricView = MutableLiveData<Student>()
     val navigateToRubricView
         get() = _navigateToRubricView
 
 
-    fun onStudentClicked(id: Long) {
-        _navigateToRubricView.value = id
+    fun onStudentClicked(student: Student) {
+        _navigateToRubricView.value = student
     }
 
     fun onStudentNavigated() {

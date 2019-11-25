@@ -14,12 +14,13 @@ import kotlin.collections.ArrayList
 
 class CriteriumOverzichtViewModel(
     private val rubricId: String,
-    private val studentId: Long
+    val student: Student
 ) :
     ViewModel() {
 
     /* PRIVATE VARIABLES -------------------------------------------------------------------------*/
     /*--------------------------------------------------------------------------------------------*/
+
 
     // Context
     @Inject lateinit var context: Context
@@ -30,6 +31,7 @@ class CriteriumOverzichtViewModel(
     @Inject lateinit var criteriumRepository: CriteriumRepository
     @Inject lateinit var evaluatieRepository: EvaluatieRepository
     @Inject lateinit var criteriumEvaluatieRepository: CriteriumEvaluatieRepository
+    @Inject lateinit var studentRepository: StudentRepository
 
     // Coroutine variables
     private var viewModelJob = Job()
@@ -131,9 +133,9 @@ class CriteriumOverzichtViewModel(
             Log.i("Test4", it.toString())
         }
         // 1: nieuwe evaluatie, of bestaande evaluatie?
-        var evaluatie: Evaluatie? = geefEvaluatie(rubricId, studentId)
+        var evaluatie: Evaluatie? = geefEvaluatie(rubricId, student.studentId)
         // 2: temp evaluatie aanmaken
-        slaTempEvaluatieOp(Evaluatie(TEMP_EVALUATIE_ID, studentId, rubricId))
+        slaTempEvaluatieOp(Evaluatie(TEMP_EVALUATIE_ID, student.studentId, rubricId))
         // 3: temp criteriumEvaluaties aanmaken, persisteren & instellen
         var bestaandeCriteriumEvaluaties: MutableList<CriteriumEvaluatie>? = null
         if(evaluatie != null){
@@ -200,6 +202,7 @@ class CriteriumOverzichtViewModel(
 
 
 
+
     /* CLICK HANDLERS ----------------------------------------------------------------------------*/
     /*--------------------------------------------------------------------------------------------*/
 
@@ -238,11 +241,13 @@ class CriteriumOverzichtViewModel(
         _positieGeselecteerdCriteriumNiveau?.value = positie
         _criteriumEvaluatie.value?.behaaldNiveau = niveauId
         _criteriumEvaluatie.value?.score = geselecteerdCriteriumNiveau.value?.ondergrens ?: 0
+        Log.i("TestCriteriumOverzicht", "Evaluatie wordt gepersisteerd")
         persisteerCriteriumEvaluatie(criteriumEvaluatie.value)
     }
 
     fun onScoreChanged(oudeScore: Int, nieuweScore: Int){
         _criteriumEvaluatie.value?.score = nieuweScore
+        Log.i("Test", nieuweScore.toString())
         persisteerCriteriumEvaluatie(criteriumEvaluatie.value)
     }
 

@@ -10,6 +10,9 @@
             name="criterium"
             type="be.hogent.tile3.rubricapplication.model.Criterium" />
         <variable
+            name="student"
+            type="be.hogent.tile3.rubricapplication.model.Student" />
+        <variable
             name="criteriumOverzichtViewModel"
             type="be.hogent.tile3.rubricapplication.ui.CriteriumOverzichtViewModel" />
     </data>
@@ -39,26 +42,28 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/criteriumNaamTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:fontFamily="serif"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:criteriumNaamAlsTitel="@{criterium}"
-            app:layout_constraintBottom_toTopOf="@+id/criteriumNiveausHorizontalScroll"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/upEdgeButton"
-            app:layout_constraintVertical_bias="0.3" />
+        android:id="@+id/criteriumNaamTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:fontFamily="serif"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:criterium="@{criterium}"
+            app:student="@{student}"
+        app:layout_constraintBottom_toTopOf="@+id/criteriumNiveausHorizontalScroll"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/upEdgeButton"
+        app:layout_constraintVertical_bias="0.3" />
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/criteriumNiveausHorizontalScroll"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@id/scoreNumberPicker"
+            android:paddingEnd="20dp"
+            app:layout_constraintBottom_toTopOf="@id/chipGroupHolder"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/upEdgeButton">
@@ -72,17 +77,21 @@
         </androidx.core.widget.NestedScrollView>
 
 
-        <NumberPicker
-            android:id="@+id/scoreNumberPicker"
-            android:theme="@style/AppTheme.TextColorReverse"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/chipGroupHolder"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onValueChange="@{(picker, oldV, newV) -> criteriumOverzichtViewModel.onScoreChanged(oldV, newV)}"
+            android:gravity="center_horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/criteriumNiveausHorizontalScroll"
-            app:numberPickerValue="@{criteriumOverzichtViewModel.geselecteerdCriteriumNiveau}" />
+            app:layout_constraintTop_toBottomOf="@+id/criteriumNiveausHorizontalScroll">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipHolder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:singleSelection="true" />
+        </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/voegCommentaarToeFloatingActionButton"

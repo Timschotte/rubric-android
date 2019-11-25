@@ -5,6 +5,8 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import be.hogent.tile3.rubricapplication.model.Criterium
 import be.hogent.tile3.rubricapplication.model.Niveau
+import be.hogent.tile3.rubricapplication.model.Student
+import kotlinx.android.synthetic.main.leerling_text_view.*
 
 @BindingAdapter("numberPickerValue")
 fun NumberPicker.setInitialValue(geselecteerdNiveau: Niveau?){
@@ -13,9 +15,7 @@ fun NumberPicker.setInitialValue(geselecteerdNiveau: Niveau?){
     }
 }
 
-@BindingAdapter("criteriumNaamAlsTitel")
-fun TextView.setCriteriumNaamAlsTitel(item: Criterium?){
-    item?.let{
-        text = item.naam
-    }
+@BindingAdapter("criterium", "student")
+fun TextView.setCriteriumNaamAlsTitel(criterium: Criterium?, student: Student?){
+    text = criterium?.naam + " - " + student?.studentNaam
 }

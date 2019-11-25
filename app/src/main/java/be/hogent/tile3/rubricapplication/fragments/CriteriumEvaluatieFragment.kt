@@ -17,6 +17,7 @@ import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import be.hogent.tile3.rubricapplication.ui.CriteriumOverzichtViewModel
+import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class CriteriumEvaluatieFragment
@@ -40,13 +41,25 @@ class CriteriumEvaluatieFragment
 
             binding.criteriumOverzichtViewModel = criteriumOverzichtViewModel
             binding.criterium = criteriumOverzichtViewModel.geselecteerdCriterium.value
+            binding.student = criteriumOverzichtViewModel.student
 
             criteriumOverzichtViewModel.geselecteerdCriteriumNiveau.observe(viewLifecycleOwner, Observer{
                     geselecteerdNiveau ->
                 // NumberPicker minValue en maxValue niet mogelijk via databinding
                 geselecteerdNiveau?.let {
-                    binding.scoreNumberPicker.minValue = geselecteerdNiveau.ondergrens
-                    binding.scoreNumberPicker.maxValue = geselecteerdNiveau.bovengrens
+                    /*binding.scoreNumberPicker.minValue = geselecteerdNiveau.ondergrens
+                    binding.scoreNumberPicker.maxValue = geselecteerdNiveau.bovengrens*/
+                    binding.chipHolder.removeAllViews()
+                    for (i in geselecteerdNiveau.ondergrens..geselecteerdNiveau.bovengrens){
+                        var chip = layoutInflater.inflate(R.layout.chip_item_evaluatie, null, false) as Chip
+                        chip.text = i.toString()
+                        chip.setOnClickListener { c -> criteriumOverzichtViewModel.onScoreChanged(0, Integer.parseInt(chip.text.toString())) }
+                        binding.chipHolder.addView(chip)
+                        if (i == criteriumOverzichtViewModel.criteriumEvaluatie.value?.score){
+                            chip.isChecked = true
+                        }
+                    }
+
                 }
 
             })
@@ -75,7 +88,9 @@ class CriteriumEvaluatieFragment
 
             criteriumOverzichtViewModel.criteriumEvaluatie?.observe(viewLifecycleOwner, Observer{
                 it?.let{
-                    binding.scoreNumberPicker.value = it.score ?: binding.scoreNumberPicker.minValue
+                    /*binding.scoreNumberPicker.value = it.score ?: binding.scoreNumberPicker.minValue*/
+                    //Werkte niet met numberpicker, ik laat dit momenteel zo
+
                 }
             })
 

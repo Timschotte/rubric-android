@@ -57,8 +57,8 @@
         android:label="Evaluatie"
         tools:layout="@layout/fragment_criterium_overzicht">
         <argument
-            android:name="studentId"
-            app:argType="long" />
+            android:name="student"
+            app:argType="be.hogent.tile3.rubricapplication.model.Student" />
         <argument
             android:name="rubricId"
             app:argType="string" />
