@@ -29,14 +29,16 @@ class LeerlingSelectFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val binding: FragmentLeerlingSelectBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_leerling_select, container, false)
+        val binding: FragmentLeerlingSelectBinding = DataBindingUtil
+            .inflate(inflater, R.layout.fragment_leerling_select, container, false)
         val args = LeerlingSelectFragmentArgs.fromBundle(arguments!!)
 
         val viewModelFactory = LeerlingSelectViewModelFactory(args.rubricId, args.opleidingsOnderdeelId)
-        val leerlingSelectViewModel = ViewModelProviders.of(this, viewModelFactory).get(LeerlingSelectViewModel::class.java)
+        val leerlingSelectViewModel = ViewModelProviders.of(this, viewModelFactory)
+            .get(LeerlingSelectViewModel::class.java)
 
         binding.leerlingSelectViewModel = leerlingSelectViewModel
-        binding.setLifecycleOwner(this)
+        binding.lifecycleOwner = this
 
         val adapter = LeerlingListAdapter(LeerlingListener {
                 student -> leerlingSelectViewModel.onStudentClicked(student)
@@ -46,7 +48,9 @@ class LeerlingSelectFragment : Fragment() {
         leerlingSelectViewModel.navigateToRubricView.observe(this, Observer { leerling ->
             leerling?.let {
                 this.findNavController().navigate(
-                    LeerlingSelectFragmentDirections.actionLeerlingSelectFragmentToCriteriumOverzichtFragment(leerling, args.rubricId, TEMP_EVALUATIE_ID, args.opleidingsOnderdeelId)
+                    LeerlingSelectFragmentDirections
+                        .actionLeerlingSelectFragmentToCriteriumOverzichtFragment(leerling,
+                            args.rubricId, TEMP_EVALUATIE_ID, args.opleidingsOnderdeelId)
                 )
                 leerlingSelectViewModel.onStudentNavigated()
             }

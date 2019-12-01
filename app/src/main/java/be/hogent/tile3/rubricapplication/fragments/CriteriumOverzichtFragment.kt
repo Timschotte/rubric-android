@@ -20,14 +20,21 @@ import androidx.recyclerview.widget.RecyclerView
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
+import android.widget.LinearLayout
 import be.hogent.tile3.rubricapplication.ui.factories.CriteriumOverzichtViewModelFactory
 import androidx.appcompat.app.AlertDialog
+import androidx.core.animation.doOnEnd
+import androidx.core.animation.doOnStart
+import androidx.core.view.updateLayoutParams
 import androidx.navigation.fragment.findNavController
+import kotlinx.android.synthetic.main.fragment_criterium_evaluatie.*
 
 
+@Suppress("DEPRECATED_IDENTITY_EQUALS")
 class CriteriumOverzichtFragment : Fragment() {
 
     private var alertDialog: AlertDialog? = null
+    private lateinit var rubricEvaluationFragment: CriteriumEvaluatieFragment
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,14 +53,6 @@ class CriteriumOverzichtFragment : Fragment() {
         val criteriumOverzichtViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(CriteriumOverzichtViewModel::class.java)
 
-/*        criteriumOverzichtViewModel.rubricCriteria.observe(viewLifecycleOwner, Observer {
-            it?.let{
-                if(it.isNotEmpty()){
-                    criteriumOverzichtViewModel.initialiseerEvaluatie()
-                }
-            }
-        })*/
-
 
         criteriumOverzichtViewModel.evaluatieRubric.observe(viewLifecycleOwner, Observer{
             it?.let{
@@ -64,14 +63,14 @@ class CriteriumOverzichtFragment : Fragment() {
 
         val adapter =
             CriteriumOverzichtListAdapter(CriteriaListListener { criteriumId, positie ->
-                criteriumOverzichtViewModel?.onGeselecteerdCriteriumGewijzigd(criteriumId, positie)
+                criteriumOverzichtViewModel.onGeselecteerdCriteriumGewijzigd(criteriumId, positie)
             })
 
         adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
 
             override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
                 super.onItemRangeChanged(positionStart, itemCount)
-                var toPosition =
+                val toPosition =
                     criteriumOverzichtViewModel?.positieGeselecteerdCriterium?.value ?: 0
                 if (itemCount > toPosition)
                     binding.rubricCriteriaListRecycler.smoothScrollToPosition(
@@ -82,19 +81,17 @@ class CriteriumOverzichtFragment : Fragment() {
                 positionStart: Int,
                 itemCount: Int
             ) {
-                var toPosition =
-                    criteriumOverzichtViewModel?.positieGeselecteerdCriterium?.value ?: 0
-                binding.rubricCriteriaListRecycler.scrollToPosition(
-                    criteriumOverzichtViewModel?.positieGeselecteerdCriterium?.value ?: 0
-                )
+                val toPosition =
+                    criteriumOverzichtViewModel.positieGeselecteerdCriterium.value ?: 0
+                binding.rubricCriteriaListRecycler.scrollToPosition(toPosition)
             }
 
             override fun onItemRangeRemoved(
                 positionStart: Int,
                 itemCount: Int
             ) {
-                var toPosition =
-                    criteriumOverzichtViewModel?.positieGeselecteerdCriterium?.value ?: 0
+                val toPosition =
+                    criteriumOverzichtViewModel?.positieGeselecteerdCriterium.value ?: 0
                 binding.rubricCriteriaListRecycler.smoothScrollToPosition(toPosition)
             }
         })
@@ -124,16 +121,18 @@ class CriteriumOverzichtFragment : Fragment() {
         criteriumOverzichtViewModel?.evaluatieRubric?.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapter.submitList(it.criteria)
-//                binding.rubricCriteriaListRecycler.smoothScrollToPosition(
-//                    criteriumOverzichtViewModel?.positieGeselecteerdCriterium?.value ?: 0)
             }
         })
 
         binding.klapInKlapUitButton.setOnClickListener {
-            criteriumOverzichtViewModel?.onKlapInKlapUitButtonClicked()
+            criteriumOverzichtViewModel.onKlapInKlapUitButtonClicked()
         }
 
-        criteriumOverzichtViewModel?.overzichtPaneelUitgeklapt?.observe(viewLifecycleOwner,
+        binding.klapInKlapUitButton2.setOnClickListener {
+            criteriumOverzichtViewModel.onKlapInKlapUitButtonClicked()
+        }
+
+        criteriumOverzichtViewModel.overzichtPaneelUitgeklapt.observe(viewLifecycleOwner,
             Observer { overzichtPaneelUitgeklapt: Boolean ->
 
                 val displaymetrics = DisplayMetrics()
@@ -153,19 +152,52 @@ class CriteriumOverzichtFragment : Fragment() {
                 )
 
                 val animCriteriumEvaluatieFramePositie = ObjectAnimator.ofFloat(
-                    binding.criteriumEvaluatieFragmentContainer,
+                    binding.criteriumEvaluatieFragmentWrapper,
                     "translationX",
-                    binding.criteriumEvaluatieFragmentContainer.translationX,
+                    binding.criteriumEvaluatieFragmentWrapper.translationX,
                     if (!overzichtPaneelUitgeklapt)
-                        binding.criteriumEvaluatieFragmentContainer.translationX + resources
+                        binding.criteriumEvaluatieFragmentWrapper.translationX + resources
                             .getDimensionPixelOffset(R.dimen.criteria_overzicht_translationX)
                             .toFloat()
                     else
                         0.0F
                 )
+                val tabletSize = resources.getBoolean(R.bool.isTablet)
+                if (!tabletSize){
+                    animCriteriumEvaluatieFramePositie.doOnStart {
+                        if(overzichtPaneelUitgeklapt){
+                            binding.criteriumEvaluatieOverzichtBalk.visibility = View.VISIBLE
+
+                        }else{
+                            binding.criteriumEvaluatieFragmentContainer.visibility = View.VISIBLE
+                        }
+                    }
+                    animCriteriumEvaluatieFramePositie.doOnEnd {
+                        if(!overzichtPaneelUitgeklapt) {
+                            binding.criteriumEvaluatieOverzichtBalk.visibility = View.INVISIBLE
+                        }else{
+                            binding.criteriumEvaluatieFragmentContainer.visibility = View.INVISIBLE
+                        }
+                    }
+                }
+                /*animCriteriumEvaluatieFramePositie.doOnStart {
+                    if(overzichtPaneelUitgeklapt){
+                        binding.criteriumEvaluatieOverzichtBalk.visibility = View.VISIBLE
+
+                    }else{
+                        binding.criteriumEvaluatieFragmentContainer.visibility = View.VISIBLE
+                    }
+                }
+                animCriteriumEvaluatieFramePositie.doOnEnd {
+                    if(!overzichtPaneelUitgeklapt) {
+                        binding.criteriumEvaluatieOverzichtBalk.visibility = View.INVISIBLE
+                    }else{
+                        binding.criteriumEvaluatieFragmentContainer.visibility = View.INVISIBLE
+                    }
+                }*/
 
                 val animCriteriumEvaluatieFrameBreedte = ValueAnimator.ofInt(
-                    binding.criteriumEvaluatieFragmentContainer.measuredWidth,
+                    binding.criteriumEvaluatieFragmentWrapper.measuredWidth,
                     if (!overzichtPaneelUitgeklapt)
                         screenWidth - resources.getDimensionPixelOffset(R.dimen.criteria_overzicht_ingeklapt_breedte)
                     else
@@ -174,10 +206,11 @@ class CriteriumOverzichtFragment : Fragment() {
 
                 animCriteriumEvaluatieFrameBreedte.addUpdateListener { valueAnimator ->
                     val animWaarde = valueAnimator.animatedValue as Int
-                    val layoutParams = binding.criteriumEvaluatieFragmentContainer.layoutParams
+                    val layoutParams = binding.criteriumEvaluatieFragmentWrapper.layoutParams
                     layoutParams.width = animWaarde
-                    binding.criteriumEvaluatieFragmentContainer.layoutParams = layoutParams
+                    binding.criteriumEvaluatieFragmentWrapper.layoutParams = layoutParams
                 }
+
 
                 val set = AnimatorSet()
                 set.duration = 500L
@@ -190,17 +223,17 @@ class CriteriumOverzichtFragment : Fragment() {
 
                 if (overzichtPaneelUitgeklapt) {
                     binding.rubricCriteriaLayout.visibility = View.VISIBLE
-                    (binding.klapInKlapUitButton as ImageButton).setImageResource(android.R.drawable.ic_media_previous)
+                    binding.klapInKlapUitButton2.visibility = View.INVISIBLE
                 } else {
                     binding.rubricCriteriaLayout.visibility = View.INVISIBLE
-                    (binding.klapInKlapUitButton as ImageButton).setImageResource(android.R.drawable.ic_media_next)
+                    binding.klapInKlapUitButton2.visibility = View.VISIBLE
                 }
 
                 binding.criteriumEvaluatieFragmentContainer.requestLayout()
 
             })
 
-        binding.setLifecycleOwner(this)
+        binding.lifecycleOwner = this
 
         setHasOptionsMenu(true)
         return binding.root
@@ -239,7 +272,7 @@ class CriteriumOverzichtFragment : Fragment() {
         view.requestFocus()
         view.setOnKeyListener(object : View.OnKeyListener {
             override fun onKey(v: View, keyCode: Int, event: KeyEvent): Boolean {
-                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() === KeyEvent.ACTION_UP) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.action === KeyEvent.ACTION_UP) {
                     onBackPressed()
 //                    fragmentManager!!.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     return true
@@ -258,8 +291,9 @@ class CriteriumOverzichtFragment : Fragment() {
         criteriumOverzichtViewModel.evaluatie.observe(this, Observer {
             it?.let {
                 if (savedInstanceState == null) {
+                    rubricEvaluationFragment = CriteriumEvaluatieFragment()
                     childFragmentManager.beginTransaction()
-                        .replace(R.id.criterium_evaluatie_fragment_container, CriteriumEvaluatieFragment())
+                        .replace(R.id.criterium_evaluatie_fragment_container, rubricEvaluationFragment)
                         .commitNow()
                 }
             }
@@ -267,7 +301,7 @@ class CriteriumOverzichtFragment : Fragment() {
     }
 
     private fun onBackPressed() {
-        var builder = AlertDialog.Builder(this.context!!)
+        val builder = AlertDialog.Builder(this.context!!)
 
         builder.setTitle(R.string.criterium_overzicht_back_dialog_titel)
         builder.setMessage(R.string.criterium_overzicht_back_dialog_body)
@@ -289,7 +323,7 @@ class CriteriumOverzichtFragment : Fragment() {
 
     private fun navigeerNaarLeerlingSelect(){
         val args = CriteriumOverzichtFragmentArgs.fromBundle(arguments!!)
-        findNavController()?.navigate(
+        findNavController().navigate(
             CriteriumOverzichtFragmentDirections.actionCriteriumOverzichtFragmentToLeerlingSelectFragment(args.rubricId, args.olodId)
         )
     }

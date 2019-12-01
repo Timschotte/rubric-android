@@ -139,26 +139,26 @@ class CriteriumOverzichtViewModel(
         // 3: temp criteriumEvaluaties aanmaken, persisteren & instellen
         var bestaandeCriteriumEvaluaties: MutableList<CriteriumEvaluatie>? = null
         if(evaluatie != null){
-            bestaandeCriteriumEvaluaties = geefCriteriumEvaluaties(evaluatie?.evaluatieId)?.toMutableList()
+            bestaandeCriteriumEvaluaties = geefCriteriumEvaluaties(evaluatie.evaluatieId)?.toMutableList()
             Log.i("Test4", "Bestaande CriteriumEvaluaties: ")
             bestaandeCriteriumEvaluaties?.forEach{
                 Log.i("Test4", it.toString())
             }
         }
-        var criteriumEvaluaties = ArrayList<CriteriumEvaluatie>()
+        val criteriumEvaluaties = ArrayList<CriteriumEvaluatie>()
         data.criteria.forEach{
-            var criteriumEvaluatie: CriteriumEvaluatie? = bestaandeCriteriumEvaluaties?.singleOrNull{
+            val criteriumEvaluatie: CriteriumEvaluatie? = bestaandeCriteriumEvaluaties?.singleOrNull{
                     critEval -> it.criteriumId == critEval.criteriumId
             }
-            var minNiveau: Niveau? = data.niveausCriteria.singleOrNull{niv -> niv.criteriumId == it.criteriumId && niv.volgnummer == 0}
-            var nieuweCriteriumEvaluatie = CriteriumEvaluatie(
+            val minNiveau: Niveau? = data.niveausCriteria.singleOrNull{niv -> niv.criteriumId == it.criteriumId && niv.volgnummer == 0}
+            val nieuweCriteriumEvaluatie = CriteriumEvaluatie(
                 TEMP_EVALUATIE_ID,
                 it.criteriumId,
                 criteriumEvaluatie?.behaaldNiveau ?: minNiveau?.niveauId,
                 criteriumEvaluatie?.score ?: minNiveau?.ondergrens,
                 criteriumEvaluatie?.commentaar ?: ""
             )
-            Log.i("test4", "Nieuwe CriteriumEvaluatie: " + nieuweCriteriumEvaluatie.toString())
+            Log.i("test4", "Nieuwe CriteriumEvaluatie: $nieuweCriteriumEvaluatie")
             criteriumEvaluaties.add(nieuweCriteriumEvaluatie)
             bestaandeCriteriumEvaluaties?.removeAt(0)
         }
@@ -208,21 +208,19 @@ class CriteriumOverzichtViewModel(
 
     fun onGeselecteerdCriteriumGewijzigd(criteriumId: String, positie: Int, data: EvaluatieRubric? = null) {
         _geselecteerdCriterium.value =
-            if(data != null) data.criteria?.singleOrNull { it?.criteriumId == criteriumId }
-            else evaluatieRubric.value?.criteria?.singleOrNull { it?.criteriumId == criteriumId }
+            if(data != null) data.criteria?.singleOrNull { it.criteriumId == criteriumId }
+            else evaluatieRubric.value?.criteria?.singleOrNull { it.criteriumId == criteriumId }
 
-        _positieGeselecteerdCriterium?.value = positie
+        _positieGeselecteerdCriterium.value = positie
 
         _criteriumEvaluatie.value = criteriumEvaluaties.value?.singleOrNull {
             it?.criteriumId == criteriumId }
 
         _criteriumNiveaus.value =
-            if(data != null) data.niveausCriteria
-                ?.filter{it.criteriumId == criteriumId}
-                ?.sortedBy{it.volgnummer}
-            else evaluatieRubric.value?.niveausCriteria
-                ?.filter{it.criteriumId == criteriumId}
-                ?.sortedBy{it.volgnummer}
+            data?.niveausCriteria?.filter{it.criteriumId == criteriumId}?.sortedBy{it.volgnummer}
+                ?: evaluatieRubric.value?.niveausCriteria
+                    ?.filter{it.criteriumId == criteriumId}
+                    ?.sortedBy{it.volgnummer}
 
         _geselecteerdCriteriumNiveau.value =
             if(data != null) data.niveausCriteria?.singleOrNull{
@@ -270,12 +268,12 @@ class CriteriumOverzichtViewModel(
     }
 
     private fun onEdgeButtonClicked(direction: Direction) {
-        var oudePositie: Int? = positieGeselecteerdCriterium.value
-        var nieuwePositie: Int = if (oudePositie == null) 0 else {
+        val oudePositie: Int? = positieGeselecteerdCriterium.value
+        val nieuwePositie: Int = if (oudePositie == null) 0 else {
             if (direction == Direction.UP) oudePositie - 1 else oudePositie + 1
         }
         _geselecteerdCriterium.value = evaluatieRubric.value?.criteria?.get(nieuwePositie)
-        _positieGeselecteerdCriterium?.value = nieuwePositie
+        _positieGeselecteerdCriterium.value = nieuwePositie
         onGeselecteerdCriteriumGewijzigd(geselecteerdCriterium.value?.criteriumId ?: "", nieuwePositie)
     }
 
@@ -291,7 +289,7 @@ class CriteriumOverzichtViewModel(
     /* PERSISTENTIE, BREAKDOWN -------------------------------------------------------------------*/
     /*--------------------------------------------------------------------------------------------*/
 
-    fun persisteerCriteriumEvaluatie(obj: CriteriumEvaluatie?){
+    private fun persisteerCriteriumEvaluatie(obj: CriteriumEvaluatie?){
         coroutineScope.launch{
             if(obj != null)
                 criteriumEvaluatieRepository.update(obj)

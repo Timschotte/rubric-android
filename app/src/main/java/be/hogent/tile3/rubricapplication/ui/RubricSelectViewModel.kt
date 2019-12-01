@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
-class RubricSelectViewModel(private val opleidingsOnderdeelId: Long) : ViewModel() {
+class RubricSelectViewModel(opleidingsOnderdeelId: Long) : ViewModel() {
 
     @Inject
     lateinit var rubricRepository: RubricRepository
@@ -39,18 +39,18 @@ class RubricSelectViewModel(private val opleidingsOnderdeelId: Long) : ViewModel
     init{
         App.component.inject(this)
         opleidingsOnderdeel.addSource(opleidingsOnderdeelRepository.get(opleidingsOnderdeelId), opleidingsOnderdeel::setValue)
-        refreshRubricDatabase()
+        //refreshRubricDatabase()
         rubrics = rubricRepository.getAllRubricsFromOpleidingsOnderdeel(opleidingsOnderdeelId)
         Log.i("test2", rubrics.toString())
     }
 
-    private fun refreshRubricDatabase() {
-        if (isNetworkAvailable()){
-            uiScope.launch {
-//                rubricRepository.refreshRubrics()
-            }
-        }
-    }
+//    private fun refreshRubricDatabase() {
+//        if (isNetworkAvailable()){
+//            uiScope.launch {
+//                //rubricRepository.refreshRubrics()
+//            }
+//        }
+//    }
 
     private fun isNetworkAvailable(): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
