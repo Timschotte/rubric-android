@@ -42,6 +42,13 @@ class OpleidingsOnderdeelViewModel : ViewModel() {
         )
     }
 
+    fun filterChanged(filterText: String?){
+        //TODO: Filter livedata
+        if (filterText != null){
+            Log.i("TestFilter", filterText)
+        }
+    }
+
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()

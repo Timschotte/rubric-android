@@ -14,6 +14,16 @@
         android:layout_height="match_parent"
         android:background="@color/primaryColor">
 
+        <EditText
+            android:id="@+id/search_bar_opleidingen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_margin"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/opleidingenList"
+            />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/opleidingenList"
@@ -26,7 +36,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/search_bar_opleidingen">
 
         </androidx.recyclerview.widget.RecyclerView>
 
