@@ -46,11 +46,17 @@ class OpleidingsOnderdeelViewModel : ViewModel() {
         )
     }
 
+    /**
+     * Removing and re-adding source is to avoid that filtered items reappear when source list is updated
+     */
     fun filterChanged(filterText: String?){
         if (filterText != null) {
             _opleidingsOnderdelen.value?.let {
-                gefilterdeOpleidingsOnderdelen.value = it.filter { opleidingsOnderdeel ->
-                    opleidingsOnderdeel.naam.toLowerCase().contains(filterText.toLowerCase())
+                gefilterdeOpleidingsOnderdelen.removeSource(_opleidingsOnderdelen)
+                gefilterdeOpleidingsOnderdelen.addSource(_opleidingsOnderdelen){
+                    gefilterdeOpleidingsOnderdelen.value = it.filter { opleidingsOnderdeel ->
+                        opleidingsOnderdeel.naam.toLowerCase().contains(filterText.toLowerCase())
+                }
                 }
             }
             Log.i("test", filterText)

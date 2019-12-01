@@ -44,8 +44,11 @@ class RubricSelectViewModel(opleidingsOnderdeelId: Long) : ViewModel() {
     fun filterChanged(filterText: String?){
         if (filterText != null) {
             _rubrics.value?.let {
-                gefilterdeRubrics.value = it.filter { rubric ->
-                    rubric.onderwerp.toLowerCase().contains(filterText.toLowerCase())
+                gefilterdeRubrics.removeSource(_rubrics)
+                gefilterdeRubrics.addSource(_rubrics){
+                    gefilterdeRubrics.value = it.filter { rubric ->
+                        rubric.onderwerp.toLowerCase().contains(filterText.toLowerCase())
+                    }
                 }
             }
             Log.i("test", filterText)

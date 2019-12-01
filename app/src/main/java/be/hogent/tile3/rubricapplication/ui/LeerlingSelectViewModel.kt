@@ -41,8 +41,11 @@ class LeerlingSelectViewModel(
     fun filterChanged(filterText: String?){
         if (filterText != null) {
             _studenten.value?.let {
-                gefilterdeStudenten.value = it.filter { student ->
-                    student.studentNaam.toLowerCase().contains(filterText.toLowerCase())
+                gefilterdeStudenten.removeSource(_studenten)
+                gefilterdeStudenten.addSource(_studenten){
+                    gefilterdeStudenten.value = it.filter { student ->
+                        student.studentNaam.toLowerCase().contains(filterText.toLowerCase())
+                    }
                 }
             }
             Log.i("test", filterText)
