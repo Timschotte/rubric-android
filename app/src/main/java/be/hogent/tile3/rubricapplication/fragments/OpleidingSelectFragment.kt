@@ -7,6 +7,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import android.widget.Toast
@@ -74,16 +75,25 @@ class OpleidingSelectFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.searchbar, menu)
-        val searchBarOpleiding = menu.findItem(R.id.action_search).actionView as EditText
+        val searchBarOpleiding = menu.findItem(R.id.action_search).actionView as androidx.appcompat.widget.SearchView
 
-        searchBarOpleiding.addTextChangedListener(
+        val editText = searchBarOpleiding.findViewById(R.id.search_src_text) as EditText
+
+        editText.addTextChangedListener(
             object : TextWatcher {
                 val handler = Handler()
 
                 override fun afterTextChanged(s: Editable?) {
+                    var text = s?.toString()
+                    var millis:Long
+                    if(text==""){
+                        millis=0
+                    } else {
+                        millis=600
+                    }
                     handler.postDelayed({
-                        binding.opleidingsOnderdeelViewModel?.filterChanged(s?.toString())
-                    }, 600)
+                        binding.opleidingsOnderdeelViewModel?.filterChanged(text)
+                    }, millis)
 
                 }
 
@@ -101,6 +111,7 @@ class OpleidingSelectFragment : Fragment() {
                 }
             }
         )
+
         super.onCreateOptionsMenu(menu, inflater)
     }
 }
