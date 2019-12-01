@@ -67,7 +67,6 @@ class OpleidingSelectFragment : Fragment() {
                 }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    //Do nothing
                     handler.removeCallbacksAndMessages(null)
                 }
             }
@@ -82,7 +81,7 @@ class OpleidingSelectFragment : Fragment() {
             }
         })
 
-        opleidingsOnderdeelViewModel.opleidingsOnderdelen.observe(viewLifecycleOwner, Observer {
+        opleidingsOnderdeelViewModel.gefilterdeOpleidingsOnderdelen.observe(viewLifecycleOwner, Observer {
             it?.let{
                 System.out.println(it)
                 adapter.submitList(it)
