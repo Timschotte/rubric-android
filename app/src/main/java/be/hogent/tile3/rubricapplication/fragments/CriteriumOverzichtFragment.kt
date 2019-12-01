@@ -162,7 +162,25 @@ class CriteriumOverzichtFragment : Fragment() {
                     else
                         0.0F
                 )
-                animCriteriumEvaluatieFramePositie.doOnStart {
+                val tabletSize = resources.getBoolean(R.bool.isTablet)
+                if (!tabletSize){
+                    animCriteriumEvaluatieFramePositie.doOnStart {
+                        if(overzichtPaneelUitgeklapt){
+                            binding.criteriumEvaluatieOverzichtBalk.visibility = View.VISIBLE
+
+                        }else{
+                            binding.criteriumEvaluatieFragmentContainer.visibility = View.VISIBLE
+                        }
+                    }
+                    animCriteriumEvaluatieFramePositie.doOnEnd {
+                        if(!overzichtPaneelUitgeklapt) {
+                            binding.criteriumEvaluatieOverzichtBalk.visibility = View.INVISIBLE
+                        }else{
+                            binding.criteriumEvaluatieFragmentContainer.visibility = View.INVISIBLE
+                        }
+                    }
+                }
+                /*animCriteriumEvaluatieFramePositie.doOnStart {
                     if(overzichtPaneelUitgeklapt){
                         binding.criteriumEvaluatieOverzichtBalk.visibility = View.VISIBLE
 
@@ -176,7 +194,7 @@ class CriteriumOverzichtFragment : Fragment() {
                     }else{
                         binding.criteriumEvaluatieFragmentContainer.visibility = View.INVISIBLE
                     }
-                }
+                }*/
 
                 val animCriteriumEvaluatieFrameBreedte = ValueAnimator.ofInt(
                     binding.criteriumEvaluatieFragmentWrapper.measuredWidth,
