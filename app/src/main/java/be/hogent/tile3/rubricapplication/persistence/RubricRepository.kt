@@ -11,10 +11,6 @@ import be.hogent.tile3.rubricapplication.model.EvaluatieRubric
 import be.hogent.tile3.rubricapplication.model.Rubric
 import be.hogent.tile3.rubricapplication.network.RubricApi
 import be.hogent.tile3.rubricapplication.network.asDatabaseModel
-import be.hogent.tile3.rubricapplication.network.asDatabaseModelArray
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import retrofit2.Retrofit
 import java.io.IOException
 import javax.inject.Inject
 
@@ -35,9 +31,7 @@ class RubricRepository(
         App.component.inject(this)
     }
 
-
-    @WorkerThread
-    fun getAllRubricsFromOpleidingsOnderdeel(id: Long): LiveData<List<Rubric>> {
+    fun getAllRubricsFromOpleidingsOnderdeel(id: Long): List<Rubric> {
         return rubricDao.getAllRubricsFromOpleidingsOnderdeel(id)
     }
 
