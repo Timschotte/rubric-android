@@ -3,9 +3,7 @@ package be.hogent.tile3.rubricapplication.ui
 import android.content.Context
 import android.net.ConnectivityManager
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.model.OpleidingsOnderdeel
 import be.hogent.tile3.rubricapplication.persistence.OpleidingsOnderdeelRepository
@@ -26,7 +24,9 @@ class OpleidingsOnderdeelViewModel : ViewModel() {
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    var opleidingsOnderdelen: LiveData<List<OpleidingsOnderdeel>>
+    private val opleidingsOnderdelen: LiveData<List<OpleidingsOnderdeel>>
+
+    val gefilterdeOpleidingsOnderdelen = MediatorLiveData<List<OpleidingsOnderdeel>>()
 
     private val _status = MutableLiveData<String>()
     val status: LiveData<String>
@@ -36,10 +36,24 @@ class OpleidingsOnderdeelViewModel : ViewModel() {
         App.component.inject(this)
         refreshRubricDatabase()
         opleidingsOnderdelen = opleidingsOnderdeelRepository.getAllOpleidingsOnderdelenWithRubric()
+        gefilterdeOpleidingsOnderdelen.addSource(opleidingsOnderdelen){
+            gefilterdeOpleidingsOnderdelen.value = it
+
+        }
         Log.i(
             "test",
             opleidingsOnderdeelRepository.getAllOpleidingsOnderdelenWithRubric().toString()
         )
+    }
+
+    fun filterChanged(filterText: String?){
+        if (filterText != null) {
+            opleidingsOnderdelen.value?.let {
+                gefilterdeOpleidingsOnderdelen.value = it.filter { opleidingsOnderdeel ->
+                    opleidingsOnderdeel.naam.toLowerCase().contains(filterText.toLowerCase())
+                }
+            }
+        }
     }
 
     override fun onCleared() {
