@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.*
+import android.widget.EditText
+import android.widget.SearchView
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -27,12 +27,14 @@ import be.hogent.tile3.rubricapplication.databinding.FragmentOpleidingSelectBind
  */
 class OpleidingSelectFragment : Fragment() {
 
+    lateinit var binding:FragmentOpleidingSelectBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        val binding: FragmentOpleidingSelectBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_opleiding_select, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_opleiding_select, container, false)
 
         val opleidingsOnderdeelViewModel = ViewModelProviders.of(this).get(OpleidingsOnderdeelViewModel::class.java)
 
@@ -46,7 +48,35 @@ class OpleidingSelectFragment : Fragment() {
         )
         binding.opleidingenList.adapter = adapter
 
-        binding.searchBarOpleidingen.addTextChangedListener(
+
+        opleidingsOnderdeelViewModel.navigateToRubricSelect.observe(this, Observer { opleidingsOnderdeel ->
+            opleidingsOnderdeel?.let {
+                this.findNavController().navigate(
+                    OpleidingSelectFragmentDirections.actionOpleidingSelectFragmentToRubricSelectFragment(opleidingsOnderdeel)
+                )
+                opleidingsOnderdeelViewModel.onOpleidingsOnderdeelNavigated()
+            }
+        })
+
+        opleidingsOnderdeelViewModel.gefilterdeOpleidingsOnderdelen.observe(viewLifecycleOwner, Observer {
+            it?.let{
+                System.out.println(it)
+                adapter.submitList(it)
+            }
+        })
+
+        this.setHasOptionsMenu(true)
+
+
+        return binding.root
+
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.searchbar, menu)
+        val searchBarOpleiding = menu.findItem(R.id.action_search).actionView as EditText
+
+        searchBarOpleiding.addTextChangedListener(
             object : TextWatcher {
                 val handler = Handler()
 
@@ -71,26 +101,6 @@ class OpleidingSelectFragment : Fragment() {
                 }
             }
         )
-
-        opleidingsOnderdeelViewModel.navigateToRubricSelect.observe(this, Observer { opleidingsOnderdeel ->
-            opleidingsOnderdeel?.let {
-                this.findNavController().navigate(
-                    OpleidingSelectFragmentDirections.actionOpleidingSelectFragmentToRubricSelectFragment(opleidingsOnderdeel)
-                )
-                opleidingsOnderdeelViewModel.onOpleidingsOnderdeelNavigated()
-            }
-        })
-
-        opleidingsOnderdeelViewModel.gefilterdeOpleidingsOnderdelen.observe(viewLifecycleOwner, Observer {
-            it?.let{
-                System.out.println(it)
-                adapter.submitList(it)
-            }
-        })
-
-        return binding.root
-
+        super.onCreateOptionsMenu(menu, inflater)
     }
-
-
 }

@@ -50,7 +50,7 @@ class OpleidingsOnderdeelViewModel : ViewModel() {
         if (filterText != null) {
             opleidingsOnderdelen.value?.let {
                 gefilterdeOpleidingsOnderdelen.value = it.filter { opleidingsOnderdeel ->
-                    opleidingsOnderdeel.naam.contains(filterText)
+                    opleidingsOnderdeel.naam.toLowerCase().contains(filterText.toLowerCase())
                 }
             }
         }
