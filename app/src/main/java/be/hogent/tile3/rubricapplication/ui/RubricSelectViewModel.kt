@@ -25,7 +25,7 @@ class RubricSelectViewModel(opleidingsOnderdeelId: Long) : ViewModel() {
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    private val rubrics: LiveData<List<Rubric>>
+    private val _rubrics: LiveData<List<Rubric>>
     val gefilterdeRubrics = MediatorLiveData<List<Rubric>>()
 
     val opleidingsOnderdeel = MediatorLiveData<OpleidingsOnderdeel>()
@@ -34,16 +34,16 @@ class RubricSelectViewModel(opleidingsOnderdeelId: Long) : ViewModel() {
         App.component.inject(this)
         opleidingsOnderdeel.addSource(opleidingsOnderdeelRepository.get(opleidingsOnderdeelId), opleidingsOnderdeel::setValue)
         //refreshRubricDatabase()
-        rubrics = rubricRepository.getAllRubricsFromOpleidingsOnderdeel(opleidingsOnderdeelId)
-        gefilterdeRubrics.addSource(rubrics){
+        _rubrics = rubricRepository.getAllRubricsFromOpleidingsOnderdeel(opleidingsOnderdeelId)
+        gefilterdeRubrics.addSource(_rubrics){
             gefilterdeRubrics.value = it
         }
-        Log.i("test2", rubrics.toString())
+        Log.i("test2", _rubrics.toString())
     }
 
     fun filterChanged(filterText: String?){
         if (filterText != null) {
-            rubrics.value?.let {
+            _rubrics.value?.let {
                 gefilterdeRubrics.value = it.filter { rubric ->
                     rubric.onderwerp.toLowerCase().contains(filterText.toLowerCase())
                 }

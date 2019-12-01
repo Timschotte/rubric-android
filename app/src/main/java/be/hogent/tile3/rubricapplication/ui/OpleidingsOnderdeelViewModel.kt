@@ -24,7 +24,7 @@ class OpleidingsOnderdeelViewModel : ViewModel() {
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    private val opleidingsOnderdelen: LiveData<List<OpleidingsOnderdeel>>
+    private val _opleidingsOnderdelen: LiveData<List<OpleidingsOnderdeel>>
 
     val gefilterdeOpleidingsOnderdelen = MediatorLiveData<List<OpleidingsOnderdeel>>()
 
@@ -35,8 +35,8 @@ class OpleidingsOnderdeelViewModel : ViewModel() {
     init {
         App.component.inject(this)
         refreshRubricDatabase()
-        opleidingsOnderdelen = opleidingsOnderdeelRepository.getAllOpleidingsOnderdelenWithRubric()
-        gefilterdeOpleidingsOnderdelen.addSource(opleidingsOnderdelen){
+        _opleidingsOnderdelen = opleidingsOnderdeelRepository.getAllOpleidingsOnderdelenWithRubric()
+        gefilterdeOpleidingsOnderdelen.addSource(_opleidingsOnderdelen){
             gefilterdeOpleidingsOnderdelen.value = it
 
         }
@@ -48,7 +48,7 @@ class OpleidingsOnderdeelViewModel : ViewModel() {
 
     fun filterChanged(filterText: String?){
         if (filterText != null) {
-            opleidingsOnderdelen.value?.let {
+            _opleidingsOnderdelen.value?.let {
                 gefilterdeOpleidingsOnderdelen.value = it.filter { opleidingsOnderdeel ->
                     opleidingsOnderdeel.naam.toLowerCase().contains(filterText.toLowerCase())
                 }
