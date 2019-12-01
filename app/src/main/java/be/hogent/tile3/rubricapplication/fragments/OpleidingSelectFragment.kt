@@ -2,6 +2,7 @@ package be.hogent.tile3.rubricapplication.fragments
 
 
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.fragment.app.Fragment
@@ -47,8 +48,13 @@ class OpleidingSelectFragment : Fragment() {
 
         binding.searchBarOpleidingen.addTextChangedListener(
             object : TextWatcher {
+                val handler = Handler()
+
                 override fun afterTextChanged(s: Editable?) {
-                    binding.opleidingsOnderdeelViewModel?.filterChanged(s?.toString())
+                    handler.postDelayed({
+                        binding.opleidingsOnderdeelViewModel?.filterChanged(s?.toString())
+                    }, 600)
+
                 }
 
                 override fun beforeTextChanged(
@@ -62,6 +68,7 @@ class OpleidingSelectFragment : Fragment() {
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     //Do nothing
+                    handler.removeCallbacksAndMessages(null)
                 }
             }
         )
