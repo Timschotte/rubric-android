@@ -18,6 +18,9 @@ interface EvaluatieDao {
     @Query("SELECT * FROM evaluatie_table WHERE evaluatieId = :evaluatieId")
     fun get(evaluatieId: String): Evaluatie
 
+    @Query("SELECT * from evaluatie_table")
+    fun getAll(): LiveData<List<Evaluatie>>
+
     @Delete
     fun delete(evaluatie: Evaluatie)
 
