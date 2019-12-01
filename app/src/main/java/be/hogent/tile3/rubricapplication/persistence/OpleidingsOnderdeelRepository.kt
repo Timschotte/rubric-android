@@ -21,14 +21,8 @@ class OpleidingsOnderdeelRepository(private val opleidingsOnderdeelDao: Opleidin
         App.component.inject(this)
     }
 
-    @WorkerThread
     fun get(id: Long): LiveData<OpleidingsOnderdeel> {
         return opleidingsOnderdeelDao.getBy(id)
-    }
-
-    @WorkerThread
-    fun getAllOpleidingsOnderdelen(): LiveData<List<OpleidingsOnderdeel>> {
-        return opleidingsOnderdeelDao.getAll()
     }
 
     suspend fun refreshOpleidingsOnderdelen(){
