@@ -27,26 +27,6 @@ class DatabaseModule(private val application: Application) {
         return RubricRepository(rubricDao, criteriumDao, niveauDao)
     }
 
-    /**
-     * Shows how to create a CriteriumRepository
-     *  @param criteriumDao the CriteriumDao used to instantiate the Repository
-     */
-    @Provides
-    @Singleton
-    internal fun provideCriteriumRepository(criteriumDao: CriteriumDao): CriteriumRepository {
-        return CriteriumRepository(criteriumDao)
-    }
-
-    /**
-     * Shows how to create a NiveauRepository
-     *  @param niveauDao the NiveauDao used to instantiate the Repository
-     */
-    @Provides
-    @Singleton
-    internal fun provideNiveauRepository(niveauDao: NiveauDao): NiveauRepository {
-        return NiveauRepository(niveauDao)
-    }
-
     @Provides
     @Singleton
     internal fun provideOpleidingsOnderdeelRepository(opleidingsOnderdeelDao: OpleidingsOnderdeelDao): OpleidingsOnderdeelRepository {

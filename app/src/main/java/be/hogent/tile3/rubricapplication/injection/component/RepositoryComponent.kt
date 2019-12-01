@@ -14,9 +14,6 @@ import javax.inject.Singleton
 @Component(modules = [NetworkModule::class, DatabaseModule::class])
 interface RepositoryComponent {
     fun inject(app: App)
-    fun inject(rubricViewModel: RubricViewModel)
-    fun inject(criteriumViewModel: CriteriumViewModel)
-    fun inject(niveauViewModel: NiveauViewModel)
     fun inject(criteriumOverzichtViewModel: CriteriumOverzichtViewModel)
     fun inject(rubricRepository: RubricRepository)
     fun inject(opleidingsOnderdeelViewModel: OpleidingsOnderdeelViewModel)

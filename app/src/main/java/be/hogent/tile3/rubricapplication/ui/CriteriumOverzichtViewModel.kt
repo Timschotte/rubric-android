@@ -27,8 +27,6 @@ class CriteriumOverzichtViewModel(
 
     // Repositories
     @Inject lateinit var rubricRepository: RubricRepository
-    @Inject lateinit var niveauRepository: NiveauRepository
-    @Inject lateinit var criteriumRepository: CriteriumRepository
     @Inject lateinit var evaluatieRepository: EvaluatieRepository
     @Inject lateinit var criteriumEvaluatieRepository: CriteriumEvaluatieRepository
     @Inject lateinit var studentRepository: StudentRepository
