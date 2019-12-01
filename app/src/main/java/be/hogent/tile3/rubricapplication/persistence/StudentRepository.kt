@@ -24,15 +24,6 @@ class StudentRepository(private val studentDao: StudentDao, private val studentO
         App.component.inject(this)
     }
 
-    fun get(id: Long): LiveData<Student> {
-        return studentDao.getBy(id)
-    }
-
-    @WorkerThread
-    fun getAllStudents(): LiveData<List<Student>> {
-        return studentDao.getAll()
-    }
-
     @WorkerThread
     fun getAllStudentsFromOpleidingsOnderdeel(id: Long): LiveData<List<Student>> {
         return studentOpleidingsOnderdeelDao.getStudentenFromOpleidingsOnderdeel(id)
