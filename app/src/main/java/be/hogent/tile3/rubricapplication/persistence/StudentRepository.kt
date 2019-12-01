@@ -24,7 +24,6 @@ class StudentRepository(private val studentDao: StudentDao, private val studentO
         App.component.inject(this)
     }
 
-    @WorkerThread
     fun getAllStudentsFromOpleidingsOnderdeel(id: Long): LiveData<List<Student>> {
         return studentOpleidingsOnderdeelDao.getStudentenFromOpleidingsOnderdeel(id)
     }
