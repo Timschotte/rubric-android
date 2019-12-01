@@ -33,20 +33,10 @@ class RubricSelectViewModel(opleidingsOnderdeelId: Long) : ViewModel() {
         App.component.inject(this)
         opleidingsOnderdeel.addSource(opleidingsOnderdeelRepository.get(opleidingsOnderdeelId), opleidingsOnderdeel::setValue)
         //refreshRubricDatabase()
-        rubrics = liveData {
-            coroutineScope.launch {
-                val data = getAllRubricsFromOpleidingsOnderdeel(opleidingsOnderdeelId)
-                emit(data)
-            }
-        }
+        rubrics = rubricRepository.getAllRubricsFromOpleidingsOnderdeel(opleidingsOnderdeelId)
         Log.i("test2", rubrics.toString())
     }
 
-    private suspend fun getAllRubricsFromOpleidingsOnderdeel(opleidingsOnderdeelId: Long): List<Rubric>{
-        return withContext(Dispatchers.IO){
-            rubricRepository.getAllRubricsFromOpleidingsOnderdeel(opleidingsOnderdeelId)
-        }
-    }
 
 //    private fun refreshRubricDatabase() {
 //        if (isNetworkAvailable()){

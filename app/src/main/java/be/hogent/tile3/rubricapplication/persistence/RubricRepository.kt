@@ -31,7 +31,7 @@ class RubricRepository(
         App.component.inject(this)
     }
 
-    fun getAllRubricsFromOpleidingsOnderdeel(id: Long): List<Rubric> {
+    fun getAllRubricsFromOpleidingsOnderdeel(id: Long): LiveData<List<Rubric>> {
         return rubricDao.getAllRubricsFromOpleidingsOnderdeel(id)
     }
 
