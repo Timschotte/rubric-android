@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.model.Student
 import be.hogent.tile3.rubricapplication.persistence.StudentRepository
@@ -24,9 +25,10 @@ class LeerlingSelectViewModel(
     lateinit var context: Context
 
     private var viewModelJob = Job()
-    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+    private val coroutineScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     val studenten: LiveData<List<Student>>
+
 
     init {
         App.component.inject(this)
@@ -37,7 +39,7 @@ class LeerlingSelectViewModel(
 
     private fun refreshRubricDatabase() {
         if (isNetworkAvailable()) {
-            uiScope.launch {
+            coroutineScope.launch {
                 studentRepository.refreshStudenten()
             }
         }

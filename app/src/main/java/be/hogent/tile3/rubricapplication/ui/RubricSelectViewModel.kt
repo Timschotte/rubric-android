@@ -3,20 +3,13 @@ package be.hogent.tile3.rubricapplication.ui
 import android.content.Context
 import android.net.ConnectivityManager
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.model.OpleidingsOnderdeel
 import be.hogent.tile3.rubricapplication.model.Rubric
 import be.hogent.tile3.rubricapplication.persistence.OpleidingsOnderdeelRepository
 import be.hogent.tile3.rubricapplication.persistence.RubricRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import java.util.*
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 class RubricSelectViewModel(opleidingsOnderdeelId: Long) : ViewModel() {
@@ -30,7 +23,7 @@ class RubricSelectViewModel(opleidingsOnderdeelId: Long) : ViewModel() {
     @Inject lateinit var context: Context
 
     private var viewModelJob = Job()
-    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+    private val coroutineScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     var rubrics: LiveData<List<Rubric>>
 
@@ -44,9 +37,10 @@ class RubricSelectViewModel(opleidingsOnderdeelId: Long) : ViewModel() {
         Log.i("test2", rubrics.toString())
     }
 
+
 //    private fun refreshRubricDatabase() {
 //        if (isNetworkAvailable()){
-//            uiScope.launch {
+//            coroutineScope.launch {
 //                //rubricRepository.refreshRubrics()
 //            }
 //        }
