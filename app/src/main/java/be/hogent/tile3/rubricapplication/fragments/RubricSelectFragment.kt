@@ -2,11 +2,12 @@ package be.hogent.tile3.rubricapplication.fragments
 
 
 import android.os.Bundle
+import android.os.Handler
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.*
+import android.widget.EditText
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -23,11 +24,13 @@ import be.hogent.tile3.rubricapplication.ui.factories.RubricSelectViewModelFacto
  */
 class RubricSelectFragment : Fragment() {
 
+    lateinit var binding:FragmentRubricSelectBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding: FragmentRubricSelectBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_rubric_select, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_rubric_select, container, false)
         val opleidingsOnderdeel = RubricSelectFragmentArgs.fromBundle(arguments!!)
 
         val viewModelFactory = RubricSelectViewModelFactory(opleidingsOnderdeel.opleidingsOnderdeelId)
@@ -50,16 +53,59 @@ class RubricSelectFragment : Fragment() {
             }
         })
 
-        rubricSelectViewModel.rubrics.observe(viewLifecycleOwner, Observer {
+        rubricSelectViewModel.gefilterdeRubrics.observe(viewLifecycleOwner, Observer {
             it?.let{
                 System.out.println(it)
                 adapter.submitList(it)
             }
         })
 
+        this.setHasOptionsMenu(true)
+
         return binding.root
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.searchbar, menu)
+        val searchBarOpleiding = menu.findItem(R.id.action_search).actionView as androidx.appcompat.widget.SearchView
 
+        val editText = searchBarOpleiding.findViewById(R.id.search_src_text) as EditText
+
+
+        editText.addTextChangedListener(
+            object : TextWatcher {
+                val handler = Handler()
+
+                override fun afterTextChanged(s: Editable?) {
+                    var text = s?.toString()
+                    var millis:Long
+                    if(text==""){
+                        millis=0
+                    } else {
+                        millis=600
+                    }
+                    handler.postDelayed({
+                        binding.rubricSelectViewModel?.filterChanged(text)
+                    }, millis)
+
+                }
+
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                    //Do nothing
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    handler.removeCallbacksAndMessages(null)
+                }
+            }
+        )
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
 
 }

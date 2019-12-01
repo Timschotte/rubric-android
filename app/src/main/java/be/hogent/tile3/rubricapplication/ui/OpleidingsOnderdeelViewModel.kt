@@ -53,6 +53,7 @@ class OpleidingsOnderdeelViewModel : ViewModel() {
                     opleidingsOnderdeel.naam.toLowerCase().contains(filterText.toLowerCase())
                 }
             }
+            Log.i("test", filterText)
         }
     }
 
