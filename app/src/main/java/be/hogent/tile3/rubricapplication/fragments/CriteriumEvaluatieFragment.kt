@@ -122,6 +122,17 @@ class CriteriumEvaluatieFragment
                 input.requestFocus()
             }
 
+            binding.toonCriteriumOmschrijvingImageButton.setOnClickListener {
+
+
+                AlertDialog.Builder(this.context!!).setTitle(criteriumOverzichtViewModel.geselecteerdCriterium.value?.naam
+                    ?: getString(R.string.criterium_evaluatie_omschrijving_dialog_titel_default)).setMessage(criteriumOverzichtViewModel.geselecteerdCriterium.value?.omschrijving
+                    ?: getString(R.string.criterium_evaluatie_omschrijving_dialog_omschrijving_default))
+                    .setPositiveButton(R.string.criterium_evaluatie_omschrijving_dialog_bevestig, null)
+                    .create()
+                    .show()
+            }
+
             criteriumOverzichtViewModel.positieGeselecteerdCriterium.observe(viewLifecycleOwner, Observer{
                 binding.upEdgeButton.visibility = if(it == 0) View.INVISIBLE else View.VISIBLE
                 binding.downEdgeButton.visibility =

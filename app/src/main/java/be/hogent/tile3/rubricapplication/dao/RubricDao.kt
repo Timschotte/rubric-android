@@ -28,6 +28,8 @@ interface RubricDao{
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg databaseRubrics: Rubric)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAllRubrics(rubrics: List<Rubric>)
     /**
      * Delete a rubric
      */
@@ -48,5 +50,5 @@ interface RubricDao{
 
     @Transaction
     @Query("SELECT * FROM rubric_table WHERE rubricId = :rubricId")
-    fun getEvaluatieRubric(rubricId: String): EvaluatieRubric
+    fun getEvaluatieRubric(rubricId: Long): EvaluatieRubric
 }

@@ -8,6 +8,7 @@ import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.model.OpleidingsOnderdeel
 import be.hogent.tile3.rubricapplication.persistence.OpleidingsOnderdeelRepository
 import be.hogent.tile3.rubricapplication.persistence.RubricRepository
+import be.hogent.tile3.rubricapplication.utils.isNetworkAvailable
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
@@ -69,22 +70,14 @@ class OpleidingsOnderdeelViewModel : ViewModel() {
     }
 
     private fun refreshRubricDatabase() {
-        if (isNetworkAvailable()) {
+        if (isNetworkAvailable(context)) {
             uiScope.launch {
                 withContext(Dispatchers.IO) {
                     opleidingsOnderdeelRepository.refreshOpleidingsOnderdelen()
                     rubricRepository.refreshRubrics()
-
                 }
             }
         }
-    }
-
-    private fun isNetworkAvailable(): Boolean {
-        val connectivityManager =
-            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
-        val activeNetworkInfo = connectivityManager!!.activeNetworkInfo
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected
     }
 
     private val _navigateToRubricSelect = MutableLiveData<Long>()

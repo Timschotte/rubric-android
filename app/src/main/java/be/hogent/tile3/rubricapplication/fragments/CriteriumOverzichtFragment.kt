@@ -35,6 +35,7 @@ class CriteriumOverzichtFragment : Fragment() {
 
     private var alertDialog: AlertDialog? = null
     private lateinit var rubricEvaluationFragment: CriteriumEvaluatieFragment
+    private lateinit var criteriumOverzichtViewModel: CriteriumOverzichtViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,7 +51,7 @@ class CriteriumOverzichtFragment : Fragment() {
         val args = CriteriumOverzichtFragmentArgs.fromBundle(arguments!!)
 
         val viewModelFactory = CriteriumOverzichtViewModelFactory(args.rubricId, args.student)
-        val criteriumOverzichtViewModel = ViewModelProviders.of(this, viewModelFactory)
+        criteriumOverzichtViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(CriteriumOverzichtViewModel::class.java)
 
 
@@ -180,21 +181,6 @@ class CriteriumOverzichtFragment : Fragment() {
                         }
                     }
                 }
-                /*animCriteriumEvaluatieFramePositie.doOnStart {
-                    if(overzichtPaneelUitgeklapt){
-                        binding.criteriumEvaluatieOverzichtBalk.visibility = View.VISIBLE
-
-                    }else{
-                        binding.criteriumEvaluatieFragmentContainer.visibility = View.VISIBLE
-                    }
-                }
-                animCriteriumEvaluatieFramePositie.doOnEnd {
-                    if(!overzichtPaneelUitgeklapt) {
-                        binding.criteriumEvaluatieOverzichtBalk.visibility = View.INVISIBLE
-                    }else{
-                        binding.criteriumEvaluatieFragmentContainer.visibility = View.INVISIBLE
-                    }
-                }*/
 
                 val animCriteriumEvaluatieFrameBreedte = ValueAnimator.ofInt(
                     binding.criteriumEvaluatieFragmentWrapper.measuredWidth,
@@ -259,9 +245,6 @@ class CriteriumOverzichtFragment : Fragment() {
     }
 
     private fun persisteerEvaluatie(){
-        val criteriumOverzichtViewModel
-                = ViewModelProviders.of(this)
-            .get(CriteriumOverzichtViewModel::class.java)
         criteriumOverzichtViewModel.persisteerEvaluatie()
     }
 
@@ -280,13 +263,6 @@ class CriteriumOverzichtFragment : Fragment() {
                 return false
             }
         })
-
-
-        val args = CriteriumOverzichtFragmentArgs.fromBundle(arguments!!)
-
-        val viewModelFactory = CriteriumOverzichtViewModelFactory(args.rubricId, args.student)
-        val criteriumOverzichtViewModel = ViewModelProviders.of(this, viewModelFactory)
-            .get(CriteriumOverzichtViewModel::class.java)
 
         criteriumOverzichtViewModel.evaluatie.observe(this, Observer {
             it?.let {
@@ -322,6 +298,7 @@ class CriteriumOverzichtFragment : Fragment() {
     }
 
     private fun navigeerNaarLeerlingSelect(){
+        criteriumOverzichtViewModel.deleteTempEvaluatie()
         val args = CriteriumOverzichtFragmentArgs.fromBundle(arguments!!)
         findNavController().navigate(
             CriteriumOverzichtFragmentDirections.actionCriteriumOverzichtFragmentToLeerlingSelectFragment(args.rubricId, args.olodId)

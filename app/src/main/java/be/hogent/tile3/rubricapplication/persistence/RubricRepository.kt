@@ -1,7 +1,6 @@
 package be.hogent.tile3.rubricapplication.persistence
 
 import android.util.Log
-import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.dao.CriteriumDao
@@ -11,6 +10,8 @@ import be.hogent.tile3.rubricapplication.model.EvaluatieRubric
 import be.hogent.tile3.rubricapplication.model.Rubric
 import be.hogent.tile3.rubricapplication.network.RubricApi
 import be.hogent.tile3.rubricapplication.network.asDatabaseModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.IOException
 import javax.inject.Inject
 
@@ -35,7 +36,7 @@ class RubricRepository(
         return rubricDao.getAllRubricsFromOpleidingsOnderdeel(id)
     }
 
-    fun getEvaluatieRubric(rubricId: String): EvaluatieRubric{
+    fun getEvaluatieRubric(rubricId: Long): EvaluatieRubric {
         return rubricDao.getEvaluatieRubric(rubricId)
     }
 
@@ -71,11 +72,9 @@ class RubricRepository(
                 Log.i("Test", it.omschrijving + "from refreshRubric in repository")
             }
 
-
-        } catch (e: IOException) {
-            Log.i("RubricRepository", e.message)
+            } catch (e: IOException) {
+                Log.i("RubricRepository", e.message)
+            }
         }
     }
-
-    val rubrics: LiveData<List<Rubric>> = rubricDao.getAllRubrics()
 }

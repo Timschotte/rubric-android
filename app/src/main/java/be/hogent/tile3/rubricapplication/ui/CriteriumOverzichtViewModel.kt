@@ -14,15 +14,14 @@ import kotlin.collections.ArrayList
 
 
 class CriteriumOverzichtViewModel(
-    private val rubricId: String,
-    val student: Student
+    private val rubricId: Long,
+    val student: Student,
+    val docent: Docent
 ) :
     ViewModel() {
 
     /* PRIVATE VARIABLES -------------------------------------------------------------------------*/
     /*--------------------------------------------------------------------------------------------*/
-
-
     // Context
     @Inject lateinit var context: Context
 
@@ -32,6 +31,7 @@ class CriteriumOverzichtViewModel(
     @Inject lateinit var criteriumEvaluatieRepository: CriteriumEvaluatieRepository
     @Inject lateinit var studentRepository: StudentRepository
     @Inject lateinit var rubricApi: RubricApi
+
 
     // Coroutine variables
     private var viewModelJob = Job()
@@ -110,16 +110,13 @@ class CriteriumOverzichtViewModel(
     val persisterenVoltooid: LiveData<Boolean>
         get() = _persisterenVoltooid
 
-
-
-
     /* INITIALIZATION ----------------------------------------------------------------------------*/
     /*--------------------------------------------------------------------------------------------*/
     init {
         App.component.inject(this)
     }
 
-    private suspend fun getEvaluatieRubric(rubricId: String): EvaluatieRubric{
+    private suspend fun getEvaluatieRubric(rubricId: Long): EvaluatieRubric{
         return withContext(Dispatchers.IO){
             rubricRepository.getEvaluatieRubric(rubricId)
         }
@@ -130,7 +127,7 @@ class CriteriumOverzichtViewModel(
         _totaalScore.value = 0
         _geselecteerdCriterium.value = data.criteria[0]
         _positieGeselecteerdCriterium.value = 0
-        var grootteRubricCriteria: Int? = data.criteria.size
+        val grootteRubricCriteria: Int? = data.criteria.size
         _positieLaatsteCriterium.value =
             if (grootteRubricCriteria == null) 0 else (grootteRubricCriteria - 1)
         initialiseerEvaluatie(data)
@@ -138,11 +135,16 @@ class CriteriumOverzichtViewModel(
     }
     private fun initialiseerEvaluatie(data: EvaluatieRubric) = runBlocking {
 
+    private fun initialiseerEvaluatie(data: EvaluatieRubric) = runBlocking {
+
         // 1: nieuwe evaluatie, of bestaande evaluatie?
-        var evaluatie: Evaluatie? = geefEvaluatie(rubricId, student.studentId)
-        // 2: temp evaluatie aanmaken
-        slaTempEvaluatieOp(Evaluatie(TEMP_EVALUATIE_ID, student.studentId, rubricId))
-        // 3: temp criteriumEvaluaties aanmaken, persisteren & instellen
+        var evaluatie: Evaluatie? = geefEvaluatie(true)
+        if(evaluatie == null) {
+            //Geen temp gevonden
+            evaluatie = geefEvaluatie()
+        }
+
+        // 2: temp criteriumEvaluaties aanmaken, persisteren & instellen
         var bestaandeCriteriumEvaluaties: MutableList<CriteriumEvaluatie>? = null
         if(evaluatie != null){
             bestaandeCriteriumEvaluaties = geefCriteriumEvaluaties(evaluatie.evaluatieId)?.toMutableList()
@@ -161,20 +163,25 @@ class CriteriumOverzichtViewModel(
                 criteriumEvaluatie?.commentaar ?: ""
             )
             criteriumEvaluaties.add(nieuweCriteriumEvaluatie)
+            bestaandeCriteriumEvaluaties?.remove(criteriumEvaluatie)
             nieuweCriteriumEvaluatie.score?.let{
                 _score.value = _score.value!!.plus(it)
             }
             _totaalScore.value = _totaalScore.value!!.plus(data.niveausCriteria.last().bovengrens)
             bestaandeCriteriumEvaluaties?.removeAt(0)
         }
-        Log.i("TestN", "Totaal: "+totaalScore)
-        // 4: temp criteriumEvaluaties persisteren & instellen
+        // 3: persisteren
+        if(evaluatie?.evaluatieId != TEMP_EVALUATIE_ID){
+            //Geen nieuwe temp opslaan als er al een temp aanwezig is (indien app gestopt/gesloten is)
+            slaTempEvaluatieOp(Evaluatie(TEMP_EVALUATIE_ID, student.studentId, rubricId, docent.docentId))
+        }
         slaTempCriteriumEvaluatiesOp(criteriumEvaluaties)
     }
 
-    private suspend fun geefEvaluatie(rubricId: String, studentId: Long): Evaluatie? {
+
+    private suspend fun geefEvaluatie(temp: Boolean = false): Evaluatie? {
         return withContext(Dispatchers.IO){
-            evaluatieRepository.getByRubricAndStudent(rubricId, studentId)
+            evaluatieRepository.getByRubricAndStudent(rubricId, student.studentId, temp)
         }
     }
 
@@ -201,14 +208,10 @@ class CriteriumOverzichtViewModel(
         }
     }
 
-
-
-
-
     /* CLICK HANDLERS ----------------------------------------------------------------------------*/
     /*--------------------------------------------------------------------------------------------*/
 
-    fun onGeselecteerdCriteriumGewijzigd(criteriumId: String, positie: Int, data: EvaluatieRubric? = null) {
+    fun onGeselecteerdCriteriumGewijzigd(criteriumId: Long, positie: Int, data: EvaluatieRubric? = null) {
         _geselecteerdCriterium.value =
             if(data != null) data.criteria?.singleOrNull { it.criteriumId == criteriumId }
             else evaluatieRubric.value?.criteria?.singleOrNull { it.criteriumId == criteriumId }
@@ -282,7 +285,7 @@ class CriteriumOverzichtViewModel(
         }
         _geselecteerdCriterium.value = evaluatieRubric.value?.criteria?.get(nieuwePositie)
         _positieGeselecteerdCriterium.value = nieuwePositie
-        onGeselecteerdCriteriumGewijzigd(geselecteerdCriterium.value?.criteriumId ?: "", nieuwePositie)
+        onGeselecteerdCriteriumGewijzigd(geselecteerdCriterium.value?.criteriumId ?: 0, nieuwePositie)
     }
 
     fun onKlapInKlapUitButtonClicked() {
@@ -308,6 +311,12 @@ class CriteriumOverzichtViewModel(
         coroutineScope.launch {
             evaluatieRepository.persisteerTemp(_evaluatie.value!!)
             _persisterenVoltooid.value = true
+        }
+    }
+
+    fun deleteTempEvaluatie() {
+        coroutineScope.launch {
+            evaluatieRepository.verwijderVorigeTempEvaluatie()
         }
     }
 

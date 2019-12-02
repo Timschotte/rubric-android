@@ -44,6 +44,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
 
     //Retrofit
     implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
@@ -68,6 +69,7 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxandroid:$versions.rxandroid"
 
     implementation "com.squareup.moshi:moshi-kotlin:$versions.moshi"
+
     //implementation "se.ansman.kotshi:api:$versions.kotshi"
     //implementation "se.ansman.kotshi:compiler:$versions.kotshi"
 

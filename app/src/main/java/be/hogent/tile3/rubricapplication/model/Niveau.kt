@@ -17,14 +17,14 @@ import java.io.Serializable
 )
 data class Niveau(
     @PrimaryKey @ColumnInfo(name = "niveauId") val niveauId: Long = 0L,
-    @ColumnInfo(name = "titel") val titel: String = "",
-    @ColumnInfo(name = "omschrijving") val omschrijving: String = "",
+    @ColumnInfo(name = "titel") val titel: String? = "",
+    @ColumnInfo(name = "omschrijving") val omschrijving: String? = "",
     @ColumnInfo(name = "ondergrens") val ondergrens: Int = 0,
     @ColumnInfo(name = "bovengrens") val bovengrens: Int = 0,
     @ColumnInfo(name = "volgnummer") val volgnummer: Int,
-    @ColumnInfo(name="rubricId") val rubricId: String,
-    @ColumnInfo(name="criteriumGroepId") val criteriumGroepId: String,
-    @ColumnInfo(name = "criteriumId") val criteriumId: String
+    @ColumnInfo(name="rubricId") val rubricId: Long,
+    @ColumnInfo(name="criteriumGroepId") val criteriumGroepId: Long,
+    @ColumnInfo(name = "criteriumId") val criteriumId: Long
 ) : Parcelable, Serializable {
     constructor(parcel: Parcel) : this(
         parcel.readLong(),
@@ -33,9 +33,9 @@ data class Niveau(
         parcel.readInt(),
         parcel.readInt(),
         parcel.readInt(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString()
+        parcel.readLong(),
+        parcel.readLong(),
+        parcel.readLong()
     ) {
     }
 
@@ -46,9 +46,9 @@ data class Niveau(
         parcel.writeInt(ondergrens)
         parcel.writeInt(bovengrens)
         parcel.writeInt(volgnummer)
-        parcel.writeString(rubricId)
-        parcel.writeString(criteriumGroepId)
-        parcel.writeString(criteriumId)
+        parcel.writeLong(rubricId)
+        parcel.writeLong(criteriumGroepId)
+        parcel.writeLong(criteriumId)
     }
 
     override fun describeContents(): Int {

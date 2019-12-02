@@ -15,7 +15,7 @@ data class Docent(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name="docentId")
-    val docentId: Int = 0,
+    val docentId: Long = 0,
 
     @ColumnInfo(name = "naam")
     val naam: String,

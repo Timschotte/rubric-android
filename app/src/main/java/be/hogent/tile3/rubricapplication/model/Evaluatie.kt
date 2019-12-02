@@ -26,12 +26,10 @@ import java.util.*
     , tableName = "evaluatie_table"
 )
 data class Evaluatie(
-    @PrimaryKey @ColumnInfo(name = "evaluatieId") var evaluatieId: String,
+    @PrimaryKey @ColumnInfo(name = "evaluatieId") var evaluatieId: String = UUID.randomUUID().toString(),
     @ColumnInfo(name = "studentId") val studentId: Long,
-    @ColumnInfo(name = "rubricId") val rubricId: String
-    //@ColumnInfo(name= "docentId") val docentId: Int
-    // TODO: toevoegen docent en data (aanmaak, wijziging)
-    // TODO: lijst criteriumevaluaties inzetten
+    @ColumnInfo(name = "rubricId") val rubricId: Long,
+    @ColumnInfo(name = "docentId") val docentId: Long
 ){
     @Ignore
     var criteriumEvaluaties: List<CriteriumEvaluatie>? = null

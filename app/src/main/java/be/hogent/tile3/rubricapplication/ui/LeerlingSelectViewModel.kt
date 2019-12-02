@@ -7,6 +7,7 @@ import androidx.lifecycle.*
 import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.model.Student
 import be.hogent.tile3.rubricapplication.persistence.StudentRepository
+import be.hogent.tile3.rubricapplication.utils.isNetworkAvailable
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
@@ -53,19 +54,11 @@ class LeerlingSelectViewModel(
     }
 
     private fun refreshRubricDatabase() {
-        if (isNetworkAvailable()) {
+        if (isNetworkAvailable(context)) {
             coroutineScope.launch {
                 studentRepository.refreshStudenten()
             }
         }
-    }
-
-
-    private fun isNetworkAvailable(): Boolean {
-        val connectivityManager =
-            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
-        val activeNetworkInfo = connectivityManager!!.activeNetworkInfo
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected
     }
 
     private val _navigateToRubricView = MutableLiveData<Student>()

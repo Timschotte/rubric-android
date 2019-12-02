@@ -18,16 +18,16 @@ import java.io.Serializable
     indices = arrayOf(Index("opleidingsOnderdeelId"))
 )
 data class Rubric(
-    @PrimaryKey @ColumnInfo(name = "rubricId") val rubricId: String = "",
-    @ColumnInfo(name = "onderwerp") val onderwerp: String = "",
-    @ColumnInfo(name = "omschrijving") val omschrijving: String = "",
-    @ColumnInfo(name = "datumTijdCreatie") val datumTijdCreatie: String = "",
-    @ColumnInfo(name = "datumTijdLaatsteWijziging") val datumTijdLaatsteWijziging: String = "",
+    @PrimaryKey @ColumnInfo(name = "rubricId") val rubricId: Long = 0,
+    @ColumnInfo(name = "onderwerp") val onderwerp: String? = "",
+    @ColumnInfo(name = "omschrijving") val omschrijving: String? = "",
+    @ColumnInfo(name = "datumTijdCreatie") val datumTijdCreatie: String? = "",
+    @ColumnInfo(name = "datumTijdLaatsteWijziging") val datumTijdLaatsteWijziging: String? = "",
     @ColumnInfo(name = "opleidingsOnderdeelId") val opleidingsOnderdeelId: Long
 
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readString(),
+        parcel.readLong(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
@@ -37,7 +37,7 @@ data class Rubric(
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(rubricId)
+        parcel.writeLong(rubricId)
         parcel.writeString(onderwerp)
         parcel.writeString(omschrijving)
         parcel.writeString(datumTijdCreatie)
