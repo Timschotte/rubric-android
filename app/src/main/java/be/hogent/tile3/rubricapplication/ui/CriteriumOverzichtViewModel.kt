@@ -56,6 +56,14 @@ class CriteriumOverzichtViewModel(
     val evaluatie: LiveData<Evaluatie>
         get() = _evaluatie
 
+    private val _score = MutableLiveData<Int>()
+    val score: LiveData<Int>
+        get() = _score
+
+    private val _totaalScore = MutableLiveData<Int>()
+    val totaalScore: LiveData<Int>
+        get() = _totaalScore
+
     private val _criteriumEvaluaties = MutableLiveData<List<CriteriumEvaluatie>>()
     val criteriumEvaluaties: LiveData<List<CriteriumEvaluatie>>
         get() = _criteriumEvaluaties
@@ -116,6 +124,8 @@ class CriteriumOverzichtViewModel(
     }
 
     private fun initialiseerProperties(data: EvaluatieRubric){
+        _score.value = 0
+        _totaalScore.value = 0
         _geselecteerdCriterium.value = data.criteria[0]
         _positieGeselecteerdCriterium.value = 0
         var grootteRubricCriteria: Int? = data.criteria.size
@@ -124,12 +134,8 @@ class CriteriumOverzichtViewModel(
         initialiseerEvaluatie(data)
         onGeselecteerdCriteriumGewijzigd(data.criteria[0]?.criteriumId, 0, data)
     }
-
     private fun initialiseerEvaluatie(data: EvaluatieRubric) = runBlocking {
-        Log.i("Test4", "Data Criteria: ")
-        data.criteria?.forEach{
-            Log.i("Test4", it.toString())
-        }
+
         // 1: nieuwe evaluatie, of bestaande evaluatie?
         var evaluatie: Evaluatie? = geefEvaluatie(rubricId, student.studentId)
         // 2: temp evaluatie aanmaken
@@ -138,10 +144,6 @@ class CriteriumOverzichtViewModel(
         var bestaandeCriteriumEvaluaties: MutableList<CriteriumEvaluatie>? = null
         if(evaluatie != null){
             bestaandeCriteriumEvaluaties = geefCriteriumEvaluaties(evaluatie.evaluatieId)?.toMutableList()
-            Log.i("Test4", "Bestaande CriteriumEvaluaties: ")
-            bestaandeCriteriumEvaluaties?.forEach{
-                Log.i("Test4", it.toString())
-            }
         }
         val criteriumEvaluaties = ArrayList<CriteriumEvaluatie>()
         data.criteria.forEach{
@@ -156,14 +158,14 @@ class CriteriumOverzichtViewModel(
                 criteriumEvaluatie?.score ?: minNiveau?.ondergrens,
                 criteriumEvaluatie?.commentaar ?: ""
             )
-            Log.i("test4", "Nieuwe CriteriumEvaluatie: $nieuweCriteriumEvaluatie")
             criteriumEvaluaties.add(nieuweCriteriumEvaluatie)
+            nieuweCriteriumEvaluatie.score?.let{
+                _score.value = _score.value!!.plus(it)
+            }
+            _totaalScore.value = _totaalScore.value!!.plus(data.niveausCriteria.last().bovengrens)
             bestaandeCriteriumEvaluaties?.removeAt(0)
         }
-        Log.i("Test4", "Nieuwe/Temp CriteriumEvaluaties: ")
-        criteriumEvaluaties?.forEach{
-            Log.i("Test4", it.toString())
-        }
+        Log.i("TestN", "Totaal: "+totaalScore)
         // 4: temp criteriumEvaluaties persisteren & instellen
         slaTempCriteriumEvaluatiesOp(criteriumEvaluaties)
     }
@@ -233,17 +235,23 @@ class CriteriumOverzichtViewModel(
     }
 
     fun onNiveauClicked(niveauId: Long, positie: Int){
+
+        if(niveauId != geselecteerdCriteriumNiveau.value?.niveauId){
+            _criteriumEvaluatie.value?.score?.let{
+                _score.value = _score.value!!.minus(it)
+            }
+        }
         _geselecteerdCriteriumNiveau.value = criteriumNiveaus.value?.singleOrNull{it.niveauId == niveauId}
         _positieGeselecteerdCriteriumNiveau?.value = positie
         _criteriumEvaluatie.value?.behaaldNiveau = niveauId
-        _criteriumEvaluatie.value?.score = geselecteerdCriteriumNiveau.value?.ondergrens ?: 0
+        _criteriumEvaluatie.value?.score = 0 //geselecteerdCriteriumNiveau.value?.ondergrens ?: 0
         Log.i("TestCriteriumOverzicht", "Evaluatie wordt gepersisteerd")
         persisteerCriteriumEvaluatie(criteriumEvaluatie.value)
     }
 
     fun onScoreChanged(oudeScore: Int, nieuweScore: Int){
+        _score.value = _score.value!!.plus(nieuweScore).minus(_criteriumEvaluatie.value?.score!!)
         _criteriumEvaluatie.value?.score = nieuweScore
-        Log.i("Test", nieuweScore.toString())
         persisteerCriteriumEvaluatie(criteriumEvaluatie.value)
     }
 
