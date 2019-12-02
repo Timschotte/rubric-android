@@ -8,6 +8,8 @@ import be.hogent.tile3.rubricapplication.model.Rubric
 import be.hogent.tile3.rubricapplication.model.Student
 import be.hogent.tile3.rubricapplication.model.StudentOpleidingsOnderdeel
 import com.squareup.moshi.JsonClass
+import java.util.*
+import kotlin.collections.ArrayList
 
 @JsonClass(generateAdapter = false)
 data class NetworkRubric(
@@ -80,6 +82,9 @@ data class NetworkDocent(
 data class NetworkStudent(
     val id: Long,
     val naam: String,
+    val achternaam: String?,
+    val voornaam: String?,
+    val geboortedatum: String?,
     val studentNummer: String,
     val opleidingsOnderdelen: List<Long>
 )
@@ -138,6 +143,9 @@ fun List<NetworkStudent>.asStudentDatabaseModel(): Array<Student> {
         Student(
             it.id,
             it.naam,
+            it.achternaam,
+            it.voornaam,
+            it.geboortedatum,
             it.studentNummer
         )
     }.toTypedArray()
