@@ -26,4 +26,6 @@
     <string name="selecteerRubricVanOpleiding">%1$s</string>
     <string name="selecteer_leerling">Selecteer een leerling</string>
     <string name="opslaan">Opslaan</string>
+    <string name="evaluatie">Evaluatie</string>
+    <string name="totaalscore">Totaalscore</string>
 </resources>
