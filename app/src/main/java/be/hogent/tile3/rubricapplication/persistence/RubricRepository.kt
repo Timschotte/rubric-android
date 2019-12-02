@@ -85,7 +85,7 @@ class RubricRepository(
     }
 
     suspend fun refreshRubrics() {
-        Log.i("Test", "refresh called in rubricrepository")
+        Log.i("TestN", "refresh called in rubricrepository")
         try {
             val rubrics = rubricApi.getRubrics().await()
 //                rubricDao.insertAll(*rubrics.asDatabaseModelArray())
@@ -110,7 +110,7 @@ class RubricRepository(
                         }
                     }
                 }
-                rubricDao.insert(rubric.asDatabaseModel())
+                //rubricDao.insert(rubric.asDatabaseModel())
             }
             rubrics.map {
                 Log.i("Test", it.omschrijving + "from refreshRubric in repository")

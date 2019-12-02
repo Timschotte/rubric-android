@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.*
 import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.model.*
+import be.hogent.tile3.rubricapplication.network.RubricApi
 import be.hogent.tile3.rubricapplication.persistence.*
 import be.hogent.tile3.rubricapplication.utils.TEMP_EVALUATIE_ID
 import kotlinx.coroutines.*
@@ -32,6 +33,7 @@ class CriteriumOverzichtViewModel(
     @Inject lateinit var evaluatieRepository: EvaluatieRepository
     @Inject lateinit var criteriumEvaluatieRepository: CriteriumEvaluatieRepository
     @Inject lateinit var studentRepository: StudentRepository
+    @Inject lateinit var rubricApi: RubricApi
 
     // Coroutine variables
     private var viewModelJob = Job()

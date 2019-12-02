@@ -3,6 +3,7 @@ package be.hogent.tile3.rubricapplication.injection.module
 import android.app.Application
 import android.content.Context
 import be.hogent.tile3.rubricapplication.dao.*
+import be.hogent.tile3.rubricapplication.network.RubricApi
 import be.hogent.tile3.rubricapplication.persistence.*
 import dagger.Module
 import dagger.Provides
@@ -67,8 +68,8 @@ class DatabaseModule(private val application: Application) {
      */
     @Provides
     @Singleton
-    internal fun provideEvaluatieRepository(evaluatieDao: EvaluatieDao, criteriumEvaluatieDao: CriteriumEvaluatieDao): EvaluatieRepository {
-        return EvaluatieRepository(evaluatieDao, criteriumEvaluatieDao)
+    internal fun provideEvaluatieRepository(evaluatieDao: EvaluatieDao, criteriumEvaluatieDao: CriteriumEvaluatieDao, rubricApi: RubricApi): EvaluatieRepository {
+        return EvaluatieRepository(evaluatieDao, criteriumEvaluatieDao, rubricApi)
     }
 
     /**

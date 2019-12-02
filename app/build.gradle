@@ -134,6 +134,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0-alpha01" // LifecycleScope
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0-alpha01" // liveData
 
+    implementation 'com.google.code.gson:gson:2.8.6'
+
 }
 dokka {
     outputFormat = 'html'
