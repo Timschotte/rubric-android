@@ -59,7 +59,7 @@ dependencies {
     //OkHttp
     implementation "com.squareup.okhttp3:okhttp:$versions.okHttp"
     implementation "com.squareup.okhttp3:logging-interceptor:$versions.okHttp"
-
+    androidTestImplementation("com.squareup.okhttp3:mockwebserver:$versions.okHttp")
 
     // LiveData & ViewModel
     implementation "android.arch.lifecycle:extensions:$versions.architecture"
