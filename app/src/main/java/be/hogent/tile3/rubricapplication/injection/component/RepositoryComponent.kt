@@ -3,6 +3,7 @@ package be.hogent.tile3.rubricapplication.injection.component
 import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.injection.module.DatabaseModule
 import be.hogent.tile3.rubricapplication.injection.module.NetworkModule
+import be.hogent.tile3.rubricapplication.persistence.EvaluatieRepository
 import be.hogent.tile3.rubricapplication.persistence.OpleidingsOnderdeelRepository
 import be.hogent.tile3.rubricapplication.persistence.RubricRepository
 import be.hogent.tile3.rubricapplication.persistence.StudentRepository
@@ -21,6 +22,7 @@ interface RepositoryComponent {
     fun inject(rubricSelectViewModel: RubricSelectViewModel)
     fun inject(leerlingSelectViewModel: LeerlingSelectViewModel)
     fun inject(studentRepository: StudentRepository)
+    fun inject(evaluatieRepository: EvaluatieRepository)
 
     @Component.Builder
     interface Builder {

@@ -10,6 +10,7 @@ import be.hogent.tile3.rubricapplication.model.Rubric
 import be.hogent.tile3.rubricapplication.persistence.OpleidingsOnderdeelRepository
 import be.hogent.tile3.rubricapplication.persistence.RubricRepository
 import kotlinx.coroutines.*
+import java.util.*
 import javax.inject.Inject
 
 class RubricSelectViewModel(opleidingsOnderdeelId: Long) : ViewModel() {
@@ -51,19 +52,25 @@ class RubricSelectViewModel(opleidingsOnderdeelId: Long) : ViewModel() {
                     }
                 }
             }
-            Log.i("test", filterText)
         }
     }
-
-
-//    private fun refreshRubricDatabase() {
-//        if (isNetworkAvailable()){
-//            coroutineScope.launch {
-//                //rubricRepository.refreshRubrics()
-//            }
-//        }
-//    }
-
+    private fun refreshRubricDatabase() {
+        if (isNetworkAvailable()){
+            uiScope.launch {
+                deleteRubricsRoutine()
+                refreshRubricsRoutine()
+        }
+    }
+    suspend fun deleteRubricsRoutine(){
+        withContext(Dispatchers.IO){
+            rubricRepository.deleteAllRubrics()
+        }
+    }
+    suspend fun refreshRubricsRoutine(){
+        withContext(Dispatchers.IO){
+            rubricRepository.refreshRubrics()
+        }
+    }
     private fun isNetworkAvailable(): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
         val activeNetworkInfo = connectivityManager!!.activeNetworkInfo

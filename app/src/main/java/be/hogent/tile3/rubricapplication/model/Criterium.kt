@@ -12,8 +12,8 @@ import java.io.Serializable
         ForeignKey(
             entity = Rubric::class,
             parentColumns = arrayOf("rubricId"),
-            childColumns = arrayOf("rubricId"))
-),
+            childColumns = arrayOf("rubricId"),
+            onDelete = ForeignKey.CASCADE)),
     indices = arrayOf(Index(value = ["criteriumId"])),
     tableName = "criterium_table"
 )
