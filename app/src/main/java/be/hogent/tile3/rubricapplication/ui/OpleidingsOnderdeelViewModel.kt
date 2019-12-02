@@ -24,7 +24,7 @@ class OpleidingsOnderdeelViewModel : ViewModel() {
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    private val opleidingsOnderdelen: LiveData<List<OpleidingsOnderdeel>>
+    private val _opleidingsOnderdelen: LiveData<List<OpleidingsOnderdeel>>
 
     val gefilterdeOpleidingsOnderdelen = MediatorLiveData<List<OpleidingsOnderdeel>>()
 
@@ -35,8 +35,8 @@ class OpleidingsOnderdeelViewModel : ViewModel() {
     init {
         App.component.inject(this)
         refreshRubricDatabase()
-        opleidingsOnderdelen = opleidingsOnderdeelRepository.getAllOpleidingsOnderdelenWithRubric()
-        gefilterdeOpleidingsOnderdelen.addSource(opleidingsOnderdelen){
+        _opleidingsOnderdelen = opleidingsOnderdeelRepository.getAllOpleidingsOnderdelenWithRubric()
+        gefilterdeOpleidingsOnderdelen.addSource(_opleidingsOnderdelen){
             gefilterdeOpleidingsOnderdelen.value = it
 
         }
@@ -46,13 +46,20 @@ class OpleidingsOnderdeelViewModel : ViewModel() {
         )
     }
 
+    /**
+     * Removing and re-adding source is to avoid that filtered items reappear when source list is updated
+     */
     fun filterChanged(filterText: String?){
         if (filterText != null) {
-            opleidingsOnderdelen.value?.let {
-                gefilterdeOpleidingsOnderdelen.value = it.filter { opleidingsOnderdeel ->
-                    opleidingsOnderdeel.naam.toLowerCase().contains(filterText.toLowerCase())
+            _opleidingsOnderdelen.value?.let {
+                gefilterdeOpleidingsOnderdelen.removeSource(_opleidingsOnderdelen)
+                gefilterdeOpleidingsOnderdelen.addSource(_opleidingsOnderdelen){
+                    gefilterdeOpleidingsOnderdelen.value = it.filter { opleidingsOnderdeel ->
+                        opleidingsOnderdeel.naam.toLowerCase().contains(filterText.toLowerCase())
+                }
                 }
             }
+            Log.i("test", filterText)
         }
     }
 
