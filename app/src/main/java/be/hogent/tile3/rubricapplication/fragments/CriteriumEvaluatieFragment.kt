@@ -12,6 +12,7 @@ import be.hogent.tile3.rubricapplication.adapters.CriteriumEvaluatieListAdapter
 import be.hogent.tile3.rubricapplication.adapters.CriteriumEvaluatieListListener
 import be.hogent.tile3.rubricapplication.databinding.FragmentCriteriumEvaluatieBinding
 import android.text.InputType
+import android.util.Log
 import android.view.*
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
@@ -42,6 +43,9 @@ class CriteriumEvaluatieFragment
             binding.criteriumOverzichtViewModel = criteriumOverzichtViewModel
             binding.criterium = criteriumOverzichtViewModel.geselecteerdCriterium.value
             binding.student = criteriumOverzichtViewModel.student
+            criteriumOverzichtViewModel.geselecteerdCriterium.observe(this, Observer{
+                binding.criterium = criteriumOverzichtViewModel.geselecteerdCriterium.value
+            })
 
             criteriumOverzichtViewModel.geselecteerdCriteriumNiveau.observe(viewLifecycleOwner, Observer{
                     geselecteerdNiveau ->
@@ -125,12 +129,11 @@ class CriteriumEvaluatieFragment
                     .create()
                     .show()
             }
-
             criteriumOverzichtViewModel.positieGeselecteerdCriterium.observe(viewLifecycleOwner, Observer{
-                binding.upEdgeButton.visibility = if(it == 0) View.GONE else View.VISIBLE
+                binding.upEdgeButton.visibility = if(it == 0) View.INVISIBLE else View.VISIBLE
                 binding.downEdgeButton.visibility =
                     if(it == criteriumOverzichtViewModel.positieLaatsteCriterium.value ?: 0)
-                        View.GONE else View.VISIBLE
+                        View.INVISIBLE else View.VISIBLE
             })
 
             binding.upEdgeButton.setOnClickListener{
