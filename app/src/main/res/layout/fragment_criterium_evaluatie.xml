@@ -68,7 +68,7 @@
             app:layout_constraintBottom_toTopOf="@id/chipGroupHolder"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/upEdgeButton">
+            app:layout_constraintTop_toBottomOf="@+id/criteriumNaamTextView">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/criteriumNiveausRecycler"
