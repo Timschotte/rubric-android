@@ -56,17 +56,13 @@ class RubricSelectViewModel(opleidingsOnderdeelId: Long) : ViewModel() {
     }
     private fun refreshRubricDatabase() {
         if (isNetworkAvailable()){
-            uiScope.launch {
-                deleteRubricsRoutine()
-                refreshRubricsRoutine()
+            coroutineScope.launch {
+                refreshRubrics()
+            }
         }
     }
-    suspend fun deleteRubricsRoutine(){
-        withContext(Dispatchers.IO){
-            rubricRepository.deleteAllRubrics()
-        }
-    }
-    suspend fun refreshRubricsRoutine(){
+
+    suspend fun refreshRubrics(){
         withContext(Dispatchers.IO){
             rubricRepository.refreshRubrics()
         }
@@ -77,12 +73,12 @@ class RubricSelectViewModel(opleidingsOnderdeelId: Long) : ViewModel() {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected
     }
 
-    private val _navigateToKlasSelect = MutableLiveData<String>()
+    private val _navigateToKlasSelect = MutableLiveData<Long>()
     val navigateToKlasSelect
         get() = _navigateToKlasSelect
 
 
-    fun onRubricClicked(id: String) {
+    fun onRubricClicked(id: Long) {
         _navigateToKlasSelect.value = id
     }
 

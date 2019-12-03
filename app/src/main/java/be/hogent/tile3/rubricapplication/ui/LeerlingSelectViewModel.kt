@@ -6,13 +6,14 @@ import android.util.Log
 import androidx.lifecycle.*
 import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.model.Student
+import be.hogent.tile3.rubricapplication.persistence.EvaluatieRepository
 import be.hogent.tile3.rubricapplication.persistence.StudentRepository
 import be.hogent.tile3.rubricapplication.utils.isNetworkAvailable
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
 class LeerlingSelectViewModel(
-    private val rubricId: String,
+    private val rubricId: Long,
     private val opleidingsOnderdeelId: Long
 ) : ViewModel() {
 
@@ -20,23 +21,30 @@ class LeerlingSelectViewModel(
     lateinit var studentRepository: StudentRepository
 
     @Inject
+    lateinit var evaluatieRepository: EvaluatieRepository
+
+    @Inject
     lateinit var context: Context
 
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    private val _studenten: LiveData<List<Student>>
+    lateinit var studenten: LiveData<List<Student>>
 
     val gefilterdeStudenten = MediatorLiveData<List<Student>>()
 
     init {
         App.component.inject(this)
-        refreshRubricDatabase()
-        _studenten = studentRepository.getAllStudentsFromOpleidingsOnderdeel(opleidingsOnderdeelId)
+        refreshStudentDatabase()
+        loadStudents()
+        refreshEvaluationDb()
         gefilterdeStudenten.addSource(_studenten){
             gefilterdeStudenten.value = it
         }
-        Log.i("test2", _studenten.toString())
+    }
+
+    private fun loadStudents(){
+        studenten = studentRepository.getAllStudentsFromOpleidingsOnderdeel(opleidingsOnderdeelId)
     }
 
     fun filterChanged(filterText: String?){
@@ -56,7 +64,15 @@ class LeerlingSelectViewModel(
     private fun refreshRubricDatabase() {
         if (isNetworkAvailable(context)) {
             coroutineScope.launch {
-                studentRepository.refreshStudenten()
+                studentRepository.refreshStudenten(opleidingsOnderdeelId)
+            }
+        }
+    }
+
+    private fun refreshEvaluationDb(){
+        if (isNetworkAvailable(context)) {
+            coroutineScope.launch {
+                evaluatieRepository.refreshEvaluations(rubricId, 1)
             }
         }
     }

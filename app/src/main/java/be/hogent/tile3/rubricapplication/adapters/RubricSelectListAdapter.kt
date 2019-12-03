@@ -51,6 +51,6 @@ class RubricDiffCallback: DiffUtil.ItemCallback<Rubric>() {
     }
 }
 
-class RubricListener(val clickListener: (rubricId: String) -> Unit){
+class RubricListener(val clickListener: (rubricId: Long) -> Unit){
     fun onClick(rubric: Rubric) = clickListener(rubric.rubricId)
 }

@@ -54,7 +54,7 @@ class CriteriumEvaluatieFragment
                     for (i in geselecteerdNiveau.ondergrens..geselecteerdNiveau.bovengrens){
                         val chip = layoutInflater.inflate(R.layout.chip_item_evaluatie, null, false) as Chip
                         chip.text = i.toString()
-                        chip.setOnClickListener { c -> criteriumOverzichtViewModel.onScoreChanged(0, Integer.parseInt(chip.text.toString())) }
+                        chip.setOnClickListener { criteriumOverzichtViewModel.onScoreChanged(Integer.parseInt(chip.text.toString())) }
                         binding.chipHolder.addView(chip)
                         if (i == criteriumOverzichtViewModel.criteriumEvaluatie.value?.score){
                             chip.isChecked = true
@@ -63,6 +63,8 @@ class CriteriumEvaluatieFragment
                 }
 
             })
+
+
 
             val adapter =
                 CriteriumEvaluatieListAdapter(CriteriumEvaluatieListListener { niveauId, position ->
@@ -113,7 +115,6 @@ class CriteriumEvaluatieFragment
 
                 builder.setPositiveButton(R.string.criterium_evaluatie_commentaar_dialog_bevestig)
                 { _, _ -> criteriumOverzichtViewModel.onCommentaarChanged(
-                    oudeCommentaar,
                     input.text.toString()) }
                 builder.setNegativeButton(R.string.criterium_evaluatie_commentaar_dialog_annuleer)
                 { dialog, _ -> dialog.cancel() }

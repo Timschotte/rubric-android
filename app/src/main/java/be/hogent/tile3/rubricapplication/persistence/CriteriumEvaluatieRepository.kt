@@ -43,8 +43,7 @@ class CriteriumEvaluatieRepository(private val criteriumEvaluatieDao: CriteriumE
 
     suspend fun getAllForEvaluatie(evaluatieId: String): List<CriteriumEvaluatie> {
         return withContext(Dispatchers.IO) {
-            val criteriumEvaluaties = criteriumEvaluatieDao.getAllForEvaluatie(evaluatieId)
-            criteriumEvaluaties
+            criteriumEvaluatieDao.getAllForEvaluatie(evaluatieId).value.orEmpty()
         }
     }
 

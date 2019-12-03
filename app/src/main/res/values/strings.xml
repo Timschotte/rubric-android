@@ -28,4 +28,7 @@
     <string name="opslaan">Opslaan</string>
     <string name="evaluatie">Evaluatie</string>
     <string name="totaalscore">Totaalscore</string>
+    <string name="offline">Geen connectie</string>
+    <string name="offline_message">Let op, er is geen internetconnectie beschikbaar. Offline werken blijft mogelijk.\nGegevens worden lokaal bewaard tot de connectie hersteld is!</string>
+    <string name="online_message">Connectie hersteld. Gegevens worden op de achtergrond bewaard!</string>
 </resources>

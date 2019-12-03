@@ -28,6 +28,9 @@ import androidx.core.animation.doOnStart
 import androidx.core.view.updateLayoutParams
 import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_criterium_evaluatie.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
 
 
 @Suppress("DEPRECATED_IDENTITY_EQUALS")
@@ -50,7 +53,7 @@ class CriteriumOverzichtFragment : Fragment() {
 
         val args = CriteriumOverzichtFragmentArgs.fromBundle(arguments!!)
 
-        val viewModelFactory = CriteriumOverzichtViewModelFactory(args.rubricId, args.student)
+        val viewModelFactory = CriteriumOverzichtViewModelFactory(args.rubricId.toLong(), args.student)
         criteriumOverzichtViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(CriteriumOverzichtViewModel::class.java)
 
@@ -228,6 +231,7 @@ class CriteriumOverzichtFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.criterium_evaluatie_menu, menu)
+        menu.findItem(R.id.offline_state_icon).setVisible(true)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

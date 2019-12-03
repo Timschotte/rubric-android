@@ -31,6 +31,9 @@ android {
     dataBinding {
         enabled = true
     }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
@@ -98,10 +101,12 @@ dependencies {
     //recyclerview
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.room:room-runtime:2.1.0'
+    implementation "androidx.room:room-rxjava2:2.1.0"
 
     //room components
     implementation "androidx.room:room-runtime:2.1.0"
     kapt "androidx.room:room-compiler:2.1.0"
+
 
     // Anko (makes some things easier, f.e. enables doAsync
     implementation 'org.jetbrains.anko:anko-common:0.10.4'
@@ -121,6 +126,8 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutines"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines"
 
+    //Worker
+    implementation "androidx.work:work-runtime-ktx:2.2.0"
 
     //Navigation
     def nav_version = "2.1.0"

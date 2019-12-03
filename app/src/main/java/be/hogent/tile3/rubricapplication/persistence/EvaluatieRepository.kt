@@ -1,17 +1,22 @@
 package be.hogent.tile3.rubricapplication.persistence
 
 import android.util.Log
-import androidx.annotation.Nullable
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.observe
 import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.dao.CriteriumEvaluatieDao
 import be.hogent.tile3.rubricapplication.dao.EvaluatieDao
+import be.hogent.tile3.rubricapplication.model.CriteriumEvaluatie
 import be.hogent.tile3.rubricapplication.model.Evaluatie
+import be.hogent.tile3.rubricapplication.network.NetworkRubricEvaluatie
 import be.hogent.tile3.rubricapplication.network.RubricApi
 import be.hogent.tile3.rubricapplication.network.asDatabaseModel
-import be.hogent.tile3.rubricapplication.utils.TEMP_EVALUATIE_ID
+import be.hogent.tile3.rubricapplication.network.asNetworkModel
+import be.hogent.tile3.rubricapplication.utils.isNetworkAvailable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.Call
+import retrofit2.Response
 import java.io.IOException
 import java.util.*
 import javax.inject.Inject
@@ -58,6 +63,13 @@ class EvaluatieRepository(private val evaluatieDao: EvaluatieDao, private val cr
         }
     }
 
+    fun getNotSynched() : LiveData<List<Evaluatie>> {
+        return evaluatieDao.getNotSynched()
+    }
+
+    fun getCriteriumEvaluationsForEvaluation(evaluatieId : String): LiveData<List<CriteriumEvaluatie>> {
+        return criteriumEvaluatieDao.getAllForEvaluatie(evaluatieId)
+    }
 
 
     suspend fun verwijderVorigeTempEvaluatie() {
@@ -83,20 +95,66 @@ class EvaluatieRepository(private val evaluatieDao: EvaluatieDao, private val cr
             evaluatieDao.insert(evaluatie)
             criteriumEvaluatieDao.koppelTempAanNieuw(evaluatie.evaluatieId)
             verwijderVorigeTempEvaluatie()
+        }
+    }
 
+    suspend fun persistEvaluationNotSynchedToNetwork(){
+        val notSynched = evaluatieDao.getNotSynched()
+        withContext(Dispatchers.IO){
+            notSynched.value?.forEach { eval -> persistEvaluationToNetwork(eval) }
+        }
+    }
+
+    suspend fun persistEvaluationToNetwork(evaluatie: Evaluatie) : Boolean {
+        var succes = true
+        return withContext(Dispatchers.IO) {
+            evaluatie.let {
+                try {
+                    it.criteriumEvaluaties = criteriumEvaluatieDao.getAllForEvaluatie(it.evaluatieId).value.orEmpty()
+
+                    val existing = rubricApi.getEvaluaties(mapOf("rubricId" to it.rubricId.toString(),
+                        "studentId" to it.studentId.toString(),
+                        "docent" to it.docentId.toString())).await().singleOrNull()
+
+                    val networkRubricEvaluatie: NetworkRubricEvaluatie = it.asNetworkModel(existing?.id)
+
+                    if (networkRubricEvaluatie.id != null){
+                        rubricApi.updateEvalutatie(networkRubricEvaluatie.id, networkRubricEvaluatie)
+                    } else {
+                        rubricApi.saveEvaluatie(networkRubricEvaluatie)
+                    }
+                } catch (e: Exception) {
+                    Log.i("TestN", "API - Try Exception: " + e.message)
+                    succes = false
+                }
+            }
+            succes
+        }
+    }
+
+    suspend fun setSynched(evaluatie: Evaluatie, synched : Boolean = true){
+        withContext(Dispatchers.IO) {
+            evaluatie.sync = synched
+            update(evaluatie)
         }
     }
 
     /**
-     * Connectie met netwerk voor backend persistentie evaluaties
+     * Connectie met netwerk voor backend  evaluaties
      */
-    suspend fun refreshEvaluations(rubricId: Int, docentId: Int){
+    suspend fun refreshEvaluations(rubricId: Long, docentId: Long){
         withContext(Dispatchers.IO) {
             try {
                 val evaluaties = rubricApi.getEvaluaties(
                     mapOf("rubricId" to rubricId.toString(), "docentId" to docentId.toString()))
                     .await()
-                //evaluatieDao.insert()
+                evaluaties.forEach { eval ->
+                    if(!evaluatieDao.tempEvaluationExists(eval.rubricId, eval.studentId).blockingGet()){
+                        val evalDb = eval.asDatabaseModel()
+                        evaluatieDao.insert(evalDb)
+                        criteriumEvaluatieDao.insertAll(evalDb.criteriumEvaluaties)
+                    }
+                }
 
             } catch (e: IOException) {
                 Log.i("RubricRepository", e.message)

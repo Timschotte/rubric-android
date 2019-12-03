@@ -44,29 +44,28 @@ class RubricRepository(
         Log.i("TestN", "refresh called in rubricrepository")
         try {
             val rubrics = rubricApi.getRubrics().await()
-//                rubricDao.insertAll(*rubrics.asDatabaseModelArray())
+            rubricDao.deleteAllRubrics()
             rubrics.forEach { rubric ->
                 rubricDao.insert(rubric.asDatabaseModel())
                 rubric.criteriumGroepen.forEach { criteriumGroep ->
                     criteriumGroep.criteria.forEach { networkCriterium ->
                         criteriumDao.insert(
                             networkCriterium.asDatabaseModel(
-                                rubric.id.toString(),
-                                criteriumGroep.id.toString()
+                                rubric.id,
+                                criteriumGroep.id
                             )
                         )
                         networkCriterium.criteriumNiveaus.forEach { networkCriteriumNiveau ->
                             niveauDao.insert(
                                 networkCriteriumNiveau.asDatabaseModel(
-                                    rubric.id.toString(),
-                                    criteriumGroep.id.toString(),
-                                    networkCriterium.id.toString()
+                                    rubric.id,
+                                    criteriumGroep.id,
+                                    networkCriterium.id
                                 )
                             )
                         }
                     }
                 }
-                //rubricDao.insert(rubric.asDatabaseModel())
             }
             rubrics.map {
                 Log.i("Test", it.omschrijving + "from refreshRubric in repository")
@@ -77,4 +76,3 @@ class RubricRepository(
             }
         }
     }
-}

@@ -8,13 +8,12 @@ import com.squareup.moshi.Json
 import java.io.Serializable
 
 @Entity(
-    foreignKeys = arrayOf(
-        ForeignKey(
-            entity = Rubric::class,
-            parentColumns = arrayOf("rubricId"),
-            childColumns = arrayOf("rubricId"),
-            onDelete = ForeignKey.CASCADE)),
-    indices = arrayOf(Index(value = ["criteriumId"])),
+    foreignKeys = [ForeignKey(
+        entity = Rubric::class,
+        parentColumns = arrayOf("rubricId"),
+        childColumns = arrayOf("rubricId"),
+        onDelete = CASCADE)],
+    indices = [Index(value = ["criteriumId"])],
     tableName = "criterium_table"
 )
 data class Criterium(

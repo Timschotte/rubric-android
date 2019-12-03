@@ -8,7 +8,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import be.hogent.tile3.rubricapplication.R
-import be.hogent.tile3.rubricapplication.fragments.CriteriumOverzichtFragment
 import be.hogent.tile3.rubricapplication.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(){

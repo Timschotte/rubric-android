@@ -96,6 +96,6 @@ class CriteriaListDiffCallback: DiffUtil.ItemCallback<Criterium>(){
     }
 }
 
-class CriteriaListListener(val clickListener: (criteriumId: String, position: Int) -> Unit){
+class CriteriaListListener(val clickListener: (criteriumId: Long, position: Int) -> Unit){
     fun onClick(criterium: Criterium, position: Int) = clickListener(criterium.criteriumId, position)
 }

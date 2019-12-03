@@ -3,16 +3,16 @@ package be.hogent.tile3.rubricapplication.model
 import android.os.Parcel
 import android.os.Parcelable
 import androidx.room.*
+import androidx.room.ForeignKey.CASCADE
 import com.squareup.moshi.Json
 import java.io.Serializable
 
 @Entity(
-    foreignKeys = arrayOf(
-    ForeignKey(
+    foreignKeys = [ForeignKey(
         entity = Criterium::class,
         parentColumns = arrayOf("criteriumId"),
-        childColumns = arrayOf("criteriumId"))
-),  indices = arrayOf(Index(value = ["niveauId"])),
+        childColumns = arrayOf("criteriumId"), onDelete = CASCADE)],
+    indices = [Index(value = ["niveauId"])],
     tableName = "niveau_table"
 )
 data class Niveau(

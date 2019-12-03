@@ -20,7 +20,6 @@ interface RepositoryComponent {
     fun inject(leerlingSelectViewModel: LeerlingSelectViewModel)
     fun inject(studentRepository: StudentRepository)
     fun inject(evaluatieRepository: EvaluatieRepository)
-    fun inject(criteriumEvaluatieRepository: CriteriumEvaluatieRepository)
 
     @Component.Builder
     interface Builder {
