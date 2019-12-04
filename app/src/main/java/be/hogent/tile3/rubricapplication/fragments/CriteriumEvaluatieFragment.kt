@@ -17,9 +17,11 @@ import android.view.*
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.view.forEach
 import be.hogent.tile3.rubricapplication.ui.CriteriumOverzichtViewModel
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import org.jetbrains.anko.forEachChild
 
 class CriteriumEvaluatieFragment
         : Fragment() {
@@ -36,8 +38,7 @@ class CriteriumEvaluatieFragment
         )
 
         this.parentFragment?.let{ it ->
-            val criteriumOverzichtViewModel
-                    = ViewModelProviders.of(it)
+            val criteriumOverzichtViewModel= ViewModelProviders.of(it)
                         .get(CriteriumOverzichtViewModel::class.java)
 
             binding.criteriumOverzichtViewModel = criteriumOverzichtViewModel
@@ -47,21 +48,22 @@ class CriteriumEvaluatieFragment
                 binding.criterium = criteriumOverzichtViewModel.geselecteerdCriterium.value
             })
 
-            criteriumOverzichtViewModel.geselecteerdCriteriumNiveau.observe(viewLifecycleOwner, Observer{
-                    geselecteerdNiveau ->
+            criteriumOverzichtViewModel.geselecteerdCriteriumNiveau.observe(viewLifecycleOwner,
+                Observer{ geselecteerdNiveau ->
                 geselecteerdNiveau?.let {
                     binding.chipHolder.removeAllViews()
+                    var checked = false
                     for (i in geselecteerdNiveau.ondergrens..geselecteerdNiveau.bovengrens){
                         val chip = layoutInflater.inflate(R.layout.chip_item_evaluatie, null, false) as Chip
                         chip.text = i.toString()
                         chip.setOnClickListener { criteriumOverzichtViewModel.onScoreChanged(Integer.parseInt(chip.text.toString())) }
                         binding.chipHolder.addView(chip)
-                        if (i == criteriumOverzichtViewModel.criteriumEvaluatie.value?.score){
+                        if (chip.text == (criteriumOverzichtViewModel.criteriumEvaluatie.value?.score?:0).toString() || !checked ){
                             chip.isChecked = true
+                            checked = true
                         }
                     }
                 }
-
             })
 
 
@@ -88,17 +90,7 @@ class CriteriumEvaluatieFragment
                 }
             })
 
-            criteriumOverzichtViewModel.criteriumEvaluatie?.observe(viewLifecycleOwner, Observer{
-                it?.let{
-                    //TODO: hieronder werkt niet: toont bij elk criterium dezelfde commentaar
-                    //if(it.commentaar != "" && it.commentaar != null) {
-                    //    binding.commentaarTextView.text = "Commentaar: " + it.commentaar
-                    //}
-                    //Hieronder wordt commentaar correct weergegeven maar bij lege commentaar wordt commentaartitel ook weergegeven
-                    //TODO: wanneer commentaar toegevoegd wordt: refresh voorzien
-                    binding.commentaarTextView.text = "Commentaar: " + it.commentaar
-                }
-            })
+
             binding.voegCommentaarToeFloatingActionButton.setOnClickListener {
                 val oudeCommentaar =
                     criteriumOverzichtViewModel.criteriumEvaluatie.value?.commentaar ?: ""

@@ -21,10 +21,10 @@ interface EvaluatieDao {
     @Delete
     fun delete(evaluatie: Evaluatie)
 
-    @Query("SELECT * FROM evaluatie_table where rubricId = :rubricId and studentId=:studentId and evaluatieId!=:tempEvaluatieId")
+    @Query("SELECT * FROM evaluatie_table where rubricId = :rubricId and studentId=:studentId and evaluatieId!=:tempEvaluatieId LIMIT 1")
     fun getByRubricAndStudent(rubricId: Long, studentId: Long, tempEvaluatieId: String = TEMP_EVALUATIE_ID): Evaluatie
 
-    @Query("SELECT * FROM evaluatie_table where rubricId = :rubricId and studentId=:studentId and evaluatieId=:tempEvaluatieId")
+    @Query("SELECT * FROM evaluatie_table where rubricId = :rubricId and studentId=:studentId and evaluatieId=:tempEvaluatieId LIMIT 1")
     fun getTempByRubricAndStudent(rubricId: Long, studentId: Long, tempEvaluatieId: String = TEMP_EVALUATIE_ID): Evaluatie
 
     @Query("SELECT * FROM evaluatie_table WHERE sync=0")

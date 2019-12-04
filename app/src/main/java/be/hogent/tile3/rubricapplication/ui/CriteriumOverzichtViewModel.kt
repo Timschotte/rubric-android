@@ -3,6 +3,7 @@ package be.hogent.tile3.rubricapplication.ui
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import androidx.core.widget.ContentLoadingProgressBar
 import androidx.lifecycle.*
 import androidx.work.*
 import be.hogent.tile3.rubricapplication.App
@@ -40,15 +41,15 @@ class CriteriumOverzichtViewModel(
 
     // Coroutine variables
     private var viewModelJob = Job()
-    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
-
+    private val uiScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+    private val ioScope = CoroutineScope(viewModelJob + Dispatchers.IO)
 
     /* BACKED PROPERTIES -------------------------------------------------------------------------*/
     /*--------------------------------------------------------------------------------------------*/
 
     // DOMAIN
     private val _evaluatieRubric: LiveData<EvaluatieRubric> = liveData {
-        coroutineScope.launch {
+        uiScope.launch {
             val data = getEvaluatieRubric(rubricId)
             initialiseerProperties(data)
             emit(data)
@@ -146,15 +147,15 @@ class CriteriumOverzichtViewModel(
 
         // 1: nieuwe evaluatie, of bestaande evaluatie?
         var evaluatie: Evaluatie? = geefEvaluatie(true)
-        if(evaluatie == null) {
+        if(evaluatie?.evaluatieId == "") {
             //Geen temp gevonden
             evaluatie = geefEvaluatie()
         }
 
         // 2: temp criteriumEvaluaties aanmaken, persisteren & instellen
         var bestaandeCriteriumEvaluaties: MutableList<CriteriumEvaluatie>? = null
-        if(evaluatie != null){
-            bestaandeCriteriumEvaluaties = geefCriteriumEvaluaties(evaluatie.evaluatieId)?.toMutableList()
+        if(evaluatie?.evaluatieId != ""){
+            bestaandeCriteriumEvaluaties = geefCriteriumEvaluaties(evaluatie?.evaluatieId)?.toMutableList()
         }
         val criteriumEvaluaties = ArrayList<CriteriumEvaluatie>()
         data.criteria.forEach{
@@ -181,8 +182,9 @@ class CriteriumOverzichtViewModel(
         if(evaluatie?.evaluatieId != TEMP_EVALUATIE_ID){
             //Geen nieuwe temp opslaan als er al een temp aanwezig is (indien app gestopt/gesloten is)
             slaTempEvaluatieOp(Evaluatie(TEMP_EVALUATIE_ID, student.studentId, rubricId, 1, true))
+            slaTempCriteriumEvaluatiesOp(criteriumEvaluaties)
         }
-        slaTempCriteriumEvaluatiesOp(criteriumEvaluaties)
+
     }
 
     private suspend fun geefEvaluatie(temp: Boolean = false): Evaluatie? {
@@ -255,8 +257,14 @@ class CriteriumOverzichtViewModel(
         _geselecteerdCriteriumNiveau.value = criteriumNiveaus.value?.singleOrNull{it.niveauId == niveauId}
         _positieGeselecteerdCriteriumNiveau?.value = positie
         _criteriumEvaluatie.value?.behaaldNiveau = niveauId
-        _criteriumEvaluatie.value?.score = 0 //geselecteerdCriteriumNiveau.value?.ondergrens ?: 0
-        Log.i("TestCriteriumOverzicht", "Evaluatie wordt gepersisteerd")
+
+        //Validate selected score before persisting
+        if(criteriumEvaluatie.value?.score?:0 < _geselecteerdCriteriumNiveau.value?.ondergrens?:0){
+            criteriumEvaluatie.value?.score = _geselecteerdCriteriumNiveau.value?.ondergrens?:0
+        }
+        if(criteriumEvaluatie.value?.score?:0 > _geselecteerdCriteriumNiveau.value?.bovengrens?:0){
+            criteriumEvaluatie.value?.score = _geselecteerdCriteriumNiveau.value?.bovengrens?:0
+        }
         persisteerCriteriumEvaluatie(criteriumEvaluatie.value)
     }
 
@@ -307,14 +315,17 @@ class CriteriumOverzichtViewModel(
     /*--------------------------------------------------------------------------------------------*/
 
     private fun persisteerCriteriumEvaluatie(obj: CriteriumEvaluatie?){
-        coroutineScope.launch{
-            if(obj != null)
+        ioScope.launch{
+            if(obj != null){
                 criteriumEvaluatieRepository.update(obj)
+            }
         }
     }
 
     fun persisteerEvaluatie() {
-        coroutineScope.launch {
+        uiScope.launch {
+            val progress = ContentLoadingProgressBar(context)
+            progress.show()
             evaluatieRepository.persisteerTemp(_evaluatie.value!!)
             if(isNetworkAvailable(context)){
                 if(evaluatieRepository.persistEvaluationToNetwork(_evaluatie.value!!)){
@@ -323,8 +334,10 @@ class CriteriumOverzichtViewModel(
             }else{
                 evaluatieRepository.setSynched(_evaluatie.value!!, false)
                 createWorkerToPersistsWhenOnline()
+                sendOfflineMessage()
             }
-            _persisterenVoltooid.value = true
+            progress.hide()
+             _persisterenVoltooid.value = true
         }
     }
 
@@ -345,10 +358,11 @@ class CriteriumOverzichtViewModel(
     private fun sendOfflineMessage() {
         val text = R.string.offline_message
         val toast = Toast.makeText(context, text, Toast.LENGTH_SHORT)
+        toast.show()
     }
 
     fun deleteTempEvaluatie() {
-        coroutineScope.launch {
+        ioScope.launch {
             evaluatieRepository.verwijderVorigeTempEvaluatie()
         }
     }

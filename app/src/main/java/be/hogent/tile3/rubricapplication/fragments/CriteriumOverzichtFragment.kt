@@ -58,13 +58,6 @@ class CriteriumOverzichtFragment : Fragment() {
             .get(CriteriumOverzichtViewModel::class.java)
 
 
-        criteriumOverzichtViewModel.evaluatieRubric.observe(viewLifecycleOwner, Observer{
-            it?.let{
-                Log.i("Test4", it.toString())
-                 it.niveausCriteria.forEach{Log.i("Test4", it.toString())}
-            }
-        })
-
         val adapter =
             CriteriumOverzichtListAdapter(CriteriaListListener { criteriumId, positie ->
                 criteriumOverzichtViewModel.onGeselecteerdCriteriumGewijzigd(criteriumId, positie)
@@ -231,7 +224,7 @@ class CriteriumOverzichtFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.criterium_evaluatie_menu, menu)
-        menu.findItem(R.id.offline_state_icon).setVisible(true)
+        menu.findItem(R.id.offline_state_icon).setVisible(false)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

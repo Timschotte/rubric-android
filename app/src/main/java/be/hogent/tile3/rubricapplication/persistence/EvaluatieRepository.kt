@@ -57,19 +57,17 @@ class EvaluatieRepository(private val evaluatieDao: EvaluatieDao, private val cr
 
     suspend fun getByRubricAndStudent(rubricId: Long, studentId: Long, temp : Boolean = false): Evaluatie? {
         return withContext(Dispatchers.IO){
-            val evaluatie = if(temp) evaluatieDao.getTempByRubricAndStudent(rubricId, studentId)
-                else evaluatieDao.getByRubricAndStudent(rubricId, studentId)
+            var evaluatie = evaluatieDao.getTempByRubricAndStudent(rubricId, studentId)
+            if(evaluatie?.evaluatieId == "" || !temp) {
+                evaluatie = evaluatieDao.getByRubricAndStudent(rubricId, studentId)
+            }
             evaluatie
         }
     }
 
-    fun getNotSynched() : LiveData<List<Evaluatie>> {
-        return evaluatieDao.getNotSynched()
-    }
-
-    fun getCriteriumEvaluationsForEvaluation(evaluatieId : String): LiveData<List<CriteriumEvaluatie>> {
+    /*fun getCriteriumEvaluationsForEvaluation(evaluatieId : String): LiveData<List<CriteriumEvaluatie>> {
         return criteriumEvaluatieDao.getAllForEvaluatie(evaluatieId)
-    }
+    }*/
 
 
     suspend fun verwijderVorigeTempEvaluatie() {
@@ -84,7 +82,7 @@ class EvaluatieRepository(private val evaluatieDao: EvaluatieDao, private val cr
      */
     suspend fun persisteerTemp(evaluatie: Evaluatie) {
         //Als er één bestaat, moet de GUID overgenomeen worden
-        //Als er geen bestaat, moet een nieuwe GUID
+        //Als er geen bestaat, moet een nieuwe GUID gekoppeld worden.
         withContext(Dispatchers.IO){
             val bestaandeEvaluatie = evaluatieDao.getByRubricAndStudent(evaluatie.rubricId, evaluatie.studentId)
             bestaandeEvaluatie?.let {
@@ -94,6 +92,7 @@ class EvaluatieRepository(private val evaluatieDao: EvaluatieDao, private val cr
             evaluatie.evaluatieId = UUID.randomUUID().toString()
             evaluatieDao.insert(evaluatie)
             criteriumEvaluatieDao.koppelTempAanNieuw(evaluatie.evaluatieId)
+            evaluatie.criteriumEvaluaties = criteriumEvaluatieDao.getAllForEvaluatie(evaluatie.evaluatieId)
             verwijderVorigeTempEvaluatie()
         }
     }
@@ -106,12 +105,11 @@ class EvaluatieRepository(private val evaluatieDao: EvaluatieDao, private val cr
     }
 
     suspend fun persistEvaluationToNetwork(evaluatie: Evaluatie) : Boolean {
-        var succes = true
+
         return withContext(Dispatchers.IO) {
+            var succes = true
             evaluatie.let {
                 try {
-                    it.criteriumEvaluaties = criteriumEvaluatieDao.getAllForEvaluatie(it.evaluatieId).value.orEmpty()
-
                     val existing = rubricApi.getEvaluaties(mapOf("rubricId" to it.rubricId.toString(),
                         "studentId" to it.studentId.toString(),
                         "docent" to it.docentId.toString())).await().singleOrNull()
@@ -119,9 +117,9 @@ class EvaluatieRepository(private val evaluatieDao: EvaluatieDao, private val cr
                     val networkRubricEvaluatie: NetworkRubricEvaluatie = it.asNetworkModel(existing?.id)
 
                     if (networkRubricEvaluatie.id != null){
-                        rubricApi.updateEvalutatie(networkRubricEvaluatie.id, networkRubricEvaluatie)
+                        rubricApi.updateEvalutatie(networkRubricEvaluatie.id, networkRubricEvaluatie).execute()
                     } else {
-                        rubricApi.saveEvaluatie(networkRubricEvaluatie)
+                        rubricApi.saveEvaluatie(networkRubricEvaluatie).execute()
                     }
                 } catch (e: Exception) {
                     Log.i("TestN", "API - Try Exception: " + e.message)

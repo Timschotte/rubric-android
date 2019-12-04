@@ -7,7 +7,7 @@ import retrofit2.http.*
 interface RubricApi{
 
     @GET("rubric")
-    fun getRubrics(): Deferred<List<NetworkRubric>>
+    fun getRubrics(@Query("status") status: String): Deferred<List<NetworkRubric>>
 
     @GET("opleidingsonderdeel")
     fun getOpleidingsOnderdeel(): Deferred<List<NetworkOpleidingsOnderdeel>>
@@ -25,6 +25,7 @@ interface RubricApi{
 
     @POST("evaluatie")
     fun saveEvaluatie(@Body evaluatie: NetworkRubricEvaluatie): Call<NetworkRubricEvaluatie>
+
     @PUT("evaluatie")
     fun updateEvalutatie(@Path(value = "id") id: Int, @Body evaluatie: NetworkRubricEvaluatie): Call<NetworkRubricEvaluatie>
 }

@@ -21,7 +21,7 @@ interface CriteriumEvaluatieDao{
     fun get(criteriumEvaluatieId: String): CriteriumEvaluatie
 
     @Query("SELECT * FROM criterium_evaluatie_table WHERE evaluatieId = :evaluatieId")
-    fun getAllForEvaluatie(evaluatieId: String): LiveData<List<CriteriumEvaluatie>>
+    fun getAllForEvaluatie(evaluatieId: String): List<CriteriumEvaluatie>
 
     @Query("SELECT * FROM criterium_evaluatie_table WHERE evaluatieId = :evaluatieId AND criteriumId = :criteriumId")
     fun getForEvaluatieAndCriterium(evaluatieId: String, criteriumId: String): CriteriumEvaluatie

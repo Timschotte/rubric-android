@@ -39,7 +39,6 @@ class RubricSelectViewModel(opleidingsOnderdeelId: Long) : ViewModel() {
         gefilterdeRubrics.addSource(_rubrics){
             gefilterdeRubrics.value = it
         }
-        Log.i("test2", _rubrics.toString())
     }
 
     fun filterChanged(filterText: String?){
@@ -49,8 +48,8 @@ class RubricSelectViewModel(opleidingsOnderdeelId: Long) : ViewModel() {
                 gefilterdeRubrics.addSource(_rubrics){
                     gefilterdeRubrics.value = it.filter { rubric ->
                         rubric.onderwerp.toLowerCase().contains(filterText.toLowerCase())
-                    }
                 }
+                    }
             }
         }
     }
@@ -61,18 +60,12 @@ class RubricSelectViewModel(opleidingsOnderdeelId: Long) : ViewModel() {
             }
         }
     }
-
     suspend fun refreshRubrics(){
-        withContext(Dispatchers.IO){
             rubricRepository.refreshRubrics()
+        withContext(Dispatchers.IO){
+
         }
     }
-    private fun isNetworkAvailable(): Boolean {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
-        val activeNetworkInfo = connectivityManager!!.activeNetworkInfo
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected
-    }
-
     private val _navigateToKlasSelect = MutableLiveData<Long>()
     val navigateToKlasSelect
         get() = _navigateToKlasSelect

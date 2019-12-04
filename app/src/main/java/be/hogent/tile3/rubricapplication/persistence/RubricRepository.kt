@@ -43,7 +43,8 @@ class RubricRepository(
     suspend fun refreshRubrics() {
         Log.i("TestN", "refresh called in rubricrepository")
         try {
-            val rubrics = rubricApi.getRubrics().await()
+            val rubrics = rubricApi.getRubrics("IN_GEBRUIK").await().toMutableList()
+            rubrics.addAll(rubricApi.getRubrics("PUBLIEK").await())
             rubricDao.deleteAllRubrics()
             rubrics.forEach { rubric ->
                 rubricDao.insert(rubric.asDatabaseModel())
