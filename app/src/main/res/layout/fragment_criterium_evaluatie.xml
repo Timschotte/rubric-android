@@ -61,7 +61,6 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:criteriumNaam="@{criterium}"
-                app:student="@{student}"
                 tools:text="Criterium naam" />
 
             <TextView
