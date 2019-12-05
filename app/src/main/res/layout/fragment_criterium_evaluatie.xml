@@ -60,8 +60,7 @@
                 android:textColor="@color/primaryTextColor"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                app:criteriumNaam="@{criterium}"
-                tools:text="Criterium naam" />
+                app:criteriumNaam="@{criterium}" />
 
             <TextView
                 android:id="@+id/criteriumOmschrijvingTextView2"
