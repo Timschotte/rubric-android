@@ -88,12 +88,15 @@ class CriteriumEvaluatieFragment
 
             criteriumOverzichtViewModel.criteriumEvaluatie?.observe(viewLifecycleOwner, Observer{
                 it?.let{
-                    /*binding.scoreNumberPicker.value = it.score ?: binding.scoreNumberPicker.minValue*/
-                    //Werkte niet met numberpicker, ik laat dit momenteel zo
-
+                    //TODO: hieronder werkt niet: toont bij elk criterium dezelfde commentaar
+                    //if(it.commentaar != "" && it.commentaar != null) {
+                    //    binding.commentaarTextView.text = "Commentaar: " + it.commentaar
+                    //}
+                    //Hieronder wordt commentaar correct weergegeven maar bij lege commentaar wordt commentaartitel ook weergegeven
+                    //TODO: wanneer commentaar toegevoegd wordt: refresh voorzien
+                    binding.commentaarTextView.text = "Commentaar: " + it.commentaar
                 }
             })
-
             binding.voegCommentaarToeFloatingActionButton.setOnClickListener {
                 val oudeCommentaar =
                     criteriumOverzichtViewModel.criteriumEvaluatie.value?.commentaar ?: ""
