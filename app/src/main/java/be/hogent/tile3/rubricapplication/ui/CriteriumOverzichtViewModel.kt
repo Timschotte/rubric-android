@@ -137,7 +137,6 @@ class CriteriumOverzichtViewModel(
         _positieLaatsteCriterium.value =
             if (grootteRubricCriteria == null) 0 else (grootteRubricCriteria - 1)
     }
-    private fun initialiseerEvaluatie(data: EvaluatieRubric) = runBlocking {
 
     fun initialiseerEvaluatie() = runBlocking {
         val data = _evaluatieRubric.value!!
@@ -175,10 +174,9 @@ class CriteriumOverzichtViewModel(
 
             bestaandeCriteriumEvaluaties?.remove(criteriumEvaluatie)
             nieuweCriteriumEvaluatie.score?.let{
-                _score.value = _score.value!!.plus(it)
+                _score.value = _score.value?:0.plus(it)
             }
-            _totaalScore.value = _totaalScore.value!!.plus(data.niveausCriteria.last().bovengrens)
-            bestaandeCriteriumEvaluaties?.removeAt(0)
+            _totaalScore.value = _totaalScore.value?:0.plus(data.niveausCriteria.last().bovengrens)
         }
         // 3: persisteren
         if (evaluatie?.evaluatieId != TEMP_EVALUATIE_ID) {
@@ -295,7 +293,7 @@ class CriteriumOverzichtViewModel(
         persisteerCriteriumEvaluatie(criteriumEvaluatie.value)
     }
 
-    fun onScoreChanged(oudeScore: Int, nieuweScore: Int){
+    fun onScoreChanged(nieuweScore: Int){
         _score.value = _score.value!!.plus(nieuweScore).minus(_criteriumEvaluatie.value?.score!!)
         _criteriumEvaluatie.value?.score = nieuweScore
         persisteerCriteriumEvaluatie(criteriumEvaluatie.value)

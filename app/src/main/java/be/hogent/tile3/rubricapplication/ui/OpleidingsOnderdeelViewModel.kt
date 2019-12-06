@@ -92,26 +92,4 @@ class OpleidingsOnderdeelViewModel : ViewModel() {
         _navigateToRubricSelect.value = null
     }
 
-//    private fun getOpleidingen(){
-//        uiScope.launch {
-//            var getOpleidingenDeferred = OpleidingApi.retrofitService.getProperties()
-//            try {
-//                var listResult = getOpleidingenDeferred.await()
-//                _status.value = "Success: ${listResult.size} opleidingen opgehaald"
-//                if (listResult.size > 0){
-//                    _opleidingen.value = listResult
-//                }
-//            } catch (e: Exception){
-//                _status.value = "Failure: ${e.message}"
-//            }
-//        }
-//    }
-
-
-//    private suspend fun insert(opleiding: OpleidingsOnderdeel) {
-//        withContext(Dispatchers.IO){
-//            database.insert(opleiding)
-//        }
-//    }
-
 }

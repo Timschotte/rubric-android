@@ -41,7 +41,6 @@ class RubricRepository(
     }
 
     suspend fun refreshRubrics() {
-        Log.i("TestN", "refresh called in rubricrepository")
         try {
             val rubrics = rubricApi.getRubrics("IN_GEBRUIK").await().toMutableList()
             rubrics.addAll(rubricApi.getRubrics("PUBLIEK").await())

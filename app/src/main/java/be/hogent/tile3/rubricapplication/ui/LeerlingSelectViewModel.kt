@@ -38,7 +38,7 @@ class LeerlingSelectViewModel(
         refreshStudentDatabase()
         loadStudents()
         refreshEvaluationDb()
-        gefilterdeStudenten.addSource(_studenten){
+        gefilterdeStudenten.addSource(studenten){
             gefilterdeStudenten.value = it
         }
     }
@@ -49,19 +49,18 @@ class LeerlingSelectViewModel(
 
     fun filterChanged(filterText: String?){
         if (filterText != null) {
-            _studenten.value?.let {
-                gefilterdeStudenten.removeSource(_studenten)
-                gefilterdeStudenten.addSource(_studenten){
+            studenten.value?.let {
+                gefilterdeStudenten.removeSource(studenten)
+                gefilterdeStudenten.addSource(studenten){
                     gefilterdeStudenten.value = it.filter { student ->
                         student.studentNaam.toLowerCase().contains(filterText.toLowerCase())
                     }
                 }
             }
-            Log.i("test", filterText)
         }
     }
 
-    private fun refreshRubricDatabase() {
+    private fun refreshStudentDatabase() {
         if (isNetworkAvailable(context)) {
             coroutineScope.launch {
                 studentRepository.refreshStudenten(opleidingsOnderdeelId)

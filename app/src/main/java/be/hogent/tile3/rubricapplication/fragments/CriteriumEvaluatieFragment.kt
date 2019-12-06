@@ -17,13 +17,6 @@ import be.hogent.tile3.rubricapplication.R
 import be.hogent.tile3.rubricapplication.adapters.CriteriumEvaluatieListAdapter
 import be.hogent.tile3.rubricapplication.adapters.CriteriumEvaluatieListListener
 import be.hogent.tile3.rubricapplication.databinding.FragmentCriteriumEvaluatieBinding
-import android.text.InputType
-import android.util.Log
-import android.view.*
-import android.widget.EditText
-import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
-import androidx.core.view.forEach
 import be.hogent.tile3.rubricapplication.ui.CriteriumOverzichtViewModel
 import com.google.android.material.chip.Chip
 
@@ -147,7 +140,7 @@ class CriteriumEvaluatieFragment
                 input.requestFocus()
             }
 
-            binding.toonCriteriumOmschrijvingImageButton.setOnClickListener {
+            /*binding.toonCriteriumOmschrijvingImageButton.setOnClickListener {
 
 
                 AlertDialog.Builder(this.context!!).setTitle(
@@ -163,7 +156,7 @@ class CriteriumEvaluatieFragment
                     )
                     .create()
                     .show()
-            }
+            }*/
 
             criteriumOverzichtViewModel.positieGeselecteerdCriterium.observe(
                 viewLifecycleOwner,

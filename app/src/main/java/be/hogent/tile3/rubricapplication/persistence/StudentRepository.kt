@@ -30,7 +30,6 @@ class StudentRepository(private val studentDao: StudentDao, private val studentO
 
 
     suspend fun refreshStudenten(olodId : Long){
-        Log.i("Test", "refresh called in studentRepo")
         try{
             withContext(Dispatchers.IO){
                 val studenten = rubricApi.getStudenten(olodId).await()
@@ -42,7 +41,4 @@ class StudentRepository(private val studentDao: StudentDao, private val studentO
             Log.i("StudentRepository", e.message)
         }
     }
-
-    val studenten: LiveData<List<Student>> = studentDao.getAll()
-
 }
