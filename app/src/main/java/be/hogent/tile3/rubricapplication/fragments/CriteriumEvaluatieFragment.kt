@@ -12,6 +12,7 @@ import be.hogent.tile3.rubricapplication.adapters.CriteriumEvaluatieListAdapter
 import be.hogent.tile3.rubricapplication.adapters.CriteriumEvaluatieListListener
 import be.hogent.tile3.rubricapplication.databinding.FragmentCriteriumEvaluatieBinding
 import android.text.InputType
+import android.util.Log
 import android.view.*
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
@@ -42,6 +43,9 @@ class CriteriumEvaluatieFragment
             binding.criteriumOverzichtViewModel = criteriumOverzichtViewModel
             binding.criterium = criteriumOverzichtViewModel.geselecteerdCriterium.value
             binding.student = criteriumOverzichtViewModel.student
+            criteriumOverzichtViewModel.geselecteerdCriterium.observe(this, Observer{
+                binding.criterium = criteriumOverzichtViewModel.geselecteerdCriterium.value
+            })
 
             criteriumOverzichtViewModel.geselecteerdCriteriumNiveau.observe(viewLifecycleOwner, Observer{
                     geselecteerdNiveau ->
@@ -84,12 +88,15 @@ class CriteriumEvaluatieFragment
 
             criteriumOverzichtViewModel.criteriumEvaluatie?.observe(viewLifecycleOwner, Observer{
                 it?.let{
-                    /*binding.scoreNumberPicker.value = it.score ?: binding.scoreNumberPicker.minValue*/
-                    //Werkte niet met numberpicker, ik laat dit momenteel zo
-
+                    //TODO: hieronder werkt niet: toont bij elk criterium dezelfde commentaar
+                    //if(it.commentaar != "" && it.commentaar != null) {
+                    //    binding.commentaarTextView.text = "Commentaar: " + it.commentaar
+                    //}
+                    //Hieronder wordt commentaar correct weergegeven maar bij lege commentaar wordt commentaartitel ook weergegeven
+                    //TODO: wanneer commentaar toegevoegd wordt: refresh voorzien
+                    binding.commentaarTextView.text = "Commentaar: " + it.commentaar
                 }
             })
-
             binding.voegCommentaarToeFloatingActionButton.setOnClickListener {
                 val oudeCommentaar =
                     criteriumOverzichtViewModel.criteriumEvaluatie.value?.commentaar ?: ""
@@ -115,22 +122,11 @@ class CriteriumEvaluatieFragment
                 input.requestFocus()
             }
 
-            binding.toonCriteriumOmschrijvingImageButton.setOnClickListener {
-
-
-                val builder = AlertDialog.Builder(this.context!!).setTitle(criteriumOverzichtViewModel.geselecteerdCriterium.value?.naam
-                    ?: getString(R.string.criterium_evaluatie_omschrijving_dialog_titel_default)).setMessage(criteriumOverzichtViewModel.geselecteerdCriterium.value?.omschrijving
-                    ?: getString(R.string.criterium_evaluatie_omschrijving_dialog_omschrijving_default))
-                    .setPositiveButton(R.string.criterium_evaluatie_omschrijving_dialog_bevestig, null)
-                    .create()
-                    .show()
-            }
-
             criteriumOverzichtViewModel.positieGeselecteerdCriterium.observe(viewLifecycleOwner, Observer{
-                binding.upEdgeButton.visibility = if(it == 0) View.GONE else View.VISIBLE
+                binding.upEdgeButton.visibility = if(it == 0) View.INVISIBLE else View.VISIBLE
                 binding.downEdgeButton.visibility =
                     if(it == criteriumOverzichtViewModel.positieLaatsteCriterium.value ?: 0)
-                        View.GONE else View.VISIBLE
+                        View.INVISIBLE else View.VISIBLE
             })
 
             binding.upEdgeButton.setOnClickListener{
@@ -140,6 +136,12 @@ class CriteriumEvaluatieFragment
             binding.downEdgeButton.setOnClickListener{
                 criteriumOverzichtViewModel.onDownEdgeButtonClicked()
             }
+            criteriumOverzichtViewModel.score.observe(this, Observer{
+                binding.scoreTextView.text = it.toString()
+            })
+            criteriumOverzichtViewModel.totaalScore.observe(this, Observer{
+                binding.totaalscoreTextView.text = it.toString()
+            })
         }
 
         return binding.root

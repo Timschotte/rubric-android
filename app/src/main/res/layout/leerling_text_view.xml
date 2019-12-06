@@ -35,6 +35,24 @@
             tools:text="Thomas Peeters" />
 
         <TextView
+            android:id="@+id/studentGeboortedatum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/bg_key"
+            android:padding="10dp"
+            android:text=""
+            android:textAlignment="viewStart"
+            android:textColor="@color/secondaryVeryDarkColor"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/studentNaam"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            app:studentGeboortedatum="@{student}"
+            tools:text="date" />
+
+        <TextView
             android:id="@+id/studentNummer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

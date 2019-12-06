@@ -39,36 +39,54 @@
                 android:src="@drawable/ic_keyboard_arrow_up_black_24dp" />
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/criteriumNaamTextView"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/criteriumInfo"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="64dp"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="6dp"
-            android:layout_marginBottom="6dp"
-            android:fontFamily="@font/montserrat"
-            android:textColor="@color/primaryTextColor"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:criterium="@{criterium}"
-            app:layout_constraintBottom_toTopOf="@+id/criteriumNiveausHorizontalScroll"
+            android:layout_marginEnd="24dp"
+            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/upEdgeButton"
-            app:layout_constraintVertical_bias="0.3"
-            app:student="@{student}" />
+            app:layout_constraintTop_toBottomOf="@+id/upEdgeButton">
+
+            <TextView
+                android:id="@+id/criteriumNaamTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:criteriumNaam="@{criterium}" />
+
+            <TextView
+                android:id="@+id/criteriumOmschrijvingTextView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:fontFamily="@font/montserrat"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="14sp"
+                app:criteriumOmschrijving="@{criterium}"
+                tools:text="Criterium omschrijving" />
+        </LinearLayout>
+
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/criteriumNiveausHorizontalScroll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
             app:layout_constraintBottom_toTopOf="@id/chipGroupHolder"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/upEdgeButton">
+            app:layout_constraintTop_toBottomOf="@+id/criteriumInfo">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/criteriumNiveausRecycler"
@@ -77,7 +95,6 @@
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
         </androidx.core.widget.NestedScrollView>
-
 
         <LinearLayout
             android:id="@+id/chipGroupHolder"
@@ -110,19 +127,87 @@
             app:layout_constraintVertical_bias="0.901"
             app:tint="@color/secondaryLightColor" />
 
-        <ImageButton
-            android:id="@+id/toonCriteriumOmschrijvingImageButton"
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.MaterialComponents.CardView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:src="@drawable/ic_info_outline_gery_32dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="8dp"
+            app:contentPadding="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/downEdgeButton"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.86"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.907"
-            app:tint="@color/secondaryDarkColor" />
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/voegCommentaarToeFloatingActionButton"
+            app:layout_constraintTop_toBottomOf="@+id/chipGroupHolder"
+            app:layout_constraintVertical_bias="1.0">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/Evaluatie_StudentNaam_TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat"
+                    android:text="@string/evaluatie"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="20dp"
+                    app:evaluatie_studentNaam="@{student}"
+                    tools:text="Evaluatie studentnaam" />
+
+                <TextView
+                    android:id="@+id/Totaalscore_TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/montserrat"
+                    android:text="@string/totaalscore"
+                    android:textAlignment="center"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="16dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/score_TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat"
+                        android:textAlignment="center"
+                        android:textColor="@color/primaryTextColor"
+                        android:textSize="32dp"
+                        tools:text="40" />
+
+                    <TextView
+                        android:id="@+id/scoreDivider_TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat"
+                        android:text="/"
+                        android:textAlignment="center"
+                        android:textColor="@color/primaryTextColor"
+                        android:textSize="32dp" />
+
+                    <TextView
+                        android:id="@+id/totaalscore_TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat"
+                        android:textAlignment="center"
+                        android:textColor="@color/primaryTextColor"
+                        android:textSize="32dp"
+                        tools:text="40" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
 
         <LinearLayout
             android:id="@+id/downEdgeButton"
@@ -142,6 +227,21 @@
                 android:tint="@color/secondaryColor"
                 android:src="@drawable/ic_keyboard_arrow_down_black_24dp" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/commentaar_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/montserrat"
+            android:textSize="20dp"
+            tools:text="Commentaar"
+            app:layout_constraintBottom_toTopOf="@+id/downEdgeButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chipGroupHolder"
+            app:layout_constraintVertical_bias="0.0" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
