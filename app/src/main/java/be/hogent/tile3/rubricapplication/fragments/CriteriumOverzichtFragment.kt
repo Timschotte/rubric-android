@@ -51,6 +51,7 @@ class CriteriumOverzichtFragment : Fragment() {
             false
         )
 
+        binding.criteriumOverzichtFragmentWrapper.visibility = View.INVISIBLE
         val args = CriteriumOverzichtFragmentArgs.fromBundle(arguments!!)
 
         val viewModelFactory = CriteriumOverzichtViewModelFactory(args.rubricId.toLong(), args.student)
@@ -95,6 +96,7 @@ class CriteriumOverzichtFragment : Fragment() {
 
         binding.rubricCriteriaListRecycler.adapter = adapter
 
+
         criteriumOverzichtViewModel?.persisterenVoltooid.observe(viewLifecycleOwner, Observer {
             saved: Boolean ->
             run {
@@ -118,6 +120,9 @@ class CriteriumOverzichtFragment : Fragment() {
         criteriumOverzichtViewModel?.evaluatieRubric?.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapter.submitList(it.criteria)
+                criteriumOverzichtViewModel.initialiseerEvaluatie()
+                binding.criteriumOverzichtFragmentWrapper.visibility = View.VISIBLE
+                binding.criteriumEvaluatieFragmentContainer.requestLayout()
             }
         })
 
@@ -221,6 +226,7 @@ class CriteriumOverzichtFragment : Fragment() {
         return binding.root
     }
 
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.criterium_evaluatie_menu, menu)
@@ -247,7 +253,6 @@ class CriteriumOverzichtFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         view.isFocusableInTouchMode = true
         view.requestFocus()
         view.setOnKeyListener(object : View.OnKeyListener {

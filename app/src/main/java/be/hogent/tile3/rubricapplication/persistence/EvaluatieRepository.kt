@@ -30,7 +30,7 @@ class EvaluatieRepository(private val evaluatieDao: EvaluatieDao, private val cr
         App.component.inject(this)
     }
 
-    suspend fun insert(evaluatie: Evaluatie){
+    suspend fun insert(evaluatie: Evaluatie) : Long  {
         return withContext(Dispatchers.IO){
             evaluatieDao.insert(evaluatie)
         }
@@ -65,14 +65,8 @@ class EvaluatieRepository(private val evaluatieDao: EvaluatieDao, private val cr
         }
     }
 
-    /*fun getCriteriumEvaluationsForEvaluation(evaluatieId : String): LiveData<List<CriteriumEvaluatie>> {
-        return criteriumEvaluatieDao.getAllForEvaluatie(evaluatieId)
-    }*/
-
-
-    suspend fun verwijderVorigeTempEvaluatie() {
+    suspend fun verwijderTempEvaluatie() {
         withContext(Dispatchers.IO) {
-            criteriumEvaluatieDao.verwijderTempCriteriumEvaluaties()
             evaluatieDao.verwijderTempEvaluatie()
         }
     }
@@ -90,10 +84,11 @@ class EvaluatieRepository(private val evaluatieDao: EvaluatieDao, private val cr
                 evaluatieDao.delete(it)
             }
             evaluatie.evaluatieId = UUID.randomUUID().toString()
+            evaluatie.sync = false //Set sync false to make sure evaluation is sent
             evaluatieDao.insert(evaluatie)
             criteriumEvaluatieDao.koppelTempAanNieuw(evaluatie.evaluatieId)
             evaluatie.criteriumEvaluaties = criteriumEvaluatieDao.getAllForEvaluatie(evaluatie.evaluatieId)
-            verwijderVorigeTempEvaluatie()
+            verwijderTempEvaluatie()
         }
     }
 
@@ -121,6 +116,7 @@ class EvaluatieRepository(private val evaluatieDao: EvaluatieDao, private val cr
                     } else {
                         rubricApi.saveEvaluatie(networkRubricEvaluatie).execute()
                     }
+                    setSynched(it, true)
                 } catch (e: Exception) {
                     Log.i("TestN", "API - Try Exception: " + e.message)
                     succes = false
@@ -149,8 +145,22 @@ class EvaluatieRepository(private val evaluatieDao: EvaluatieDao, private val cr
                 evaluaties.forEach { eval ->
                     if(!evaluatieDao.tempEvaluationExists(eval.rubricId, eval.studentId).blockingGet()){
                         val evalDb = eval.asDatabaseModel()
-                        evaluatieDao.insert(evalDb)
-                        criteriumEvaluatieDao.insertAll(evalDb.criteriumEvaluaties)
+                        //Check of lokale versie al gesynched is. Indien niet, lokale versie behouden en server versie negeren.
+                        val existingEval = evaluatieDao.getByRubricAndStudent(eval.rubricId, eval.studentId)
+                        var insert = true
+
+                        existingEval?.let{ ex ->
+                            if(ex.sync){
+                                evalDb.evaluatieId = ex.evaluatieId
+                                evalDb.criteriumEvaluaties.forEach { ce -> ce.evaluatieId = ex.evaluatieId }
+                            }else {
+                                insert = false
+                            }
+                        }
+                        if(insert){
+                            evaluatieDao.insert(evalDb)
+                            criteriumEvaluatieDao.insertAll(evalDb.criteriumEvaluaties)
+                        }
                     }
                 }
 

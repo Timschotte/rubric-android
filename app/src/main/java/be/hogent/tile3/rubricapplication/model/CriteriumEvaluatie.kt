@@ -8,10 +8,10 @@ import java.util.*
 @Entity(foreignKeys = [ForeignKey(
     entity = Criterium::class,
     parentColumns = arrayOf("criteriumId"),
-    childColumns = arrayOf("criteriumId"), onDelete = CASCADE)
+    childColumns = arrayOf("criteriumId"))
     , ForeignKey(entity = Evaluatie::class,
     parentColumns = arrayOf("evaluatieId"),
-    childColumns = arrayOf("evaluatieId")), ForeignKey(
+    childColumns = arrayOf("evaluatieId"), onDelete = CASCADE), ForeignKey(
     entity = Niveau::class,
     parentColumns = arrayOf("niveauId"),
     childColumns = arrayOf("behaaldNiveau")

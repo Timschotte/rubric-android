@@ -10,7 +10,7 @@ import kotlinx.coroutines.Deferred
 @Dao
 interface EvaluatieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(evaluatie: Evaluatie)
+    fun insert(evaluatie: Evaluatie): Long
 
     @Update
     fun update(evaluatie: Evaluatie)
