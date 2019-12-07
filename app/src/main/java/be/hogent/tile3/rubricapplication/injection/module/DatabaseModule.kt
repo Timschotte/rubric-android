@@ -3,6 +3,7 @@ package be.hogent.tile3.rubricapplication.injection.module
 import android.app.Application
 import android.content.Context
 import be.hogent.tile3.rubricapplication.dao.*
+import be.hogent.tile3.rubricapplication.network.RubricApi
 import be.hogent.tile3.rubricapplication.persistence.*
 import dagger.Module
 import dagger.Provides

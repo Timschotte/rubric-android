@@ -37,7 +37,7 @@ class LeerlingSelectFragment : Fragment() {
             .inflate(inflater, R.layout.fragment_leerling_select, container, false)
         val args = LeerlingSelectFragmentArgs.fromBundle(arguments!!)
 
-        val viewModelFactory = LeerlingSelectViewModelFactory(args.rubricId, args.opleidingsOnderdeelId)
+        val viewModelFactory = LeerlingSelectViewModelFactory(args.rubricId.toLong(), args.opleidingsOnderdeelId)
         val leerlingSelectViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(LeerlingSelectViewModel::class.java)
 
@@ -74,8 +74,8 @@ class LeerlingSelectFragment : Fragment() {
 
     }
 
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.searchbar, menu)
         val searchBarOpleiding = menu.findItem(R.id.action_search).actionView as androidx.appcompat.widget.SearchView
 

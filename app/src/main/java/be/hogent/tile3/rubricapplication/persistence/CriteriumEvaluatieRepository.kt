@@ -8,7 +8,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class CriteriumEvaluatieRepository(private val criteriumEvaluatieDao: CriteriumEvaluatieDao) {
-    val criteriumEvaluaties = criteriumEvaluatieDao.getAll()
 
     suspend fun insert(criteriumEvaluatie: CriteriumEvaluatie) {
         withContext(Dispatchers.IO) {
@@ -30,15 +29,6 @@ class CriteriumEvaluatieRepository(private val criteriumEvaluatieDao: CriteriumE
         }
     }
 
-    fun insertAllTemp(criteriumEvaluaties: List<CriteriumEvaluatie>) {
-        Log.i(
-            "CriteriumEvaluatieRepo",
-            "Inserting " + criteriumEvaluaties.size + " criteriumEvaluaties"
-        )
-        criteriumEvaluatieDao.insertAll(criteriumEvaluaties)
-
-    }
-
     suspend fun update(criteriumEvaluatie: CriteriumEvaluatie) {
         withContext(Dispatchers.IO) {
             criteriumEvaluatieDao.update(criteriumEvaluatie)
@@ -53,17 +43,8 @@ class CriteriumEvaluatieRepository(private val criteriumEvaluatieDao: CriteriumE
 
     suspend fun getAllForEvaluatie(evaluatieId: String): List<CriteriumEvaluatie> {
         return withContext(Dispatchers.IO) {
-            var criteriumEvaluaties = criteriumEvaluatieDao.getAllForEvaluatie(evaluatieId)
-            criteriumEvaluaties
+            criteriumEvaluatieDao.getAllForEvaluatie(evaluatieId)
         }
-    }
-
-    fun getForEvaluatieAndCriterium(evaluatieId: String, criteriumId: String):
-            CriteriumEvaluatie {
-            var criteriumEvaluatie =
-                criteriumEvaluatieDao.getForEvaluatieAndCriterium(evaluatieId, criteriumId)
-            return criteriumEvaluatie
-
     }
 
     suspend fun delete(criteriumEvaluatie: CriteriumEvaluatie) {

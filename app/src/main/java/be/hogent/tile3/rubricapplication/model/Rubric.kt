@@ -9,40 +9,38 @@ import java.io.Serializable
 
 @Entity(
     tableName = "rubric_table",
-    foreignKeys = arrayOf(
-        ForeignKey(
-            entity = OpleidingsOnderdeel::class,
-            parentColumns = arrayOf("opleidingsOnderdeelId"),
-            childColumns = arrayOf("opleidingsOnderdeelId"))
-    ),
-    indices = arrayOf(Index("opleidingsOnderdeelId"))
+    foreignKeys = [ForeignKey(
+        entity = OpleidingsOnderdeel::class,
+        parentColumns = arrayOf("opleidingsOnderdeelId"),
+        childColumns = arrayOf("opleidingsOnderdeelId"),
+        onDelete = ForeignKey.SET_NULL)],
+    indices = [Index("opleidingsOnderdeelId")]
 )
 data class Rubric(
-    @PrimaryKey @ColumnInfo(name = "rubricId") val rubricId: String = "",
-    @ColumnInfo(name = "onderwerp") val onderwerp: String = "",
-    @ColumnInfo(name = "omschrijving") val omschrijving: String = "",
-    @ColumnInfo(name = "datumTijdCreatie") val datumTijdCreatie: String = "",
-    @ColumnInfo(name = "datumTijdLaatsteWijziging") val datumTijdLaatsteWijziging: String = "",
-    @ColumnInfo(name = "opleidingsOnderdeelId") val opleidingsOnderdeelId: Long
+    @PrimaryKey @ColumnInfo(name = "rubricId") val rubricId: Long = 0,
+    @ColumnInfo(name = "onderwerp") val onderwerp: String? = "",
+    @ColumnInfo(name = "omschrijving") val omschrijving: String? = "",
+    @ColumnInfo(name = "datumTijdCreatie") val datumTijdCreatie: String? = "",
+    @ColumnInfo(name = "datumTijdLaatsteWijziging") val datumTijdLaatsteWijziging: String? = "",
+    @ColumnInfo(name = "opleidingsOnderdeelId") val opleidingsOnderdeelId: Long?
 
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readString(),
+        parcel.readLong(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readLong()
-    ) {
-    }
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(rubricId)
+        parcel.writeLong(rubricId)
         parcel.writeString(onderwerp)
         parcel.writeString(omschrijving)
         parcel.writeString(datumTijdCreatie)
         parcel.writeString(datumTijdLaatsteWijziging)
-        parcel.writeLong(opleidingsOnderdeelId)
+        parcel.writeLong(opleidingsOnderdeelId!!)
     }
 
     override fun describeContents(): Int {

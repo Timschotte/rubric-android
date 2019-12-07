@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
-
     <item
         android:id="@+id/action_evaluatie_opslaan"
         android:icon="@drawable/ic_save_white_24dp"
         android:title="@string/opslaan"
         app:showAsAction="ifRoom|withText" />
+    <item
+        android:id="@+id/offline_state_icon"
+        android:icon="@drawable/ic_cloud_off_black_48dp"
+        android:title="@string/offline"
+        app:showAsAction="collapseActionView|always"
+        android:visible="false"
+        />
 </menu>

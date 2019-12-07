@@ -3,22 +3,26 @@ package be.hogent.tile3.rubricapplication.model
 import androidx.room.*
 import java.util.*
 
-@Entity(foreignKeys = arrayOf(
-    ForeignKey(
+@Entity(
+    foreignKeys = [ForeignKey(
         entity = Student::class,
         parentColumns = arrayOf("studentId"),
         childColumns = arrayOf("studentId")
-    ),
-    ForeignKey(
+    ), ForeignKey(
         entity = Rubric::class,
         parentColumns = arrayOf("rubricId"),
-        childColumns = arrayOf("rubricId"))
-), tableName = "evaluatie_table"
+        childColumns = arrayOf("rubricId"),
+        onDelete = ForeignKey.CASCADE
+    )], indices = [Index("studentId")]
+    , tableName = "evaluatie_table"
 )
 data class Evaluatie(
-    @PrimaryKey @ColumnInfo(name = "evaluatieId") var evaluatieId: String,
+    @PrimaryKey @ColumnInfo(name = "evaluatieId") var evaluatieId: String = UUID.randomUUID().toString(),
     @ColumnInfo(name = "studentId") val studentId: Long,
-    @ColumnInfo(name = "rubricId") val rubricId: String
-    // TODO: toevoegen docent en data (aanmaak, wijziging)
-    // TODO: lijst criteriumevaluaties inzetten
-)
+    @ColumnInfo(name = "rubricId") val rubricId: Long,
+    @ColumnInfo(name = "docentId") val docentId: Long,
+    @ColumnInfo(name = "sync") var sync: Boolean
+){
+    @Ignore
+    var criteriumEvaluaties: List<CriteriumEvaluatie> = emptyList()
+}

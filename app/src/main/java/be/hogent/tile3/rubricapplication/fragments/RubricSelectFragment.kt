@@ -47,7 +47,7 @@ class RubricSelectFragment : Fragment() {
         rubricSelectViewModel.navigateToKlasSelect.observe(this, Observer { rubric ->
             rubric?.let {
                 this.findNavController().navigate(
-                    RubricSelectFragmentDirections.actionRubricSelectFragmentToLeerlingSelectFragment(rubric, opleidingsOnderdeel.opleidingsOnderdeelId)
+                    RubricSelectFragmentDirections.actionRubricSelectFragmentToLeerlingSelectFragment(rubric.toString(), opleidingsOnderdeel.opleidingsOnderdeelId)
                 )
                 rubricSelectViewModel.onOpleidingsOnderdeelNavigated()
             }

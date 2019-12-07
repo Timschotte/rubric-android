@@ -28,6 +28,9 @@ import androidx.core.animation.doOnStart
 import androidx.core.view.updateLayoutParams
 import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_criterium_evaluatie.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
 
 
 @Suppress("DEPRECATED_IDENTITY_EQUALS")
@@ -35,6 +38,7 @@ class CriteriumOverzichtFragment : Fragment() {
 
     private var alertDialog: AlertDialog? = null
     private lateinit var rubricEvaluationFragment: CriteriumEvaluatieFragment
+    private lateinit var criteriumOverzichtViewModel: CriteriumOverzichtViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,19 +51,13 @@ class CriteriumOverzichtFragment : Fragment() {
             false
         )
 
+        binding.criteriumOverzichtFragmentWrapper.visibility = View.INVISIBLE
         val args = CriteriumOverzichtFragmentArgs.fromBundle(arguments!!)
 
-        val viewModelFactory = CriteriumOverzichtViewModelFactory(args.rubricId, args.student)
-        val criteriumOverzichtViewModel = ViewModelProviders.of(this, viewModelFactory)
+        val viewModelFactory = CriteriumOverzichtViewModelFactory(args.rubricId.toLong(), args.student)
+        criteriumOverzichtViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(CriteriumOverzichtViewModel::class.java)
 
-
-        criteriumOverzichtViewModel.evaluatieRubric.observe(viewLifecycleOwner, Observer{
-            it?.let{
-                Log.i("Test4", it.toString())
-                 it.niveausCriteria.forEach{Log.i("Test4", it.toString())}
-            }
-        })
 
         val adapter =
             CriteriumOverzichtListAdapter(CriteriaListListener { criteriumId, positie ->
@@ -98,6 +96,7 @@ class CriteriumOverzichtFragment : Fragment() {
 
         binding.rubricCriteriaListRecycler.adapter = adapter
 
+
         criteriumOverzichtViewModel?.persisterenVoltooid.observe(viewLifecycleOwner, Observer {
             saved: Boolean ->
             run {
@@ -121,6 +120,9 @@ class CriteriumOverzichtFragment : Fragment() {
         criteriumOverzichtViewModel?.evaluatieRubric?.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapter.submitList(it.criteria)
+                criteriumOverzichtViewModel.initialiseerEvaluatie()
+                binding.criteriumOverzichtFragmentWrapper.visibility = View.VISIBLE
+                binding.criteriumEvaluatieFragmentContainer.requestLayout()
             }
         })
 
@@ -180,21 +182,6 @@ class CriteriumOverzichtFragment : Fragment() {
                         }
                     }
                 }
-                /*animCriteriumEvaluatieFramePositie.doOnStart {
-                    if(overzichtPaneelUitgeklapt){
-                        binding.criteriumEvaluatieOverzichtBalk.visibility = View.VISIBLE
-
-                    }else{
-                        binding.criteriumEvaluatieFragmentContainer.visibility = View.VISIBLE
-                    }
-                }
-                animCriteriumEvaluatieFramePositie.doOnEnd {
-                    if(!overzichtPaneelUitgeklapt) {
-                        binding.criteriumEvaluatieOverzichtBalk.visibility = View.INVISIBLE
-                    }else{
-                        binding.criteriumEvaluatieFragmentContainer.visibility = View.INVISIBLE
-                    }
-                }*/
 
                 val animCriteriumEvaluatieFrameBreedte = ValueAnimator.ofInt(
                     binding.criteriumEvaluatieFragmentWrapper.measuredWidth,
@@ -239,9 +226,11 @@ class CriteriumOverzichtFragment : Fragment() {
         return binding.root
     }
 
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.criterium_evaluatie_menu, menu)
+        menu.findItem(R.id.offline_state_icon).setVisible(false)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -259,15 +248,11 @@ class CriteriumOverzichtFragment : Fragment() {
     }
 
     private fun persisteerEvaluatie(){
-        val criteriumOverzichtViewModel
-                = ViewModelProviders.of(this)
-            .get(CriteriumOverzichtViewModel::class.java)
         criteriumOverzichtViewModel.persisteerEvaluatie()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         view.isFocusableInTouchMode = true
         view.requestFocus()
         view.setOnKeyListener(object : View.OnKeyListener {
@@ -280,13 +265,6 @@ class CriteriumOverzichtFragment : Fragment() {
                 return false
             }
         })
-
-
-        val args = CriteriumOverzichtFragmentArgs.fromBundle(arguments!!)
-
-        val viewModelFactory = CriteriumOverzichtViewModelFactory(args.rubricId, args.student)
-        val criteriumOverzichtViewModel = ViewModelProviders.of(this, viewModelFactory)
-            .get(CriteriumOverzichtViewModel::class.java)
 
         criteriumOverzichtViewModel.evaluatie.observe(this, Observer {
             it?.let {
@@ -322,6 +300,7 @@ class CriteriumOverzichtFragment : Fragment() {
     }
 
     private fun navigeerNaarLeerlingSelect(){
+        criteriumOverzichtViewModel.deleteTempEvaluatie()
         val args = CriteriumOverzichtFragmentArgs.fromBundle(arguments!!)
         findNavController().navigate(
             CriteriumOverzichtFragmentDirections.actionCriteriumOverzichtFragmentToLeerlingSelectFragment(args.rubricId, args.olodId)

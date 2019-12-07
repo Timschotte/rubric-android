@@ -9,8 +9,12 @@ import be.hogent.tile3.rubricapplication.model.Rubric
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import android.R
+import android.annotation.SuppressLint
+import java.sql.Time
+import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.*
 
 
@@ -46,4 +50,16 @@ fun ImageView.setImageResource(item: Rubric){
     item?.let {
         setImageResource(be.hogent.tile3.rubricapplication.R.drawable.ic_user)
     }
+}
+
+@SuppressLint("SimpleDateFormat")
+fun convertDateToLong(date : LocalDateTime): Long {
+    val df = SimpleDateFormat("yyyy.MM.dd HH:mm:ss")
+    val toParse = date.toString()
+    return df.parse(toParse).time
+}
+@RequiresApi(Build.VERSION_CODES.O)
+fun convertLongToDate(time : Long) :LocalDateTime {
+    val date = Date(time)
+    return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
 }

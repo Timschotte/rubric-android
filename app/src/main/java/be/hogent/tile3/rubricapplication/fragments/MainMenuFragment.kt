@@ -23,8 +23,6 @@ class MainMenuFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-
-
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main_menu, container, false)
 
         binding.startEvaluatieButton.setOnClickListener { view: View ->

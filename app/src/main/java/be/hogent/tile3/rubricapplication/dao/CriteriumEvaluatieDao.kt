@@ -32,9 +32,6 @@ interface CriteriumEvaluatieDao{
     @Delete
     fun delete(criteriumEvaluatie: CriteriumEvaluatie)
 
-    @Query("DELETE FROM criterium_evaluatie_table where evaluatieId = :tempEvaluatieId")
-    fun verwijderTempCriteriumEvaluaties(tempEvaluatieId: String = TEMP_EVALUATIE_ID)
-
     @Query("DELETE FROM criterium_evaluatie_table where evaluatieId = :evaluatieId")
     fun verwijderBestaandeCriteriumEvaluaties(evaluatieId: String)
 
