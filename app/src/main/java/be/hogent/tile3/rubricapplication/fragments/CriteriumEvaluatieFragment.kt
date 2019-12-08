@@ -180,6 +180,13 @@ class CriteriumEvaluatieFragment
             criteriumOverzichtViewModel.totaalScore.observe(this, Observer{
                 binding.totaalscoreTextView.text = it.toString()
             })
+            criteriumOverzichtViewModel.criteriumEvaluatie.observe(this, Observer{
+                if(!it.commentaar.isNullOrBlank()) {
+                    binding.commentaarTextView.text = "Commentaar: " + it.commentaar
+                }else{
+                    binding.commentaarTextView.text = ""
+                }
+            })
         }
 
         return binding.root

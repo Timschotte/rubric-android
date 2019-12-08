@@ -284,12 +284,16 @@ class CriteriumOverzichtViewModel(
         _criteriumEvaluatie.value?.behaaldNiveau = niveauId
 
         //Validate selected score before persisting
+        /*
         if (criteriumEvaluatie.value?.score ?: 0 < _geselecteerdCriteriumNiveau.value?.ondergrens ?: 0) {
             criteriumEvaluatie.value?.score = _geselecteerdCriteriumNiveau.value?.ondergrens ?: 0
         }
         if (criteriumEvaluatie.value?.score ?: 0 > _geselecteerdCriteriumNiveau.value?.bovengrens ?: 0) {
             criteriumEvaluatie.value?.score = _geselecteerdCriteriumNiveau.value?.bovengrens ?: 0
         }
+        */
+        _criteriumEvaluatie.value?.score = geselecteerdCriteriumNiveau.value!!.ondergrens
+        _score.value = _score.value!!.plus(geselecteerdCriteriumNiveau.value!!.ondergrens)
         persisteerCriteriumEvaluatie(criteriumEvaluatie.value)
     }
 
@@ -302,6 +306,7 @@ class CriteriumOverzichtViewModel(
     fun onCommentaarChanged(nieuweCommentaar: String) {
         _criteriumEvaluatie.value?.commentaar = nieuweCommentaar
         persisteerCriteriumEvaluatie(criteriumEvaluatie.value)
+        _criteriumEvaluatie.value = _criteriumEvaluatie.value
     }
 
     fun onUpEdgeButtonClicked() {
