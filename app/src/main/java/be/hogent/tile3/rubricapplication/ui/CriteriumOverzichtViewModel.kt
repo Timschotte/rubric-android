@@ -120,6 +120,8 @@ class CriteriumOverzichtViewModel(
     /*--------------------------------------------------------------------------------------------*/
     init {
         App.component.inject(this)
+        _score.value = 0
+        _totaalScore.value = 0
     }
 
     private suspend fun getEvaluatieRubric(rubricId: Long): EvaluatieRubric {
@@ -129,8 +131,6 @@ class CriteriumOverzichtViewModel(
     }
 
     private fun initialiseerProperties(data: EvaluatieRubric){
-        _score.value = 0
-        _totaalScore.value = 0
         _geselecteerdCriterium.value = data.criteria[0]
         _positieGeselecteerdCriterium.value = 0
         val grootteRubricCriteria: Int? = data.criteria.size
@@ -174,9 +174,9 @@ class CriteriumOverzichtViewModel(
 
             bestaandeCriteriumEvaluaties?.remove(criteriumEvaluatie)
             nieuweCriteriumEvaluatie.score?.let{
-                _score.value = _score.value?:0.plus(it)
+                _score.value = _score.value?.plus(it)
             }
-            _totaalScore.value = _totaalScore.value?:0.plus(data.niveausCriteria.last().bovengrens)
+            _totaalScore.value = _totaalScore.value?.plus(data.niveausCriteria.last().bovengrens)
         }
         // 3: persisteren
         if (evaluatie?.evaluatieId != TEMP_EVALUATIE_ID) {

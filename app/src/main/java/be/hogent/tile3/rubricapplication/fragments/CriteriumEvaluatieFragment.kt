@@ -161,10 +161,10 @@ class CriteriumEvaluatieFragment
             criteriumOverzichtViewModel.positieGeselecteerdCriterium.observe(
                 viewLifecycleOwner,
                 Observer {
-                    binding.upEdgeButton.visibility = if (it == 0) View.GONE else View.VISIBLE
+                    binding.upEdgeButton.visibility = if (it == 0) View.INVISIBLE else View.VISIBLE
                     binding.downEdgeButton.visibility =
                         if (it == criteriumOverzichtViewModel.positieLaatsteCriterium.value ?: 0)
-                            View.GONE else View.VISIBLE
+                            View.INVISIBLE else View.VISIBLE
                 })
 
             binding.upEdgeButton.setOnClickListener {
