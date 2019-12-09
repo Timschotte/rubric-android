@@ -5,8 +5,11 @@ import android.content.Context
 import be.hogent.tile3.rubricapplication.dao.*
 import be.hogent.tile3.rubricapplication.network.RubricApi
 import be.hogent.tile3.rubricapplication.persistence.*
+import be.hogent.tile3.rubricapplication.security.AuthConnectionBuilder
 import dagger.Module
 import dagger.Provides
+import net.openid.appauth.AppAuthConfiguration
+import net.openid.appauth.AuthorizationService
 import javax.inject.Singleton
 
 /**
