@@ -147,6 +147,11 @@ dependencies {
 
     implementation 'com.google.code.gson:gson:2.8.6'
 
+    // security
+    implementation 'net.openid:appauth:0.7.1' // OAuth
+    implementation 'com.squareup.okio:okio:2.2.0' //File parser
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0' //HTTP
+
 }
 dokka {
     outputFormat = 'html'
