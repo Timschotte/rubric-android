@@ -17,8 +17,9 @@
 
 * [About the Project](#about-the-project)
   * [Built With](#built-with)
+* [Getting Started](#getting-started)
 * [Usage](#usage)
-* [Contact](#Contact)
+* [Contant](#Contact)
 
 
 
@@ -29,9 +30,9 @@ Dit project is gecreëerd in opdracht voor Projecten III van de richting Toegepa
 Er is een angular en android gedeelte van dit project, in android worden rubrics geëvalueerd en in angular worden er rubrics, users en studenten aangemaakt/toegevoegd.
 
 ### Built With
+This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
 * [Android](https://www.android.com/)
 * [Kotlin](https://kotlinlang.org/)
-* [Dagger 2](https://developer.android.com/training/dependency-injection/dagger-android)
 
 
 <!-- USAGE EXAMPLES -->
