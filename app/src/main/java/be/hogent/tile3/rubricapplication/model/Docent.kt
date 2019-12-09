@@ -3,7 +3,14 @@ package be.hogent.tile3.rubricapplication.model
 import android.os.Parcel
 import android.os.Parcelable
 import androidx.room.*
-
+/**
+ * Model class for [Docent]
+ * @constructor Creates a [Docent] class from a [Parcel]-object
+ * @property docentId               ID for [Docent]
+ * @property naam                   Name for [Docent]
+ * @property opleidingsOnderdeelId  ID ([OpleidingsOnderdeel]) that belongs to [Docent]
+ * @see Parcelable
+ */
 @Entity(
     tableName = "docent_table",
     foreignKeys = [ForeignKey(
@@ -30,7 +37,11 @@ data class Docent(
         parcel.readString(),
         parcel.readLong()
     )
-
+    /**
+     * Function to write a [Docent] to a [Parcel]-object
+     * @param parcel [Parcel]
+     * @param flags [Int]
+     */
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeLong(docentId)
         parcel.writeString(naam)

@@ -12,22 +12,31 @@ import be.hogent.tile3.rubricapplication.R
 import be.hogent.tile3.rubricapplication.databinding.FragmentMainMenuBinding
 
 /**
- * A simple [Fragment] subclass.
+ * MainMenu [Fragment] for showing the Main fragment
+ * @see Fragment
  */
 class MainMenuFragment : Fragment() {
-
-    private lateinit var binding: FragmentMainMenuBinding
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main_menu, container, false)
-
+    /**
+     * Initializes the [MainMenuFragment] in CREATED state. Inflates the fragment layout, initializes databinding objects
+     *  and onClickListeners handlers
+     * @param inflater [LayoutInflater]
+     * @param container [ViewGroup]
+     * @param savedInstanceState [Bundle]
+     */
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        /**
+         * Layout inflation
+         */
+        val binding: FragmentMainMenuBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_main_menu, container, false)
+        /**
+         * onClickListener
+         */
         binding.startEvaluatieButton.setOnClickListener { view: View ->
             Navigation.findNavController(view).navigate(R.id.action_mainMenuFragment_to_opleidingSelectFragment)
         }
+        /**
+         * Other
+         */
         return binding.root
 
     }
