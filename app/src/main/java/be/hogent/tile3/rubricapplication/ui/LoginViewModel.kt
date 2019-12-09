@@ -1,6 +1,7 @@
 package be.hogent.tile3.rubricapplication.ui
 
 import android.content.Context
+import android.graphics.Color
 import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
 import androidx.browser.customtabs.CustomTabsIntent
@@ -30,12 +31,15 @@ class LoginViewModel : ViewModel() {
     val mClientId = AtomicReference<String>()
     var mAuthService: AuthorizationService? = null
     val mAuthRequest = AtomicReference<AuthorizationRequest>()
-    val mAuthIntent = AtomicReference<CustomTabsIntent>()
+    var mAuthIntent = AtomicReference<CustomTabsIntent>()
     var mExecutor: ExecutorService? = null
 
     init {
-        mExecutor = Executors.newSingleThreadExecutor()
         App.component.inject(this)
+        mAuthStateManager = AuthStateManager.getInstance(context)
+        mAuthService = createAuthorizationService()
+        mAuthIntent.set(mAuthService!!.createCustomTabsIntentBuilder().setToolbarColor(Color.BLACK).build())
+        mExecutor = Executors.newSingleThreadExecutor()
     }
 
     @MainThread

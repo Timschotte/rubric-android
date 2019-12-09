@@ -153,9 +153,18 @@ dependencies {
     // security
     implementation 'net.openid:appauth:0.7.1' // OAuth
     implementation 'com.squareup.okio:okio:2.2.0' //File parser
-    implementation 'com.squareup.retrofit2:retrofit:2.5.0' //HTTP
 
 }
+
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == "androidx") {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion "${targetSdk}.+"
+            }
+        }
+    }}
 dokka {
     outputFormat = 'html'
     outputDirectory = "$buildDir/dokkadocs"
