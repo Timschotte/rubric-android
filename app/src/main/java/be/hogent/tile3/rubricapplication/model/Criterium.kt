@@ -16,6 +16,17 @@ import java.io.Serializable
     indices = [Index(value = ["criteriumId"])],
     tableName = "criterium_table"
 )
+/**
+ * Model class for [Criterium]
+ * @constructor Creates a [Criterium] class from a [Parcel]-object
+ * @property naam               Name for [Criterium]
+ * @property omschrijving       Description for [Criterium]
+ * @property gewicht            Weight for [Criterium] for calculating the evaluation-score
+ * @property criteriumGroepId   ID for defining the criteriumgroup the [Criterium] belongs to
+ * @property rubricId           ID ([Rubric]) for defining the [Rubric] the [Criterium] belongs to
+ * @see Parcelable
+ * @see Serializable
+  */
 data class Criterium(
     // let op: geen criteriumgroepid
     @PrimaryKey @ColumnInfo(name = "criteriumId") val criteriumId: Long,
@@ -34,7 +45,11 @@ data class Criterium(
         parcel.readLong()
     ) {
     }
-
+    /**
+     * Function to write a [Criterium] to a [Parcel]-object
+     * @param parcel [Parcel]
+     * @param flags [Int]
+     */
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeLong(criteriumId)
         parcel.writeString(naam)

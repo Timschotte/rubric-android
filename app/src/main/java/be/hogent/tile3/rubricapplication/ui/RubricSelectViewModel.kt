@@ -1,10 +1,7 @@
 package be.hogent.tile3.rubricapplication.ui
 
 import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.model.OpleidingsOnderdeel
 import be.hogent.tile3.rubricapplication.model.Rubric
@@ -12,23 +9,40 @@ import be.hogent.tile3.rubricapplication.persistence.OpleidingsOnderdeelReposito
 import be.hogent.tile3.rubricapplication.persistence.RubricRepository
 import java.util.*
 import javax.inject.Inject
-
+/**
+ * ViewModel for RubricSelect
+ * @constructor Creates a [RubricSelectViewModel]
+ * @property opleidingsOnderdeelRepository [OpleidingsOnderdeelRepository]
+ * @property rubricRepository [RubricRepository]
+ * @property context [Context]
+ * @property _rubrics Private [LiveData] [List] of [Rubric]
+ * @property gefilterdeRubrics Public getter for filtered [LiveData] [List] of [Rubric]
+ * @property opleidingsOnderdeel Current [OpleidingsOnderdeel]
+ * @property _navigateToKlasSelect Private indicator for navigation in Fragment
+ * @property navigateToKlasSelect Public getter for [_navigateToKlasSelect]
+ */
 class RubricSelectViewModel(opleidingsOnderdeelId: Long) : ViewModel() {
-
+    /**
+     * Properties
+     */
     @Inject
     lateinit var rubricRepository: RubricRepository
-
     @Inject
     lateinit var opleidingsOnderdeelRepository: OpleidingsOnderdeelRepository
-
     @Inject
     lateinit var context: Context
 
     private val _rubrics: LiveData<List<Rubric>>
     val gefilterdeRubrics = MediatorLiveData<List<Rubric>>()
 
-    val opleidingsOnderdeel = MediatorLiveData<OpleidingsOnderdeel>()
+    private val _navigateToKlasSelect = MutableLiveData<Long>()
+    val navigateToKlasSelect
+        get() = _navigateToKlasSelect
 
+    val opleidingsOnderdeel = MediatorLiveData<OpleidingsOnderdeel>()
+    /**
+     * Constructor. Dependency injection, initializing current opleidingsonderdeel object and all rubrics
+     */
     init {
         App.component.inject(this)
         opleidingsOnderdeel.addSource(
@@ -40,7 +54,10 @@ class RubricSelectViewModel(opleidingsOnderdeelId: Long) : ViewModel() {
             gefilterdeRubrics.value = it
         }
     }
-
+    /**
+     * Function that filters rubrics from SearchBar input on Fragment
+     * @param filterText Input to filter the rubrics
+     */
     fun filterChanged(filterText: String?) {
         if (filterText != null) {
             _rubrics.value?.let {
@@ -54,16 +71,16 @@ class RubricSelectViewModel(opleidingsOnderdeelId: Long) : ViewModel() {
             }
         }
     }
-
-    private val _navigateToKlasSelect = MutableLiveData<Long>()
-    val navigateToKlasSelect
-        get() = _navigateToKlasSelect
-
-
+    /**
+     * onClickListener handling when a [Rubric] is clicked in Fragment.
+     * @param id ID from [Rubric]
+     */
     fun onRubricClicked(id: Long) {
         _navigateToKlasSelect.value = id
     }
-
+    /**
+     * Resetting the navigation control when navigated in the Fragment
+     */
     fun onOpleidingsOnderdeelNavigated() {
         _navigateToKlasSelect.value = null
     }
