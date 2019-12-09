@@ -1,4 +1,4 @@
-package org.mayday.sociallogins
+package be.hogent.tile3.rubricapplication.security
 
 import okhttp3.ResponseBody
 import retrofit2.Call

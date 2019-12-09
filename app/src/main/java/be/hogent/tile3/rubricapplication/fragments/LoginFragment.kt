@@ -18,7 +18,8 @@ import be.hogent.tile3.rubricapplication.ui.LoginViewModel
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
 import net.openid.appauth.*
-import org.mayday.sociallogins.Configuration
+import be.hogent.tile3.rubricapplication.security.Configuration
+import java.util.concurrent.ExecutorService
 
 class LoginFragment : Fragment() {
     companion object {
@@ -46,13 +47,13 @@ class LoginFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        loginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
         binding.loginBtn.setOnClickListener { view: View ->
             loginViewModel.recreateAuthorizationService()
             startAuthProcess()
         }
+        loginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
 
         return binding.root
     }
@@ -78,7 +79,7 @@ class LoginFragment : Fragment() {
     }
 
     @MainThread
-    public fun startAuth() {
+    fun startAuth() {
         loginViewModel.mExecutor?.submit { doAuth() }
     }
 
@@ -89,7 +90,7 @@ class LoginFragment : Fragment() {
         startActivityForResult(intent, RC_AUTH)
     }
 
-    public fun createAuthRequest() {
+    fun createAuthRequest() {
         val authRequestBuilder = AuthorizationRequest.Builder(
             loginViewModel.mAuthStateManager.current.authorizationServiceConfiguration!!,
             loginViewModel.mClientId.get(),
@@ -102,13 +103,13 @@ class LoginFragment : Fragment() {
     }
 
     @WorkerThread
-    public fun initializeClient() {
+    fun initializeClient() {
         loginViewModel.mClientId.set(loginViewModel.mConfiguration.clientId)
         activity?.runOnUiThread { createAuthRequest() }
         return
     }
 
-    public fun startAuthProcess() {
+    fun startAuthProcess() {
         loginViewModel.mConfiguration = Configuration.getInstance(requireContext())
         if (!loginViewModel.mConfiguration.isValid) {
             return
@@ -120,7 +121,7 @@ class LoginFragment : Fragment() {
     }
 
     @WorkerThread
-    public fun initializeAppAuth() {
+    fun initializeAppAuth() {
         val config = AuthorizationServiceConfiguration(
             loginViewModel.mConfiguration.authEndpointUri!!,
             loginViewModel.mConfiguration.tokenEndpointUri!!
