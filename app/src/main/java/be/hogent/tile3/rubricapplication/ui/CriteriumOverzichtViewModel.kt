@@ -354,11 +354,8 @@ class CriteriumOverzichtViewModel(
      * @param positie Position of the selected [Criterium]
      */
     fun onNiveauClicked(niveauId: Long, positie: Int){
-
-        if(niveauId != geselecteerdCriteriumNiveau.value?.niveauId){
-            _criteriumEvaluatie.value?.score?.let{
-                _score.value = _score.value!!.minus(it)
-            }
+        _criteriumEvaluatie.value?.score?.let {
+            _score.value = _score.value!!.minus(it)
         }
         _geselecteerdCriteriumNiveau.value = criteriumNiveaus.value?.singleOrNull{it.niveauId == niveauId}
         _positieGeselecteerdCriteriumNiveau?.value = positie
