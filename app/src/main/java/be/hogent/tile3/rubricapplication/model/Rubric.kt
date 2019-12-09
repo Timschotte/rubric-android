@@ -23,7 +23,8 @@ import androidx.room.*
     indices = [Index("opleidingsOnderdeelId")]
 )
 data class Rubric(
-    @PrimaryKey @ColumnInfo(name = "rubricId") val rubricId: Long = 0,
+    @PrimaryKey
+    @ColumnInfo(name = "rubricId") val rubricId: Long = 0,
     @ColumnInfo(name = "onderwerp") val onderwerp: String? = "",
     @ColumnInfo(name = "omschrijving") val omschrijving: String? = "",
     @ColumnInfo(name = "datumTijdCreatie") val datumTijdCreatie: String? = "",

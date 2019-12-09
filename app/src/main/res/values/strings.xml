@@ -31,4 +31,6 @@
     <string name="offline">Geen connectie</string>
     <string name="offline_message">Let op, er is geen internetconnectie beschikbaar. Offline werken blijft mogelijk.\nGegevens worden lokaal bewaard tot de connectie hersteld is!</string>
     <string name="online_message">Connectie hersteld. Gegevens worden op de achtergrond bewaard!</string>
+    <string name="ApiSecret">3167a15e-476e-4ef5-b29b-89bdd4f24119</string>
+    <string name="Login">Login</string>
 </resources>
