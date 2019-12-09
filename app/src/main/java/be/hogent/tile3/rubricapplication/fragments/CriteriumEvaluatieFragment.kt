@@ -80,7 +80,6 @@ class CriteriumEvaluatieFragment : Fragment() {
                         binding.criterium = it
                     }
                 })
-
             criteriumOverzichtViewModel.geselecteerdCriteriumNiveau.value?.let {
                     geselecteerdNiveau ->
                 geselecteerdNiveau?.let {

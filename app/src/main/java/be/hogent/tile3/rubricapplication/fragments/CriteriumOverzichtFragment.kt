@@ -120,7 +120,6 @@ class CriteriumOverzichtFragment : Fragment() {
                 binding.criteriumEvaluatieFragmentContainer.requestLayout()
             }
         })
-
         criteriumOverzichtViewModel.overzichtPaneelUitgeklapt.observe(viewLifecycleOwner, Observer { overzichtPaneelUitgeklapt: Boolean ->
 
             val displaymetrics = DisplayMetrics()
@@ -202,8 +201,8 @@ class CriteriumOverzichtFragment : Fragment() {
                 binding.klapInKlapUitButton2.visibility = View.VISIBLE
             }
 
-                binding.criteriumEvaluatieFragmentContainer.invalidate()
-                binding.criteriumEvaluatieFragmentContainer.requestLayout()
+            binding.criteriumEvaluatieFragmentContainer.invalidate()
+            binding.criteriumEvaluatieFragmentContainer.requestLayout()
 
         })
         /**
