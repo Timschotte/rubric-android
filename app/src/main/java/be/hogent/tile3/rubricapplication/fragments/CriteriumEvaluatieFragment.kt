@@ -20,6 +20,10 @@ import be.hogent.tile3.rubricapplication.databinding.FragmentCriteriumEvaluatieB
 import be.hogent.tile3.rubricapplication.model.Niveau
 import be.hogent.tile3.rubricapplication.ui.CriteriumOverzichtViewModel
 import com.google.android.material.chip.Chip
+import android.view.animation.AnimationUtils.loadAnimation
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+
 
 class CriteriumEvaluatieFragment
     : Fragment() {
@@ -32,7 +36,7 @@ class CriteriumEvaluatieFragment
     ): View? {
         binding = DataBindingUtil.inflate(
             inflater,
-            R.layout.fragment_criterium_evaluatie,
+            be.hogent.tile3.rubricapplication.R.layout.fragment_criterium_evaluatie,
             container,
             false
         )

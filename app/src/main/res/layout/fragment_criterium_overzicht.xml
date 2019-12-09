@@ -44,26 +44,28 @@
             </LinearLayout>
 
         </LinearLayout>
+
         <RelativeLayout
             android:id="@+id/criterium_evaluatie_fragment_wrapper"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <ImageButton
                 android:id="@+id/klap_in_klap_uit_button2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:src="@drawable/ic_keyboard_arrow_right_black_24dp"
-                android:tint="@color/secondaryColor"
-                android:elevation="1dp"
                 android:background="?android:attr/selectableItemBackground"
-                />
+                android:elevation="1dp"
+                android:src="@drawable/ic_keyboard_arrow_right_black_24dp"
+                android:tint="@color/secondaryColor" />
+
             <FrameLayout
                 android:id="@+id/criterium_evaluatie_fragment_container"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:visibility="visible"/>
+                android:visibility="visible" />
         </RelativeLayout>
 
 
