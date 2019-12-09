@@ -33,6 +33,12 @@ interface EvaluatieDao {
     @Query("SELECT * FROM evaluatie_table WHERE evaluatieId = :evaluatieId")
     fun get(evaluatieId: String): Evaluatie
     /**
+     * Inserts a [List] of [Evaluatie] to Room Database
+     * @return [LiveData] [List] of [Evaluatie]
+     */
+    @Query("SELECT * from evaluatie_table")
+    fun getAll(): LiveData<List<Evaluatie>>
+    /**
      * Deletes a [Evaluatie] from [Room] database
      * @param evaluatie [Evaluatie]
      */
