@@ -30,7 +30,7 @@ Er is een angular en android gedeelte van dit project, in android worden rubrics
 
 ### Built With
 * [Android](https://www.android.com/)
-* [Kotlin](https://kotlinlang.org/)f
+* [Kotlin](https://kotlinlang.org/)
 * [Dagger 2](https://developer.android.com/training/dependency-injection/dagger-android)
 
 
