@@ -75,10 +75,7 @@ class CriteriumEvaluatieFragment : Fragment() {
             criteriumOverzichtViewModel.geselecteerdCriterium.observe(this, Observer{
                 binding.criterium = criteriumOverzichtViewModel.geselecteerdCriterium.value
             })
-
-            criteriumOverzichtViewModel.geselecteerdCriterium.observe(
-                viewLifecycleOwner,
-                Observer { sel ->
+            criteriumOverzichtViewModel.geselecteerdCriterium.observe(viewLifecycleOwner, Observer { sel ->
                     sel.let {
                         binding.criterium = it
                     }
