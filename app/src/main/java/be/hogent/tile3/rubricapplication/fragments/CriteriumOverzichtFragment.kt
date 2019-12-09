@@ -16,6 +16,7 @@ import be.hogent.tile3.rubricapplication.ui.CriteriumOverzichtViewModel
 import android.animation.ObjectAnimator
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
+import android.app.ActionBar
 import androidx.recyclerview.widget.RecyclerView
 import android.util.DisplayMetrics
 import android.util.Log
@@ -192,11 +193,11 @@ class CriteriumOverzichtFragment : Fragment() {
                 )
 
                 animCriteriumEvaluatieFrameBreedte.addUpdateListener { valueAnimator ->
-                    val animWaarde = valueAnimator.animatedValue as Int
                     val layoutParams = binding.criteriumEvaluatieFragmentWrapper.layoutParams
-                    layoutParams.width = animWaarde
-                    binding.criteriumEvaluatieFragmentWrapper.layoutParams = layoutParams
+                    layoutParams.width = valueAnimator.animatedValue as Int
+                    binding.criteriumEvaluatieFragmentWrapper.setLayoutParams(layoutParams)
                 }
+
 
 
                 val set = AnimatorSet()
@@ -216,6 +217,7 @@ class CriteriumOverzichtFragment : Fragment() {
                     binding.klapInKlapUitButton2.visibility = View.VISIBLE
                 }
 
+                binding.criteriumEvaluatieFragmentContainer.invalidate()
                 binding.criteriumEvaluatieFragmentContainer.requestLayout()
 
             })
