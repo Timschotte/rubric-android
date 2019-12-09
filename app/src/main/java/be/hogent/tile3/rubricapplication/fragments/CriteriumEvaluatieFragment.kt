@@ -17,17 +17,20 @@ import be.hogent.tile3.rubricapplication.R
 import be.hogent.tile3.rubricapplication.adapters.CriteriumEvaluatieListAdapter
 import be.hogent.tile3.rubricapplication.adapters.CriteriumEvaluatieListListener
 import be.hogent.tile3.rubricapplication.databinding.FragmentCriteriumEvaluatieBinding
+import be.hogent.tile3.rubricapplication.model.Niveau
 import be.hogent.tile3.rubricapplication.ui.CriteriumOverzichtViewModel
 import com.google.android.material.chip.Chip
 
 class CriteriumEvaluatieFragment
     : Fragment() {
 
+    lateinit var binding: FragmentCriteriumEvaluatieBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = DataBindingUtil.inflate<FragmentCriteriumEvaluatieBinding>(
+        binding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_criterium_evaluatie,
             container,
@@ -53,32 +56,17 @@ class CriteriumEvaluatieFragment
                     }
                 })
 
+            criteriumOverzichtViewModel.geselecteerdCriteriumNiveau.value?.let {
+                    geselecteerdNiveau ->
+                geselecteerdNiveau?.let {
+                    displayChipsOfSelectedNiveau(it)
+                }
+            }
+
             criteriumOverzichtViewModel.geselecteerdCriteriumNiveau.observe(viewLifecycleOwner,
                 Observer { geselecteerdNiveau ->
                     geselecteerdNiveau?.let {
-                        binding.chipHolder.removeAllViews()
-                        var checked = false
-                        for (i in geselecteerdNiveau.ondergrens..geselecteerdNiveau.bovengrens) {
-                            val chip = layoutInflater.inflate(
-                                R.layout.chip_item_evaluatie,
-                                null,
-                                false
-                            ) as Chip
-                            chip.text = i.toString()
-                            chip.setOnClickListener {
-                                criteriumOverzichtViewModel.onScoreChanged(
-                                    Integer.parseInt(chip.text.toString())
-                                )
-                            }
-                            binding.chipHolder.addView(chip)
-                            if (chip.text == (criteriumOverzichtViewModel.criteriumEvaluatie.value?.score
-                                    ?: 0).toString() || !checked
-                            ) {
-                                chip.isChecked = true
-                                checked = true
-                            }
-                        }
-                        binding.chipHolder.visibility = View.VISIBLE
+                        displayChipsOfSelectedNiveau(it)
                     }
                 })
 
@@ -190,5 +178,31 @@ class CriteriumEvaluatieFragment
         }
 
         return binding.root
+    }
+
+    private fun displayChipsOfSelectedNiveau(geselecteerdNiveau: Niveau){
+        binding.chipHolder.removeAllViews()
+        var checked = false
+        for (i in geselecteerdNiveau.ondergrens..geselecteerdNiveau.bovengrens) {
+            val chip = layoutInflater.inflate(
+                R.layout.chip_item_evaluatie,
+                null,
+                false
+            ) as Chip
+            chip.text = i.toString()
+            chip.setOnClickListener {
+                binding.criteriumOverzichtViewModel?.onScoreChanged(
+                    Integer.parseInt(chip.text.toString())
+                )
+            }
+            binding.chipHolder.addView(chip)
+            if (chip.text == (binding.criteriumOverzichtViewModel?.criteriumEvaluatie?.value?.score
+                    ?: 0).toString() || !checked
+            ) {
+                chip.isChecked = true
+                checked = true
+            }
+        }
+        binding.chipHolder.visibility = View.VISIBLE
     }
 }
