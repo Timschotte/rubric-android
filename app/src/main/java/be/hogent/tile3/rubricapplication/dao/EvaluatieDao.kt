@@ -13,7 +13,7 @@ import kotlinx.coroutines.Deferred
 @Dao
 interface EvaluatieDao {
     /**
-     * Inserts an [Evaluatie] in [Room] database. Exisiting [Evaluatie] will be replaced.
+     * Inserts a [Evaluatie] in [Room] database. Exisiting [Evaluatie] will be replaced.
      * @see OnConflictStrategy.REPLACE
      * @param evaluatie [Evaluatie]
      */
@@ -26,20 +26,20 @@ interface EvaluatieDao {
     @Update
     fun update(evaluatie: Evaluatie)
     /**
-     * Retrieves an [Evaluatie] by id
+     * Retrieves [Evaluatie] by id
      * @param evaluatieId [String]
      * @return [Evaluatie]
      */
     @Query("SELECT * FROM evaluatie_table WHERE evaluatieId = :evaluatieId")
     fun get(evaluatieId: String): Evaluatie
     /**
-     * Retrieves all [Evaluatie] from [Room] database
+     * Inserts a [List] of [Evaluatie] to Room Database
      * @return [LiveData] [List] of [Evaluatie]
      */
     @Query("SELECT * from evaluatie_table")
     fun getAll(): LiveData<List<Evaluatie>>
     /**
-     * Deletes an [Evaluatie] from [Room] database
+     * Deletes a [Evaluatie] from [Room] database
      * @param evaluatie [Evaluatie]
      */
     @Delete

@@ -120,63 +120,61 @@ class CriteriumOverzichtFragment : Fragment() {
                 binding.criteriumEvaluatieFragmentContainer.requestLayout()
             }
         })
+        criteriumOverzichtViewModel.overzichtPaneelUitgeklapt.observe(viewLifecycleOwner, Observer { overzichtPaneelUitgeklapt: Boolean ->
 
-        criteriumOverzichtViewModel.overzichtPaneelUitgeklapt.observe(viewLifecycleOwner,
-            Observer { overzichtPaneelUitgeklapt: Boolean ->
+            val displaymetrics = DisplayMetrics()
+            activity!!.windowManager.defaultDisplay.getMetrics(displaymetrics)
+            val screenWidth = displaymetrics.widthPixels
 
-                val displaymetrics = DisplayMetrics()
-                activity!!.windowManager.defaultDisplay.getMetrics(displaymetrics)
-                val screenWidth = displaymetrics.widthPixels
+            val animOverzichtBalk = ObjectAnimator.ofFloat(
+                binding.criteriumEvaluatieOverzichtBalk,
+                "translationX",
+                binding.criteriumEvaluatieOverzichtBalk.translationX,
+                if (!overzichtPaneelUitgeklapt)
+                    binding.criteriumEvaluatieOverzichtBalk.translationX + resources
+                        .getDimensionPixelOffset(R.dimen.criteria_overzicht_translationX)
+                        .toFloat()
+                else
+                    0.0F
+            )
 
-                val animOverzichtBalk = ObjectAnimator.ofFloat(
-                    binding.criteriumEvaluatieOverzichtBalk,
-                    "translationX",
-                    binding.criteriumEvaluatieOverzichtBalk.translationX,
-                    if (!overzichtPaneelUitgeklapt)
-                        binding.criteriumEvaluatieOverzichtBalk.translationX + resources
-                            .getDimensionPixelOffset(R.dimen.criteria_overzicht_translationX)
-                            .toFloat()
-                    else
-                        0.0F
-                )
+            val animCriteriumEvaluatieFramePositie = ObjectAnimator.ofFloat(
+                binding.criteriumEvaluatieFragmentWrapper,
+                "translationX",
+                binding.criteriumEvaluatieFragmentWrapper.translationX,
+                if (!overzichtPaneelUitgeklapt)
+                    binding.criteriumEvaluatieFragmentWrapper.translationX + resources
+                        .getDimensionPixelOffset(R.dimen.criteria_overzicht_translationX)
+                        .toFloat()
+                else
+                    0.0F
+            )
+            val tabletSize = resources.getBoolean(R.bool.isTablet)
+            if (!tabletSize){
+                animCriteriumEvaluatieFramePositie.doOnStart {
+                    if(overzichtPaneelUitgeklapt){
+                        binding.criteriumEvaluatieOverzichtBalk.visibility = View.VISIBLE
 
-                val animCriteriumEvaluatieFramePositie = ObjectAnimator.ofFloat(
-                    binding.criteriumEvaluatieFragmentWrapper,
-                    "translationX",
-                    binding.criteriumEvaluatieFragmentWrapper.translationX,
-                    if (!overzichtPaneelUitgeklapt)
-                        binding.criteriumEvaluatieFragmentWrapper.translationX + resources
-                            .getDimensionPixelOffset(R.dimen.criteria_overzicht_translationX)
-                            .toFloat()
-                    else
-                        0.0F
-                )
-                val tabletSize = resources.getBoolean(R.bool.isTablet)
-                if (!tabletSize){
-                    animCriteriumEvaluatieFramePositie.doOnStart {
-                        if(overzichtPaneelUitgeklapt){
-                            binding.criteriumEvaluatieOverzichtBalk.visibility = View.VISIBLE
-
-                        }else{
-                            binding.criteriumEvaluatieFragmentContainer.visibility = View.VISIBLE
-                        }
-                    }
-                    animCriteriumEvaluatieFramePositie.doOnEnd {
-                        if(!overzichtPaneelUitgeklapt) {
-                            binding.criteriumEvaluatieOverzichtBalk.visibility = View.INVISIBLE
-                        }else{
-                            binding.criteriumEvaluatieFragmentContainer.visibility = View.INVISIBLE
-                        }
+                    }else{
+                        binding.criteriumEvaluatieFragmentContainer.visibility = View.VISIBLE
                     }
                 }
+                animCriteriumEvaluatieFramePositie.doOnEnd {
+                    if(!overzichtPaneelUitgeklapt) {
+                        binding.criteriumEvaluatieOverzichtBalk.visibility = View.INVISIBLE
+                    }else{
+                        binding.criteriumEvaluatieFragmentContainer.visibility = View.INVISIBLE
+                    }
+                }
+            }
 
-                val animCriteriumEvaluatieFrameBreedte = ValueAnimator.ofInt(
-                    binding.criteriumEvaluatieFragmentWrapper.measuredWidth,
-                    if (!overzichtPaneelUitgeklapt)
-                        screenWidth - resources.getDimensionPixelOffset(R.dimen.criteria_overzicht_ingeklapt_breedte)
-                    else
-                        screenWidth - resources.getDimensionPixelOffset(R.dimen.criteria_overzicht_width)
-                )
+            val animCriteriumEvaluatieFrameBreedte = ValueAnimator.ofInt(
+                binding.criteriumEvaluatieFragmentWrapper.measuredWidth,
+                if (!overzichtPaneelUitgeklapt)
+                    screenWidth - resources.getDimensionPixelOffset(R.dimen.criteria_overzicht_ingeklapt_breedte)
+                else
+                    screenWidth - resources.getDimensionPixelOffset(R.dimen.criteria_overzicht_width)
+            )
 
                 animCriteriumEvaluatieFrameBreedte.addUpdateListener { valueAnimator ->
                     val layoutParams = binding.criteriumEvaluatieFragmentWrapper.layoutParams
@@ -186,25 +184,25 @@ class CriteriumOverzichtFragment : Fragment() {
 
 
 
-                val set = AnimatorSet()
-                set.duration = 500L
-                set.playTogether(
-                    animOverzichtBalk,
-                    animCriteriumEvaluatieFramePositie,
-                    animCriteriumEvaluatieFrameBreedte
-                )
-                set.start()
+            val set = AnimatorSet()
+            set.duration = 500L
+            set.playTogether(
+                animOverzichtBalk,
+                animCriteriumEvaluatieFramePositie,
+                animCriteriumEvaluatieFrameBreedte
+            )
+            set.start()
 
-                if (overzichtPaneelUitgeklapt) {
-                    binding.rubricCriteriaLayout.visibility = View.VISIBLE
-                    binding.klapInKlapUitButton2.visibility = View.INVISIBLE
-                } else {
-                    binding.rubricCriteriaLayout.visibility = View.INVISIBLE
-                    binding.klapInKlapUitButton2.visibility = View.VISIBLE
-                }
+            if (overzichtPaneelUitgeklapt) {
+                binding.rubricCriteriaLayout.visibility = View.VISIBLE
+                binding.klapInKlapUitButton2.visibility = View.INVISIBLE
+            } else {
+                binding.rubricCriteriaLayout.visibility = View.INVISIBLE
+                binding.klapInKlapUitButton2.visibility = View.VISIBLE
+            }
 
-                binding.criteriumEvaluatieFragmentContainer.invalidate()
-                binding.criteriumEvaluatieFragmentContainer.requestLayout()
+            binding.criteriumEvaluatieFragmentContainer.invalidate()
+            binding.criteriumEvaluatieFragmentContainer.requestLayout()
 
         })
         /**
