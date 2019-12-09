@@ -1,4 +1,4 @@
-package org.mayday.sociallogins
+package be.hogent.tile3.rubricapplication.security
 
 import android.content.Context
 import android.content.Intent

@@ -5,13 +5,15 @@ import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.lifecycle.ViewModel
+import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.R
 import be.hogent.tile3.rubricapplication.security.AuthConnectionBuilder
 import net.openid.appauth.*
-import org.mayday.sociallogins.AuthStateManager
-import org.mayday.sociallogins.Configuration
+import be.hogent.tile3.rubricapplication.security.AuthStateManager
+import be.hogent.tile3.rubricapplication.security.Configuration
 import java.util.*
 import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
 
@@ -31,6 +33,10 @@ class LoginViewModel : ViewModel() {
     val mAuthIntent = AtomicReference<CustomTabsIntent>()
     var mExecutor: ExecutorService? = null
 
+    init {
+        mExecutor = Executors.newSingleThreadExecutor()
+        App.component.inject(this)
+    }
 
     @MainThread
     public fun exchangeAuthorizationCode(authorizationResponse: AuthorizationResponse) {

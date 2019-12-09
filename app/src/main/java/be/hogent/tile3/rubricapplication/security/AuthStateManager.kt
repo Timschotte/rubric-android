@@ -1,4 +1,4 @@
-package org.mayday.sociallogins
+package be.hogent.tile3.rubricapplication.security
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -8,7 +8,6 @@ import org.json.JSONException
 import java.lang.ref.WeakReference
 import java.util.concurrent.atomic.AtomicReference
 import java.util.concurrent.locks.ReentrantLock
-import javax.inject.Inject
 
 
 class AuthStateManager(context: Context) {
