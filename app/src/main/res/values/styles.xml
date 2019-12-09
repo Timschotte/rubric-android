@@ -9,6 +9,7 @@
         <item name="android:fontFamily">@font/montserrat</item>
         <item name="android:textColorPrimary">@color/primaryTextColor</item>
         <item name="android:textColorSecondary">@color/secondaryTextColor</item>
+        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
     </style>
 
     <style name="AppTheme.TextColorReverse" parent="AppTheme">
@@ -28,6 +29,14 @@
         <item name="android:layout_height">200dp</item>
         <item name="android:background">@color/primaryColor</item>
     </style>
+    <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="buttonBarNegativeButtonStyle">@style/buttonBarButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/buttonBarButtonStyle</item>
+        <item name="buttonBarNeutralButtonStyle">@style/buttonBarButtonStyle</item>
+    </style>
 
+    <style name="buttonBarButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/secondaryDarkColor</item>
+    </style>
 
 </resources>

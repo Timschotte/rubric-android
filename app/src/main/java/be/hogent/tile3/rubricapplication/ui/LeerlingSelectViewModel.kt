@@ -3,17 +3,17 @@ package be.hogent.tile3.rubricapplication.ui
 import android.content.Context
 import android.net.ConnectivityManager
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.model.Student
+import be.hogent.tile3.rubricapplication.persistence.EvaluatieRepository
 import be.hogent.tile3.rubricapplication.persistence.StudentRepository
+import be.hogent.tile3.rubricapplication.utils.isNetworkAvailable
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
 class LeerlingSelectViewModel(
-    private val rubricId: String,
+    private val rubricId: Long,
     private val opleidingsOnderdeelId: Long
 ) : ViewModel() {
 
@@ -21,34 +21,59 @@ class LeerlingSelectViewModel(
     lateinit var studentRepository: StudentRepository
 
     @Inject
+    lateinit var evaluatieRepository: EvaluatieRepository
+
+    @Inject
     lateinit var context: Context
 
     private var viewModelJob = Job()
-    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+    private val coroutineScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    val studenten: LiveData<List<Student>>
+    lateinit var studenten: LiveData<List<Student>>
+
+    val gefilterdeStudenten = MediatorLiveData<List<Student>>()
 
     init {
         App.component.inject(this)
-        refreshRubricDatabase()
-        studenten = studentRepository.getAllStudentsFromOpleidingsOnderdeel(opleidingsOnderdeelId)
-        Log.i("test2", studenten.toString())
+        refreshStudentDatabase()
+        loadStudents()
+        refreshEvaluationDb()
+        gefilterdeStudenten.addSource(studenten){
+            gefilterdeStudenten.value = it
+        }
     }
 
-    private fun refreshRubricDatabase() {
-        if (isNetworkAvailable()) {
-            uiScope.launch {
-                studentRepository.refreshStudenten()
+    private fun loadStudents(){
+        studenten = studentRepository.getAllStudentsFromOpleidingsOnderdeel(opleidingsOnderdeelId)
+    }
+
+    fun filterChanged(filterText: String?){
+        if (filterText != null) {
+            studenten.value?.let {
+                gefilterdeStudenten.removeSource(studenten)
+                gefilterdeStudenten.addSource(studenten){
+                    gefilterdeStudenten.value = it.filter { student ->
+                        student.studentNaam.toLowerCase().contains(filterText.toLowerCase())
+                    }
+                }
             }
         }
     }
 
+    private fun refreshStudentDatabase() {
+        if (isNetworkAvailable(context)) {
+            coroutineScope.launch {
+                studentRepository.refreshStudenten(opleidingsOnderdeelId)
+            }
+        }
+    }
 
-    private fun isNetworkAvailable(): Boolean {
-        val connectivityManager =
-            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
-        val activeNetworkInfo = connectivityManager!!.activeNetworkInfo
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected
+    private fun refreshEvaluationDb(){
+        if (isNetworkAvailable(context)) {
+            coroutineScope.launch {
+                evaluatieRepository.refreshEvaluations(rubricId, 1)
+            }
+        }
     }
 
     private val _navigateToRubricView = MutableLiveData<Student>()

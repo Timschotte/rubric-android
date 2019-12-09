@@ -8,41 +8,40 @@ import com.squareup.moshi.Json
 import java.io.Serializable
 
 @Entity(
-    foreignKeys = arrayOf(
-        ForeignKey(
-            entity = Rubric::class,
-            parentColumns = arrayOf("rubricId"),
-            childColumns = arrayOf("rubricId"))
-),
-    indices = arrayOf(Index(value = ["criteriumId"])),
+    foreignKeys = [ForeignKey(
+        entity = Rubric::class,
+        parentColumns = arrayOf("rubricId"),
+        childColumns = arrayOf("rubricId"),
+        onDelete = CASCADE)],
+    indices = [Index(value = ["criteriumId"])],
     tableName = "criterium_table"
 )
 data class Criterium(
     // let op: geen criteriumgroepid
-    @PrimaryKey @ColumnInfo(name = "criteriumId") val criteriumId: String,
-    @ColumnInfo(name = "naam") val naam: String = "",
-    @ColumnInfo(name = "omschrijving") val omschrijving: String = "",
+    @PrimaryKey @ColumnInfo(name = "criteriumId") val criteriumId: Long,
+    @ColumnInfo(name = "naam") val naam: String? = "",
+    @ColumnInfo(name = "omschrijving") val omschrijving: String? = "",
     @ColumnInfo(name = "gewicht") val gewicht: Double = 0.0,
-    @ColumnInfo(name = "criteriumGroepId") val criteriumGroepId: String,
-    @ColumnInfo(name = "rubricId") val rubricId: String
+    @ColumnInfo(name = "criteriumGroepId") val criteriumGroepId: Long,
+    @ColumnInfo(name = "rubricId") val rubricId: Long
 ) : Parcelable, Serializable {
     constructor(parcel: Parcel) : this(
-        parcel.readString(),
+        parcel.readLong(),
         parcel.readString(),
         parcel.readString(),
         parcel.readDouble(),
-        parcel.readString(),
-        parcel.readString()
+        parcel.readLong(),
+        parcel.readLong()
     ) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(criteriumId)
+        parcel.writeLong(criteriumId)
         parcel.writeString(naam)
         parcel.writeString(omschrijving)
         parcel.writeDouble(gewicht)
-        parcel.writeString(criteriumGroepId)
-        parcel.writeString(rubricId)
+        parcel.writeLong(criteriumGroepId)
+        parcel.writeLong(rubricId)
     }
 
     override fun describeContents(): Int {

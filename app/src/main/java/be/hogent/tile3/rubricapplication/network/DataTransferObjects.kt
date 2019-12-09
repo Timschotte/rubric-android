@@ -8,6 +8,8 @@ import be.hogent.tile3.rubricapplication.model.Rubric
 import be.hogent.tile3.rubricapplication.model.Student
 import be.hogent.tile3.rubricapplication.model.StudentOpleidingsOnderdeel
 import com.squareup.moshi.JsonClass
+import java.util.*
+import kotlin.collections.ArrayList
 
 @JsonClass(generateAdapter = false)
 data class NetworkRubric(
@@ -80,6 +82,9 @@ data class NetworkDocent(
 data class NetworkStudent(
     val id: Long,
     val naam: String,
+    val achternaam: String?,
+    val voornaam: String?,
+    val geboortedatum: String?,
     val studentNummer: String,
     val opleidingsOnderdelen: List<Long>
 )
@@ -89,7 +94,7 @@ data class NetworkStudent(
  */
 fun NetworkRubric.asDatabaseModel(): Rubric{
     return Rubric(
-        this.id.toString(),
+        this.id,
         this.onderwerp,
         this.omschrijving,
         this.datumTijdCreatie,
@@ -101,7 +106,7 @@ fun NetworkRubric.asDatabaseModel(): Rubric{
 fun List<NetworkRubric>.asDatabaseModel(): List<Rubric> {
     return map {
         Rubric(
-            it.id.toString(),
+            it.id,
             it.onderwerp,
             it.omschrijving,
             it.datumTijdCreatie,
@@ -109,19 +114,6 @@ fun List<NetworkRubric>.asDatabaseModel(): List<Rubric> {
             it.opleidingsOnderdeel.id
         )
     }
-}
-
-fun List<NetworkRubric>.asDatabaseModelArray(): Array<Rubric> {
-    return map {
-        Rubric(
-            it.id.toString(),
-            it.onderwerp,
-            it.omschrijving,
-            it.datumTijdCreatie,
-            it.datumTijdLaatsteWijziging,
-            it.opleidingsOnderdeel.id
-        )
-    }.toTypedArray()
 }
 
 fun List<NetworkOpleidingsOnderdeel>.asOpleidingsOnderdeelDatabaseModel(): Array<OpleidingsOnderdeel> {
@@ -138,6 +130,9 @@ fun List<NetworkStudent>.asStudentDatabaseModel(): Array<Student> {
         Student(
             it.id,
             it.naam,
+            it.achternaam,
+            it.voornaam,
+            it.geboortedatum,
             it.studentNummer
         )
     }.toTypedArray()
@@ -154,10 +149,10 @@ fun List<NetworkStudent>.asStudentOpleidingsOnderdeelDatabaseModel(): Array<Stud
 }
 
 
-fun NetworkCriterium.asDatabaseModel(rubricId: String, criteriumGroepId: String): Criterium{
+fun NetworkCriterium.asDatabaseModel(rubricId: Long, criteriumGroepId: Long): Criterium{
     Log.i("DTO", "About to return Criterium for rubric " + rubricId + ", criteriumGroepId: " + criteriumGroepId + " and criteriumId: " + this.id.toString())
     return Criterium(
-        this.id.toString(),
+        this.id,
         this.naam,
         this.omschrijving,
         this.gewicht,
@@ -166,20 +161,7 @@ fun NetworkCriterium.asDatabaseModel(rubricId: String, criteriumGroepId: String)
     )
 }
 
-fun List<NetworkCriterium>.asDatabaseModelArray(rubricId: String, criteriumGroepId: String): Array<Criterium>{
-    return map{
-        Criterium(
-            it.id.toString(),
-            it.naam,
-            it.omschrijving,
-            it.gewicht,
-            criteriumGroepId,
-            rubricId
-        )
-    }.toTypedArray()
-}
-
-fun NetworkCriteriumNiveau.asDatabaseModel(rubricId: String, criteriumGroepId: String, criteriumId: String): Niveau{
+fun NetworkCriteriumNiveau.asDatabaseModel(rubricId: Long, criteriumGroepId: Long, criteriumId: Long): Niveau{
     Log.i("DTO", "About to return Niveau for rubric " + rubricId + ", criteriumGroep " + criteriumGroepId + ", criterium" + criteriumId + ", niveauId: " + this.id.toString())
     return Niveau(
         this.id,
@@ -192,20 +174,4 @@ fun NetworkCriteriumNiveau.asDatabaseModel(rubricId: String, criteriumGroepId: S
         criteriumGroepId,
         criteriumId
     )
-}
-
-fun List<NetworkCriteriumNiveau>.asDatabaseModelArray(rubricId: String, criteriumGroepId: String, criteriumId: String): Array<Niveau>{
-    return map{
-        Niveau(
-            it.id,
-            it.niveau.naam,
-            it.omschrijving,
-            it.ondergrens,
-            it.bovengrens,
-            it.niveau.volgnummer,
-            rubricId,
-            criteriumGroepId,
-            criteriumId
-        )
-    }.toTypedArray()
 }

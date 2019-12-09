@@ -9,4 +9,5 @@
         <attr name="titel" format="reference" />
         <attr name="omschrijving" format="reference" />
     </declare-styleable>
+    <bool name="isTablet">false</bool>
 </resources>

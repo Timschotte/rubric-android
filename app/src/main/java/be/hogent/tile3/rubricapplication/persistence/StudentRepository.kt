@@ -24,39 +24,21 @@ class StudentRepository(private val studentDao: StudentDao, private val studentO
         App.component.inject(this)
     }
 
-    fun get(id: Long): LiveData<Student> {
-        return studentDao.getBy(id)
-    }
-
-    @WorkerThread
-    fun getAllStudents(): LiveData<List<Student>> {
-        return studentDao.getAll()
-    }
-
-    @WorkerThread
     fun getAllStudentsFromOpleidingsOnderdeel(id: Long): LiveData<List<Student>> {
         return studentOpleidingsOnderdeelDao.getStudentenFromOpleidingsOnderdeel(id)
     }
 
 
-    suspend fun refreshStudenten(){
-        Log.i("Test", "refresh called in studentRepo")
+    suspend fun refreshStudenten(olodId : Long){
         try{
             withContext(Dispatchers.IO){
-                val studenten = rubricApi.getStudenten().await()
+                val studenten = rubricApi.getStudenten(olodId).await()
                 studentDao.insertAll(*studenten.asStudentDatabaseModel())
                 studentOpleidingsOnderdeelDao.insertAll(*studenten.asStudentOpleidingsOnderdeelDatabaseModel())
-                System.out.printf(studenten.asStudentOpleidingsOnderdeelDatabaseModel().toString())
-                studenten.map {
-                    Log.i("Test", it.naam + "from refreshRubric in repository")
-                }
             }
 
         } catch (e: IOException){
             Log.i("StudentRepository", e.message)
         }
     }
-
-    val studenten: LiveData<List<Student>> = studentDao.getAll()
-
 }

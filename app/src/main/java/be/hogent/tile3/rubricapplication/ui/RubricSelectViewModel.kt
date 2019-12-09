@@ -1,8 +1,6 @@
 package be.hogent.tile3.rubricapplication.ui
 
 import android.content.Context
-import android.net.ConnectivityManager
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,14 +10,10 @@ import be.hogent.tile3.rubricapplication.model.OpleidingsOnderdeel
 import be.hogent.tile3.rubricapplication.model.Rubric
 import be.hogent.tile3.rubricapplication.persistence.OpleidingsOnderdeelRepository
 import be.hogent.tile3.rubricapplication.persistence.RubricRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
-class RubricSelectViewModel(private val opleidingsOnderdeelId: Long) : ViewModel() {
+class RubricSelectViewModel(opleidingsOnderdeelId: Long) : ViewModel() {
 
     @Inject
     lateinit var rubricRepository: RubricRepository
@@ -27,48 +21,51 @@ class RubricSelectViewModel(private val opleidingsOnderdeelId: Long) : ViewModel
     @Inject
     lateinit var opleidingsOnderdeelRepository: OpleidingsOnderdeelRepository
 
-    @Inject lateinit var context: Context
+    @Inject
+    lateinit var context: Context
 
-    private var viewModelJob = Job()
-    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
-
-    var rubrics: LiveData<List<Rubric>>
+    private val _rubrics: LiveData<List<Rubric>>
+    val gefilterdeRubrics = MediatorLiveData<List<Rubric>>()
 
     val opleidingsOnderdeel = MediatorLiveData<OpleidingsOnderdeel>()
 
-    init{
+    init {
         App.component.inject(this)
-        opleidingsOnderdeel.addSource(opleidingsOnderdeelRepository.get(opleidingsOnderdeelId), opleidingsOnderdeel::setValue)
-        refreshRubricDatabase()
-        rubrics = rubricRepository.getAllRubricsFromOpleidingsOnderdeel(opleidingsOnderdeelId)
-        Log.i("test2", rubrics.toString())
+        opleidingsOnderdeel.addSource(
+            opleidingsOnderdeelRepository.get(opleidingsOnderdeelId),
+            opleidingsOnderdeel::setValue
+        )
+        _rubrics = rubricRepository.getAllRubricsFromOpleidingsOnderdeel(opleidingsOnderdeelId)
+        gefilterdeRubrics.addSource(_rubrics) {
+            gefilterdeRubrics.value = it
+        }
     }
 
-    private fun refreshRubricDatabase() {
-        if (isNetworkAvailable()){
-            uiScope.launch {
-//                rubricRepository.refreshRubrics()
+    fun filterChanged(filterText: String?) {
+        if (filterText != null) {
+            _rubrics.value?.let {
+                gefilterdeRubrics.removeSource(_rubrics)
+                gefilterdeRubrics.addSource(_rubrics) {
+                    gefilterdeRubrics.value = it.filter { rubric ->
+                        rubric.onderwerp?.toLowerCase(Locale.FRENCH).orEmpty()
+                            .contains(filterText.toLowerCase(Locale.FRENCH))
+                    }
+                }
             }
         }
     }
 
-    private fun isNetworkAvailable(): Boolean {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
-        val activeNetworkInfo = connectivityManager!!.activeNetworkInfo
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected
-    }
-
-    private val _navigateToKlasSelect = MutableLiveData<String>()
+    private val _navigateToKlasSelect = MutableLiveData<Long>()
     val navigateToKlasSelect
         get() = _navigateToKlasSelect
 
 
-    fun onRubricClicked(id: String) {
+    fun onRubricClicked(id: Long) {
         _navigateToKlasSelect.value = id
     }
 
-    fun onOpleidingsOnderdeelNavigated(){
-        _navigateToKlasSelect. value = null
+    fun onOpleidingsOnderdeelNavigated() {
+        _navigateToKlasSelect.value = null
     }
 
 }

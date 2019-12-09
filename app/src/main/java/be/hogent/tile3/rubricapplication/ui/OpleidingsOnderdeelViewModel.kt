@@ -3,13 +3,12 @@ package be.hogent.tile3.rubricapplication.ui
 import android.content.Context
 import android.net.ConnectivityManager
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.model.OpleidingsOnderdeel
 import be.hogent.tile3.rubricapplication.persistence.OpleidingsOnderdeelRepository
 import be.hogent.tile3.rubricapplication.persistence.RubricRepository
+import be.hogent.tile3.rubricapplication.utils.isNetworkAvailable
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
@@ -26,7 +25,9 @@ class OpleidingsOnderdeelViewModel : ViewModel() {
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    var opleidingsOnderdelen: LiveData<List<OpleidingsOnderdeel>>
+    private val _opleidingsOnderdelen: LiveData<List<OpleidingsOnderdeel>>
+
+    val gefilterdeOpleidingsOnderdelen = MediatorLiveData<List<OpleidingsOnderdeel>>()
 
     private val _status = MutableLiveData<String>()
     val status: LiveData<String>
@@ -35,11 +36,32 @@ class OpleidingsOnderdeelViewModel : ViewModel() {
     init {
         App.component.inject(this)
         refreshRubricDatabase()
-        opleidingsOnderdelen = opleidingsOnderdeelRepository.getAllOpleidingsOnderdelenWithRubric()
+        _opleidingsOnderdelen = opleidingsOnderdeelRepository.getAllOpleidingsOnderdelenWithRubric()
+        gefilterdeOpleidingsOnderdelen.addSource(_opleidingsOnderdelen){
+            gefilterdeOpleidingsOnderdelen.value = it
+
+        }
         Log.i(
             "test",
             opleidingsOnderdeelRepository.getAllOpleidingsOnderdelenWithRubric().toString()
         )
+    }
+
+    /**
+     * Removing and re-adding source is to avoid that filtered items reappear when source list is updated
+     */
+    fun filterChanged(filterText: String?){
+        if (filterText != null) {
+            _opleidingsOnderdelen.value?.let {
+                gefilterdeOpleidingsOnderdelen.removeSource(_opleidingsOnderdelen)
+                gefilterdeOpleidingsOnderdelen.addSource(_opleidingsOnderdelen){
+                    gefilterdeOpleidingsOnderdelen.value = it.filter { opleidingsOnderdeel ->
+                        opleidingsOnderdeel.naam.toLowerCase().contains(filterText.toLowerCase())
+                }
+                }
+            }
+            Log.i("test", filterText)
+        }
     }
 
     override fun onCleared() {
@@ -48,22 +70,14 @@ class OpleidingsOnderdeelViewModel : ViewModel() {
     }
 
     private fun refreshRubricDatabase() {
-        if (isNetworkAvailable()) {
+        if (isNetworkAvailable(context)) {
             uiScope.launch {
                 withContext(Dispatchers.IO) {
                     opleidingsOnderdeelRepository.refreshOpleidingsOnderdelen()
                     rubricRepository.refreshRubrics()
-
                 }
             }
         }
-    }
-
-    private fun isNetworkAvailable(): Boolean {
-        val connectivityManager =
-            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
-        val activeNetworkInfo = connectivityManager!!.activeNetworkInfo
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected
     }
 
     private val _navigateToRubricSelect = MutableLiveData<Long>()
@@ -77,27 +91,5 @@ class OpleidingsOnderdeelViewModel : ViewModel() {
     fun onOpleidingsOnderdeelNavigated() {
         _navigateToRubricSelect.value = null
     }
-
-//    private fun getOpleidingen(){
-//        uiScope.launch {
-//            var getOpleidingenDeferred = OpleidingApi.retrofitService.getProperties()
-//            try {
-//                var listResult = getOpleidingenDeferred.await()
-//                _status.value = "Success: ${listResult.size} opleidingen opgehaald"
-//                if (listResult.size > 0){
-//                    _opleidingen.value = listResult
-//                }
-//            } catch (e: Exception){
-//                _status.value = "Failure: ${e.message}"
-//            }
-//        }
-//    }
-
-
-//    private suspend fun insert(opleiding: OpleidingsOnderdeel) {
-//        withContext(Dispatchers.IO){
-//            database.insert(opleiding)
-//        }
-//    }
 
 }

@@ -3,6 +3,7 @@ package be.hogent.tile3.rubricapplication.injection.module
 import android.app.Application
 import android.content.Context
 import be.hogent.tile3.rubricapplication.dao.*
+import be.hogent.tile3.rubricapplication.network.RubricApi
 import be.hogent.tile3.rubricapplication.persistence.*
 import dagger.Module
 import dagger.Provides
@@ -25,26 +26,6 @@ class DatabaseModule(private val application: Application) {
                                          criteriumDao: CriteriumDao,
                                          niveauDao: NiveauDao): RubricRepository {
         return RubricRepository(rubricDao, criteriumDao, niveauDao)
-    }
-
-    /**
-     * Shows how to create a CriteriumRepository
-     *  @param criteriumDao the CriteriumDao used to instantiate the Repository
-     */
-    @Provides
-    @Singleton
-    internal fun provideCriteriumRepository(criteriumDao: CriteriumDao): CriteriumRepository {
-        return CriteriumRepository(criteriumDao)
-    }
-
-    /**
-     * Shows how to create a NiveauRepository
-     *  @param niveauDao the NiveauDao used to instantiate the Repository
-     */
-    @Provides
-    @Singleton
-    internal fun provideNiveauRepository(niveauDao: NiveauDao): NiveauRepository {
-        return NiveauRepository(niveauDao)
     }
 
     @Provides

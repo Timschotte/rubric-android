@@ -34,6 +34,7 @@
             android:padding="@dimen/criterium_evaluatie_list_item_padding"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -47,11 +48,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginBottom="12dp"
                     android:layout_weight="50"
-                    android:textSize="14sp"
+                    android:textColor="@color/secondaryVeryDarkColor"
+                    android:textSize="16sp"
                     android:textStyle="bold|italic"
-                    android:textColor="@color/secondaryTextColorDark"
                     app:criteriumNiveauNaam="@{niveau}"
                     tools:text="@tools:sample/lorem" />
 
@@ -82,9 +83,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:textAlignment="textStart"
+                        android:textColor="@color/primaryTextColor"
                         android:textSize="12sp"
                         android:textStyle="italic"
-                        android:textColor="@color/secondaryTextColor"
                         app:criteriumNiveauOmschrijving="@{niveau}"
                         tools:text="@tools:sample/lorem/random" />
                 </LinearLayout>

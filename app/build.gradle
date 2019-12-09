@@ -31,6 +31,9 @@ android {
     dataBinding {
         enabled = true
     }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
@@ -44,6 +47,10 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.2.0'
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
+
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
 
     //Retrofit
     implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
@@ -55,7 +62,7 @@ dependencies {
     //OkHttp
     implementation "com.squareup.okhttp3:okhttp:$versions.okHttp"
     implementation "com.squareup.okhttp3:logging-interceptor:$versions.okHttp"
-
+    androidTestImplementation("com.squareup.okhttp3:mockwebserver:$versions.okHttp")
 
     // LiveData & ViewModel
     implementation "android.arch.lifecycle:extensions:$versions.architecture"
@@ -68,6 +75,7 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxandroid:$versions.rxandroid"
 
     implementation "com.squareup.moshi:moshi-kotlin:$versions.moshi"
+
     //implementation "se.ansman.kotshi:api:$versions.kotshi"
     //implementation "se.ansman.kotshi:compiler:$versions.kotshi"
 
@@ -96,10 +104,12 @@ dependencies {
     //recyclerview
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.room:room-runtime:2.1.0'
+    implementation "androidx.room:room-rxjava2:2.1.0"
 
     //room components
     implementation "androidx.room:room-runtime:2.1.0"
     kapt "androidx.room:room-compiler:2.1.0"
+
 
     // Anko (makes some things easier, f.e. enables doAsync
     implementation 'org.jetbrains.anko:anko-common:0.10.4'
@@ -119,6 +129,8 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutines"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines"
 
+    //Worker
+    implementation "androidx.work:work-runtime-ktx:2.2.0"
 
     //Navigation
     def nav_version = "2.1.0"
@@ -133,6 +145,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0-beta01" // viewModelScope
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0-alpha01" // LifecycleScope
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0-alpha01" // liveData
+
+    implementation 'com.google.code.gson:gson:2.8.6'
 
 }
 dokka {
