@@ -3,8 +3,18 @@ package be.hogent.tile3.rubricapplication.model
 import android.os.Parcel
 import android.os.Parcelable
 import androidx.room.*
-import java.util.*
 
+/**
+ * Model class for [Student]
+ * @constructor Creates a [Student]-object from [Parcel]
+ * @property studentId              ID for [Student]
+ * @property studentNaam            Name for [Student]
+ * @property studentAchternaam      Last name for [Student]
+ * @property studentVoornaam        First name for [Student]
+ * @property studentGeboortedatum   Birthdate for [Student]
+ * @property studentenNr            Studentnumber for [Student]
+ * @see Parcelable
+ */
 @Entity( tableName = "student_table")
 data class Student(
 
@@ -35,7 +45,11 @@ data class Student(
         parcel.readString(),
         parcel.readString()
     )
-
+    /**
+     * Function to write a [Student] to a [Parcel]-object
+     * @param parcel [Parcel]
+     * @param flags [Int]
+     */
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeLong(studentId)
         parcel.writeString(studentNaam)

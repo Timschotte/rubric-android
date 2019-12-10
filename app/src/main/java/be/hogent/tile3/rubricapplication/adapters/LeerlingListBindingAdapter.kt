@@ -4,8 +4,6 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import be.hogent.tile3.rubricapplication.R
 import be.hogent.tile3.rubricapplication.model.Student
-import java.text.DateFormat
-import java.text.SimpleDateFormat
 
 @BindingAdapter("studentNaam")
 fun TextView.setStudentNaam(item: Student?){

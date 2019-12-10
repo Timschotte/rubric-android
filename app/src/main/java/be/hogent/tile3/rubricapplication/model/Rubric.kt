@@ -3,10 +3,16 @@ package be.hogent.tile3.rubricapplication.model
 import android.os.Parcel
 import android.os.Parcelable
 import androidx.room.*
-import com.squareup.moshi.Json
-import kotlinx.android.parcel.Parcelize
-import java.io.Serializable
 
+/**
+ * Model class for [Rubric]
+ * @constructor Creates a [Rubric] object from [Parcel]
+ * @property rubricId                   ID for [Rubric]
+ * @property onderwerp                  Subject for [Rubric]
+ * @property omschrijving               Description for [Rubric]
+ * @property datumTijdCreatie           Date when [Rubric] was created
+ * @property datumTijdLaatsteWijziging  Date when [Rubric] was last edited
+ */
 @Entity(
     tableName = "rubric_table",
     foreignKeys = [ForeignKey(
@@ -33,7 +39,11 @@ data class Rubric(
         parcel.readString(),
         parcel.readLong()
     )
-
+    /**
+     * Function to write a [Rubric] to a [Parcel]-object
+     * @param parcel [Parcel]
+     * @param flags [Int]
+     */
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeLong(rubricId)
         parcel.writeString(onderwerp)
