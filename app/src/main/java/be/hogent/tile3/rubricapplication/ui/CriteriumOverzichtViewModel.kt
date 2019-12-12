@@ -1,7 +1,6 @@
 package be.hogent.tile3.rubricapplication.ui
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.lifecycle.*

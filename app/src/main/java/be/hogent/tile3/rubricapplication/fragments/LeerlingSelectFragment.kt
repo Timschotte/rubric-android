@@ -78,7 +78,6 @@ class LeerlingSelectFragment : Fragment() {
         })
         leerlingSelectViewModel.gefilterdeStudenten.observe(viewLifecycleOwner, Observer {
             it?.let{
-                System.out.println(it)
                 adapter.submitList(it)
             }
         })

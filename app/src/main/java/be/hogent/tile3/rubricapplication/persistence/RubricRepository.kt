@@ -1,6 +1,7 @@
 package be.hogent.tile3.rubricapplication.persistence
 
-import android.util.Log
+import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.dao.CriteriumDao
@@ -29,6 +30,8 @@ class RubricRepository(
     /**
      * Properties
      */
+    @Inject
+    lateinit var context: Context
     @Inject
     lateinit var rubricApi: RubricApi
     /**
@@ -90,7 +93,7 @@ class RubricRepository(
                 }
             }
         } catch (e: IOException) {
-            Log.i("RubricRepository", e.message)
+            Toast.makeText(context, "An error occured while fetching Rubrics from repository", Toast.LENGTH_LONG).show()
         }
     }
 }

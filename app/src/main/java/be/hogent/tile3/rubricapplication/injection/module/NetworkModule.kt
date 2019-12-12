@@ -46,10 +46,10 @@ class NetworkModule {
             this.level = HttpLoggingInterceptor.Level.BODY
         }
 
+        //HTTP client without logging
         val okHttpClient = OkHttpClient.Builder()
-
             .build()
-
+        //HTTP client with logging
         val client: OkHttpClient = OkHttpClient.Builder().apply {
             this.addInterceptor(interceptor)
             this.addInterceptor(OkHttpProfilerInterceptor())
@@ -61,13 +61,13 @@ class NetworkModule {
                 }
                 response
             })
-        }.build()
+        } .build()
 
         val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .client(client)
+            .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
