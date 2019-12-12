@@ -81,6 +81,15 @@ class LeerlingSelectFragment : Fragment() {
                 adapter.submitList(it)
             }
         })
+        leerlingSelectViewModel.refreshIsComplete.observe(viewLifecycleOwner, Observer{
+            if(it){
+                binding.spinningLoader.visibility = View.GONE
+                binding.leerlingList.visibility = View.VISIBLE
+            }else{
+                binding.spinningLoader.visibility = View.VISIBLE
+                binding.leerlingList.visibility = View.GONE
+            }
+        })
         /**
          * Other
          */

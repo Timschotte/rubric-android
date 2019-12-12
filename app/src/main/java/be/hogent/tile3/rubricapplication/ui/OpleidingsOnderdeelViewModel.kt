@@ -51,6 +51,10 @@ class OpleidingsOnderdeelViewModel : ViewModel() {
     private val _navigateToRubricSelect = MutableLiveData<Long>()
     val navigateToRubricSelect
         get() = _navigateToRubricSelect
+
+    private val _refreshIsComplete = MutableLiveData<Boolean>(false)
+    val refreshIsComplete: LiveData<Boolean>
+        get() = _refreshIsComplete
     /**
      * Constructor. Dependency injectio, initialization of all OpleidingsOnderdelen with a Rubric
      */
@@ -74,7 +78,7 @@ class OpleidingsOnderdeelViewModel : ViewModel() {
                 gefilterdeOpleidingsOnderdelen.addSource(_opleidingsOnderdelen){
                     gefilterdeOpleidingsOnderdelen.value = it.filter { opleidingsOnderdeel ->
                         opleidingsOnderdeel.naam.toLowerCase().contains(filterText.toLowerCase())
-                }
+                    }
                 }
             }
         }
@@ -93,6 +97,8 @@ class OpleidingsOnderdeelViewModel : ViewModel() {
                 withContext(Dispatchers.IO) {
                     opleidingsOnderdeelRepository.refreshOpleidingsOnderdelen()
                     rubricRepository.refreshRubrics()
+                }.apply {
+                    _refreshIsComplete.value = true
                 }
             }
         }

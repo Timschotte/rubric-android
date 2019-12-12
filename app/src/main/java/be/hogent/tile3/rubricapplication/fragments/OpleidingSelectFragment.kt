@@ -6,6 +6,8 @@ import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
@@ -52,8 +54,8 @@ class OpleidingSelectFragment : Fragment() {
         /**
          * RecyclerView setup
          */
-        val adapter = OpleidingsOnderdeelListAdapter(OpleidingsOnderdeelListener { 
-            opleidingsOnderdeelId -> opleidingsOnderdeelViewModel.onOpleidingsOnderdeelClicked(opleidingsOnderdeelId)
+        val adapter = OpleidingsOnderdeelListAdapter(OpleidingsOnderdeelListener {
+                opleidingsOnderdeelId -> opleidingsOnderdeelViewModel.onOpleidingsOnderdeelClicked(opleidingsOnderdeelId)
         })
         binding.opleidingenList.adapter = adapter
         /**
@@ -70,6 +72,15 @@ class OpleidingSelectFragment : Fragment() {
         opleidingsOnderdeelViewModel.gefilterdeOpleidingsOnderdelen.observe(viewLifecycleOwner, Observer {
             it?.let{
                 adapter.submitList(it)
+            }
+        })
+        opleidingsOnderdeelViewModel.refreshIsComplete.observe(viewLifecycleOwner, Observer{
+            if(it){
+                binding.spinningLoader.visibility = GONE
+                binding.opleidingenList.visibility = VISIBLE
+            }else{
+                binding.spinningLoader.visibility = VISIBLE
+                binding.opleidingenList.visibility = GONE
             }
         })
         /**

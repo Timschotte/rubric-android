@@ -7,6 +7,8 @@ import be.hogent.tile3.rubricapplication.model.OpleidingsOnderdeel
 import be.hogent.tile3.rubricapplication.model.Rubric
 import be.hogent.tile3.rubricapplication.persistence.OpleidingsOnderdeelRepository
 import be.hogent.tile3.rubricapplication.persistence.RubricRepository
+import be.hogent.tile3.rubricapplication.utils.isNetworkAvailable
+import kotlinx.coroutines.*
 import java.util.*
 import javax.inject.Inject
 /**
@@ -32,6 +34,9 @@ class RubricSelectViewModel(opleidingsOnderdeelId: Long) : ViewModel() {
     @Inject
     lateinit var context: Context
 
+    private var viewModelJob = Job()
+    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+
     private val _rubrics: LiveData<List<Rubric>>
     val gefilterdeRubrics = MediatorLiveData<List<Rubric>>()
 
@@ -40,11 +45,17 @@ class RubricSelectViewModel(opleidingsOnderdeelId: Long) : ViewModel() {
         get() = _navigateToKlasSelect
 
     val opleidingsOnderdeel = MediatorLiveData<OpleidingsOnderdeel>()
+
+    private val _refreshIsComplete = MutableLiveData<Boolean>(false)
+    val refreshIsComplete: LiveData<Boolean>
+        get() = _refreshIsComplete
+
     /**
      * Constructor. Dependency injection, initializing current opleidingsonderdeel object and all rubrics
      */
     init {
         App.component.inject(this)
+        refreshRubricDatabase()
         opleidingsOnderdeel.addSource(
             opleidingsOnderdeelRepository.get(opleidingsOnderdeelId),
             opleidingsOnderdeel::setValue
@@ -52,6 +63,17 @@ class RubricSelectViewModel(opleidingsOnderdeelId: Long) : ViewModel() {
         _rubrics = rubricRepository.getAllRubricsFromOpleidingsOnderdeel(opleidingsOnderdeelId)
         gefilterdeRubrics.addSource(_rubrics) {
             gefilterdeRubrics.value = it
+        }
+    }
+    private fun refreshRubricDatabase(){
+        if (isNetworkAvailable(context)) {
+            uiScope.launch {
+                withContext(Dispatchers.IO) {
+                    rubricRepository.refreshRubrics()
+                }.apply {
+                    _refreshIsComplete.value = true
+                }
+            }
         }
     }
     /**

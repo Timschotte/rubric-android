@@ -75,6 +75,15 @@ class RubricSelectFragment : Fragment() {
                 adapter.submitList(it)
             }
         })
+        rubricSelectViewModel.refreshIsComplete.observe(viewLifecycleOwner, Observer{
+            if(it){
+                binding.spinningLoader.visibility = View.GONE
+                binding.rubricList.visibility = View.VISIBLE
+            }else{
+                binding.spinningLoader.visibility = View.VISIBLE
+                binding.rubricList.visibility = View.GONE
+            }
+        })
         /**
          * Other
          */

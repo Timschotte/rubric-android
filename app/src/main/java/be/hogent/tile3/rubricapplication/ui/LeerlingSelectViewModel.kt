@@ -12,10 +12,7 @@ import be.hogent.tile3.rubricapplication.model.Student
 import be.hogent.tile3.rubricapplication.persistence.EvaluatieRepository
 import be.hogent.tile3.rubricapplication.persistence.StudentRepository
 import be.hogent.tile3.rubricapplication.utils.isNetworkAvailable
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 /**
@@ -57,6 +54,10 @@ class LeerlingSelectViewModel(
     private val _navigateToRubricView = MutableLiveData<Student>()
     val navigateToRubricView
         get() = _navigateToRubricView
+
+    private val _refreshIsComplete = MutableLiveData<Boolean>(false)
+    val refreshIsComplete: LiveData<Boolean>
+        get() = _refreshIsComplete
     /**
      * Constructor. Dependency injection. Refreshes rubrics in database, loads the students for current OpleidingsOnderdeel,
      *  refreshes evaluations in database.
@@ -101,7 +102,11 @@ class LeerlingSelectViewModel(
     private fun refreshStudentDatabase() {
         if (isNetworkAvailable(context)) {
             coroutineScope.launch {
-                studentRepository.refreshStudenten(opleidingsOnderdeelId)
+                withContext(Dispatchers.IO) {
+                    studentRepository.refreshStudenten(opleidingsOnderdeelId)
+                }.apply {
+                    _refreshIsComplete.value = true
+                }
             }
         }
     }
