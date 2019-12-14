@@ -7,17 +7,20 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
 import android.widget.EditText
+import androidx.core.app.ActivityCompat.invalidateOptionsMenu
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import androidx.work.impl.constraints.NetworkState
 
 import be.hogent.tile3.rubricapplication.R
 import be.hogent.tile3.rubricapplication.adapters.LeerlingListAdapter
 import be.hogent.tile3.rubricapplication.adapters.LeerlingListener
 import be.hogent.tile3.rubricapplication.databinding.FragmentLeerlingSelectBinding
 import be.hogent.tile3.rubricapplication.ui.LeerlingSelectViewModel
+import be.hogent.tile3.rubricapplication.ui.SyncStateViewModel
 import be.hogent.tile3.rubricapplication.ui.factories.LeerlingSelectViewModelFactory
 import be.hogent.tile3.rubricapplication.utils.TEMP_EVALUATIE_ID
 
@@ -73,6 +76,7 @@ class LeerlingSelectFragment : Fragment() {
         return binding.root
 
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)

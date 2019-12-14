@@ -6,18 +6,24 @@ import android.widget.Toast
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.lifecycle.*
 import androidx.work.*
+import androidx.work.impl.constraints.NetworkState
 import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.R
 import be.hogent.tile3.rubricapplication.model.*
 import be.hogent.tile3.rubricapplication.persistence.CriteriumEvaluatieRepository
 import be.hogent.tile3.rubricapplication.persistence.EvaluatieRepository
+import be.hogent.tile3.rubricapplication.persistence.NetworkStateRepository
 import be.hogent.tile3.rubricapplication.persistence.RubricRepository
 import be.hogent.tile3.rubricapplication.utils.TEMP_EVALUATIE_ID
 import be.hogent.tile3.rubricapplication.utils.isNetworkAvailable
+import be.hogent.tile3.rubricapplication.utils.toSimpleString
 import be.hogent.tile3.rubricapplication.workers.NetworkPersistenceWorker
+import be.hogent.tile3.rubricapplication.workers.NetworkPersistenceWorkerFactory
 import kotlinx.coroutines.*
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 
 class CriteriumOverzichtViewModel(
@@ -39,7 +45,11 @@ class CriteriumOverzichtViewModel(
     lateinit var evaluatieRepository: EvaluatieRepository
     @Inject
     lateinit var criteriumEvaluatieRepository: CriteriumEvaluatieRepository
+    @Inject
+    lateinit var networkStateRepository: NetworkStateRepository
 
+    @Inject
+    lateinit var workerFactory: NetworkPersistenceWorkerFactory
 
     // Coroutine variables
     private var viewModelJob = Job()
@@ -56,6 +66,7 @@ class CriteriumOverzichtViewModel(
             emit(data)
         }
     }
+
     val evaluatieRubric: LiveData<EvaluatieRubric>
         get() = _evaluatieRubric
 
@@ -181,7 +192,7 @@ class CriteriumOverzichtViewModel(
         // 3: persisteren
         if (evaluatie?.evaluatieId != TEMP_EVALUATIE_ID) {
             //Geen nieuwe temp opslaan als er al een temp aanwezig is (indien app gestopt/gesloten is)
-            val temp = Evaluatie(TEMP_EVALUATIE_ID, student.studentId, rubricId, 1, false)
+            val temp = Evaluatie(TEMP_EVALUATIE_ID, student.studentId, rubricId, "1", false)
             slaTempEvaluatieOp(temp)
             slaTempCriteriumEvaluatiesOp(criteriumEvaluaties)
         }
@@ -283,15 +294,6 @@ class CriteriumOverzichtViewModel(
         _positieGeselecteerdCriteriumNiveau?.value = positie
         _criteriumEvaluatie.value?.behaaldNiveau = niveauId
 
-        //Validate selected score before persisting
-        /*
-        if (criteriumEvaluatie.value?.score ?: 0 < _geselecteerdCriteriumNiveau.value?.ondergrens ?: 0) {
-            criteriumEvaluatie.value?.score = _geselecteerdCriteriumNiveau.value?.ondergrens ?: 0
-        }
-        if (criteriumEvaluatie.value?.score ?: 0 > _geselecteerdCriteriumNiveau.value?.bovengrens ?: 0) {
-            criteriumEvaluatie.value?.score = _geselecteerdCriteriumNiveau.value?.bovengrens ?: 0
-        }
-        */
         _criteriumEvaluatie.value?.score = geselecteerdCriteriumNiveau.value!!.ondergrens
         _score.value = _score.value!!.plus(geselecteerdCriteriumNiveau.value!!.ondergrens)
         persisteerCriteriumEvaluatie(criteriumEvaluatie.value)
@@ -365,6 +367,7 @@ class CriteriumOverzichtViewModel(
             } else {
                 createWorkerToPersistsWhenOnline()
                 sendOfflineMessage()
+                networkStateRepository.setState(false, Calendar.getInstance().time.toSimpleString())
             }
             progress.hide()
             _persisterenVoltooid.value = true
@@ -372,6 +375,7 @@ class CriteriumOverzichtViewModel(
     }
 
     private fun createWorkerToPersistsWhenOnline() {
+        configureWorkManager()
         //Create worker and set to execute when connection is restored.
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -385,6 +389,8 @@ class CriteriumOverzichtViewModel(
                 TimeUnit.SECONDS
             )
             .build()
+
+        WorkManager.getInstance(context).enqueue(nwWorker)
     }
 
     private fun sendOfflineMessage() {
@@ -395,7 +401,6 @@ class CriteriumOverzichtViewModel(
 
     fun deleteTempEvaluatie() = runBlocking {
         evaluatieRepository.verwijderTempEvaluatie()
-        Log.i("Test blocking", "OK")
     }
 
     fun navigatieNaPersisterenVoltooidCompleted() {
@@ -405,5 +410,12 @@ class CriteriumOverzichtViewModel(
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()
+    }
+
+    private fun configureWorkManager() {
+        val config = Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .build()
+        WorkManager.initialize(context, config)
     }
 }

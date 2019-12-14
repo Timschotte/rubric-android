@@ -1,11 +1,12 @@
 package be.hogent.tile3.rubricapplication.ui
 
 import android.content.Context
-import android.net.ConnectivityManager
 import android.util.Log
 import androidx.lifecycle.*
 import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.model.OpleidingsOnderdeel
+import be.hogent.tile3.rubricapplication.model.SyncStatus
+import be.hogent.tile3.rubricapplication.persistence.NetworkStateRepository
 import be.hogent.tile3.rubricapplication.persistence.OpleidingsOnderdeelRepository
 import be.hogent.tile3.rubricapplication.persistence.RubricRepository
 import be.hogent.tile3.rubricapplication.utils.isNetworkAvailable
@@ -20,6 +21,8 @@ class OpleidingsOnderdeelViewModel : ViewModel() {
     @Inject
     lateinit var rubricRepository: RubricRepository
     @Inject
+    lateinit var networkStateRepository: NetworkStateRepository
+    @Inject
     lateinit var context: Context
 
     private var viewModelJob = Job()
@@ -28,6 +31,13 @@ class OpleidingsOnderdeelViewModel : ViewModel() {
     private val _opleidingsOnderdelen: LiveData<List<OpleidingsOnderdeel>>
 
     val gefilterdeOpleidingsOnderdelen = MediatorLiveData<List<OpleidingsOnderdeel>>()
+
+    /*private val _networkState: LiveData<SyncStatus> = liveData {
+        uiScope.launch {
+            val data = networkStateRepository.currentState()
+            emit(data)
+        }
+    }*/
 
     private val _status = MutableLiveData<String>()
     val status: LiveData<String>

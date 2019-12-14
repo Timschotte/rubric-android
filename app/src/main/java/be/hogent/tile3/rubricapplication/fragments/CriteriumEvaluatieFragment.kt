@@ -4,6 +4,7 @@ package be.hogent.tile3.rubricapplication.fragments
 import android.os.Bundle
 import android.text.InputType
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
@@ -18,10 +19,12 @@ import be.hogent.tile3.rubricapplication.adapters.CriteriumEvaluatieListAdapter
 import be.hogent.tile3.rubricapplication.adapters.CriteriumEvaluatieListListener
 import be.hogent.tile3.rubricapplication.databinding.FragmentCriteriumEvaluatieBinding
 import be.hogent.tile3.rubricapplication.ui.CriteriumOverzichtViewModel
+import be.hogent.tile3.rubricapplication.ui.SyncStateViewModel
 import com.google.android.material.chip.Chip
 
-class CriteriumEvaluatieFragment
-    : Fragment() {
+class CriteriumEvaluatieFragment : Fragment() {
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,6 +40,7 @@ class CriteriumEvaluatieFragment
         this.parentFragment?.let { it ->
             val criteriumOverzichtViewModel = ViewModelProviders.of(it)
                 .get(CriteriumOverzichtViewModel::class.java)
+
 
             binding.criteriumOverzichtViewModel = criteriumOverzichtViewModel
             binding.criterium = criteriumOverzichtViewModel.geselecteerdCriterium.value
@@ -139,24 +143,6 @@ class CriteriumEvaluatieFragment
                 builder.show()
                 input.requestFocus()
             }
-
-            /*binding.toonCriteriumOmschrijvingImageButton.setOnClickListener {
-
-
-                AlertDialog.Builder(this.context!!).setTitle(
-                    criteriumOverzichtViewModel.geselecteerdCriterium.value?.naam
-                        ?: getString(R.string.criterium_evaluatie_omschrijving_dialog_titel_default)
-                ).setMessage(
-                    criteriumOverzichtViewModel.geselecteerdCriterium.value?.omschrijving
-                        ?: getString(R.string.criterium_evaluatie_omschrijving_dialog_omschrijving_default)
-                )
-                    .setPositiveButton(
-                        R.string.criterium_evaluatie_omschrijving_dialog_bevestig,
-                        null
-                    )
-                    .create()
-                    .show()
-            }*/
 
             criteriumOverzichtViewModel.positieGeselecteerdCriterium.observe(
                 viewLifecycleOwner,

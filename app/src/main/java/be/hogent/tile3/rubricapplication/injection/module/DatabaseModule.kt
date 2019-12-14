@@ -2,9 +2,10 @@ package be.hogent.tile3.rubricapplication.injection.module
 
 import android.app.Application
 import android.content.Context
+import androidx.work.WorkerFactory
 import be.hogent.tile3.rubricapplication.dao.*
-import be.hogent.tile3.rubricapplication.network.RubricApi
 import be.hogent.tile3.rubricapplication.persistence.*
+import be.hogent.tile3.rubricapplication.workers.NetworkPersistenceWorkerFactory
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -40,6 +41,12 @@ class DatabaseModule(private val application: Application) {
         return StudentRepository(studentDao, studentOpleidingsOnderdeelDao)
     }
 
+
+    @Provides
+    @Singleton
+    internal fun provideNetworkStateRepository(syncStatusDao: SyncStatusDao): NetworkStateRepository {
+        return NetworkStateRepository(syncStatusDao)
+    }
 
 
     /**
@@ -131,6 +138,12 @@ class DatabaseModule(private val application: Application) {
         return rubricsDatabase.criteriumEvaluatieDao()
     }
 
+    @Provides
+    @Singleton
+    internal fun provideSyncStatusDao(rubricsDatabase: RubricsDatabase): SyncStatusDao {
+        return rubricsDatabase.syncStatusDao()
+    }
+
     /**
      * Shows how to create a rubricsDatabase
      *  @param context the Context used to instantiate the Database
@@ -139,6 +152,12 @@ class DatabaseModule(private val application: Application) {
     @Singleton
     internal fun provideRubricsDatabase(context: Context): RubricsDatabase {
         return RubricsDatabase.getDatabase(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNetworkPersistanceWorkerFactory(repo: EvaluatieRepository, nw: NetworkStateRepository): NetworkPersistenceWorkerFactory {
+        return NetworkPersistenceWorkerFactory(repo, nw)
     }
 
     /**

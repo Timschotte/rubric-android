@@ -1,12 +1,10 @@
 package be.hogent.tile3.rubricapplication.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import be.hogent.tile3.rubricapplication.model.SyncStatus
 
+@Dao
 interface SyncStatusDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

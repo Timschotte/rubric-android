@@ -16,8 +16,9 @@ import be.hogent.tile3.rubricapplication.model.*
     OpleidingsOnderdeel::class,
     Docent::class,
     Student::class,
-    StudentOpleidingsOnderdeel::class),
-    version = 24, exportSchema = false)
+    StudentOpleidingsOnderdeel::class,
+    SyncStatus::class),
+    version = 26, exportSchema = false)
 abstract class RubricsDatabase : RoomDatabase() {
     abstract fun rubricDao(): RubricDao
     abstract fun criteriumDao(): CriteriumDao
@@ -28,6 +29,7 @@ abstract class RubricsDatabase : RoomDatabase() {
     abstract fun docentDao(): DocentDao
     abstract fun studentDao(): StudentDao
     abstract fun studentOpleidingsOnderdeelDao(): StudentOpleidingsOnderdeelDao
+    abstract fun syncStatusDao(): SyncStatusDao
 
     companion object {
         @Volatile

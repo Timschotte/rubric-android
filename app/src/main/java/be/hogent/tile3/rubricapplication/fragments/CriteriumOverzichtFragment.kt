@@ -27,6 +27,7 @@ import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
 import androidx.core.view.updateLayoutParams
 import androidx.navigation.fragment.findNavController
+import be.hogent.tile3.rubricapplication.ui.SyncStateViewModel
 import kotlinx.android.synthetic.main.fragment_criterium_evaluatie.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
@@ -39,6 +40,8 @@ class CriteriumOverzichtFragment : Fragment() {
     private var alertDialog: AlertDialog? = null
     private lateinit var rubricEvaluationFragment: CriteriumEvaluatieFragment
     private lateinit var criteriumOverzichtViewModel: CriteriumOverzichtViewModel
+    private lateinit var syncStateViewModel: SyncStateViewModel
+    private var _offline: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,6 +61,14 @@ class CriteriumOverzichtFragment : Fragment() {
         criteriumOverzichtViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(CriteriumOverzichtViewModel::class.java)
 
+        syncStateViewModel = ViewModelProviders.of(this).get(SyncStateViewModel::class.java)
+        syncStateViewModel?.networkState?.observe(this, Observer {
+            it?.let {
+                _offline = !it.connectionActive
+                requireActivity().invalidateOptionsMenu()
+            }
+        })
+        syncStateViewModel.getNetworkState()
 
         val adapter =
             CriteriumOverzichtListAdapter(CriteriaListListener { criteriumId, positie ->
@@ -230,7 +241,12 @@ class CriteriumOverzichtFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.criterium_evaluatie_menu, menu)
-        menu.findItem(R.id.offline_state_icon).setVisible(false)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        val offlineMenuItem = menu.findItem(R.id.offline_state_icon)
+        offlineMenuItem?.isVisible = _offline
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -290,7 +306,7 @@ class CriteriumOverzichtFragment : Fragment() {
         builder.setNeutralButton(R.string.criterium_overzicht_back_dialog_terug) { dialog, _ ->
             dialog.cancel()
         }
-        builder.setNegativeButton(R.string.criterium_overzicht_back_dialog_weggooien) { dialog, _ ->
+        builder.setNegativeButton(R.string.criterium_overzicht_back_dialog_weggooien) { _, _ ->
 //            fragmentManager!!.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
             navigeerNaarLeerlingSelect()
 

@@ -20,7 +20,7 @@ data class Evaluatie(
     @PrimaryKey @ColumnInfo(name = "evaluatieId") var evaluatieId: String = UUID.randomUUID().toString(),
     @ColumnInfo(name = "studentId") val studentId: Long,
     @ColumnInfo(name = "rubricId") val rubricId: Long,
-    @ColumnInfo(name = "docentId") val docentId: Long,
+    @ColumnInfo(name = "docentId") val docentId: String,
     @ColumnInfo(name = "sync") var sync: Boolean
 ){
     @Ignore

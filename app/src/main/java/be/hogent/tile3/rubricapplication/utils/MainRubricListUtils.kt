@@ -52,6 +52,11 @@ fun ImageView.setImageResource(item: Rubric){
     }
 }
 
+fun Date.toSimpleString() : String {
+    val format = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+    return format.format(this)
+}
+
 @SuppressLint("SimpleDateFormat")
 fun convertDateToLong(date : LocalDateTime): Long {
     val df = SimpleDateFormat("yyyy.MM.dd HH:mm:ss")

@@ -9,18 +9,22 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import be.hogent.tile3.rubricapplication.R
 import be.hogent.tile3.rubricapplication.databinding.ActivityMainBinding
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(){
     /**
      * Creates the Activity
      */
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
         val navController = this.findNavController(R.id.myNavHostFragment)
         NavigationUI.setupActionBarWithNavController(this, navController)
     }
+
+
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = this.findNavController(R.id.myNavHostFragment)

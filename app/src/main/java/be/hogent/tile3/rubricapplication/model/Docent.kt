@@ -16,8 +16,11 @@ import androidx.room.*
 data class Docent(
 
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name="docentId")
-    val docentId: Long = 0,
+    @ColumnInfo(name="id")
+    val id: Long = 0,
+
+    @ColumnInfo(name = "docentId")
+    val docentId: String?,
 
     @ColumnInfo(name = "naam")
     val naam: String?,
@@ -28,11 +31,13 @@ data class Docent(
     constructor(parcel: Parcel) : this(
         parcel.readLong(),
         parcel.readString(),
+        parcel.readString(),
         parcel.readLong()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeLong(docentId)
+        parcel.writeLong(id)
+        parcel.writeString(docentId)
         parcel.writeString(naam)
         parcel.writeLong(opleidingsOnderdeelId)
     }
