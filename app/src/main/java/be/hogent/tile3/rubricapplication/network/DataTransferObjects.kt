@@ -150,7 +150,6 @@ fun List<NetworkStudent>.asStudentOpleidingsOnderdeelDatabaseModel(): Array<Stud
 
 
 fun NetworkCriterium.asDatabaseModel(rubricId: Long, criteriumGroepId: Long): Criterium{
-    Log.i("DTO", "About to return Criterium for rubric " + rubricId + ", criteriumGroepId: " + criteriumGroepId + " and criteriumId: " + this.id.toString())
     return Criterium(
         this.id,
         this.naam,
@@ -162,7 +161,6 @@ fun NetworkCriterium.asDatabaseModel(rubricId: Long, criteriumGroepId: Long): Cr
 }
 
 fun NetworkCriteriumNiveau.asDatabaseModel(rubricId: Long, criteriumGroepId: Long, criteriumId: Long): Niveau{
-    Log.i("DTO", "About to return Niveau for rubric " + rubricId + ", criteriumGroep " + criteriumGroepId + ", criterium" + criteriumId + ", niveauId: " + this.id.toString())
     return Niveau(
         this.id,
         this.niveau.naam,

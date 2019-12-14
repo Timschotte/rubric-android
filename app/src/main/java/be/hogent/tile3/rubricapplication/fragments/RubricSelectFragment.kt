@@ -72,8 +72,16 @@ class RubricSelectFragment : Fragment() {
         })
         rubricSelectViewModel.gefilterdeRubrics.observe(viewLifecycleOwner, Observer {
             it?.let{
-                System.out.println(it)
                 adapter.submitList(it)
+            }
+        })
+        rubricSelectViewModel.refreshIsComplete.observe(viewLifecycleOwner, Observer{
+            if(it){
+                binding.spinningLoader.visibility = View.GONE
+                binding.rubricList.visibility = View.VISIBLE
+            }else{
+                binding.spinningLoader.visibility = View.VISIBLE
+                binding.rubricList.visibility = View.GONE
             }
         })
         /**

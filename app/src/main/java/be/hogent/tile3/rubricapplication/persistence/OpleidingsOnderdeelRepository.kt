@@ -1,6 +1,7 @@
 package be.hogent.tile3.rubricapplication.persistence
 
-import android.util.Log
+import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.dao.OpleidingsOnderdeelDao
@@ -21,6 +22,7 @@ class OpleidingsOnderdeelRepository(private val opleidingsOnderdeelDao: Opleidin
     /**
      * Properties
      */
+    @Inject lateinit var context: Context
     @Inject lateinit var rubricApi: RubricApi
     val opleidingsOnderdelen: LiveData<List<OpleidingsOnderdeel>> = opleidingsOnderdeelDao.getAll()
 
@@ -48,7 +50,7 @@ class OpleidingsOnderdeelRepository(private val opleidingsOnderdeelDao: Opleidin
             val opleidingsOnderdelen = rubricApi.getOpleidingsOnderdeel().await()
             opleidingsOnderdeelDao.insertAll(*opleidingsOnderdelen.asOpleidingsOnderdeelDatabaseModel())
         } catch (e: IOException){
-            Log.i("RubricRepository", e.message)
+            Toast.makeText(context, "An error occured while refreshing olods in database", Toast.LENGTH_LONG).show()
         }
     }
     /**

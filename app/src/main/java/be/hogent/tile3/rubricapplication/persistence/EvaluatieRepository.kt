@@ -1,8 +1,7 @@
 package be.hogent.tile3.rubricapplication.persistence
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.observe
+import android.content.Context
+import android.widget.Toast
 import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.dao.CriteriumEvaluatieDao
 import be.hogent.tile3.rubricapplication.dao.EvaluatieDao
@@ -12,11 +11,8 @@ import be.hogent.tile3.rubricapplication.network.NetworkRubricEvaluatie
 import be.hogent.tile3.rubricapplication.network.RubricApi
 import be.hogent.tile3.rubricapplication.network.asDatabaseModel
 import be.hogent.tile3.rubricapplication.network.asNetworkModel
-import be.hogent.tile3.rubricapplication.utils.isNetworkAvailable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import retrofit2.Call
-import retrofit2.Response
 import java.io.IOException
 import java.util.*
 import javax.inject.Inject
@@ -31,6 +27,8 @@ class EvaluatieRepository(private val evaluatieDao: EvaluatieDao, private val cr
     /**
      * Properties
      */
+    @Inject
+    lateinit var context: Context
     @Inject
     lateinit var rubricApi: RubricApi
     /**
@@ -238,7 +236,7 @@ class EvaluatieRepository(private val evaluatieDao: EvaluatieDao, private val cr
                 }
 
             } catch (e: IOException) {
-                Log.i("RubricRepository", e.message)
+                Toast.makeText(context, "An error occured while fetching evaluations from repository", Toast.LENGTH_LONG)
             }
         }
     }

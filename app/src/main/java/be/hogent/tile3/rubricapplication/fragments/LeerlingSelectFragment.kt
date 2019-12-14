@@ -78,8 +78,16 @@ class LeerlingSelectFragment : Fragment() {
         })
         leerlingSelectViewModel.gefilterdeStudenten.observe(viewLifecycleOwner, Observer {
             it?.let{
-                System.out.println(it)
                 adapter.submitList(it)
+            }
+        })
+        leerlingSelectViewModel.refreshIsComplete.observe(viewLifecycleOwner, Observer{
+            if(it){
+                binding.spinningLoader.visibility = View.GONE
+                binding.leerlingList.visibility = View.VISIBLE
+            }else{
+                binding.spinningLoader.visibility = View.VISIBLE
+                binding.leerlingList.visibility = View.GONE
             }
         })
         /**
