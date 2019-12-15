@@ -2,7 +2,6 @@ package be.hogent.tile3.rubricapplication.persistence
 
 import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.dao.StudentDao
@@ -63,7 +62,7 @@ class StudentRepository(private val studentDao: StudentDao, private val studentO
             }
 
         } catch (e: IOException){
-            Toast.makeText(context, "An error occured while refreshing students in database", Toast.LENGTH_LONG).show()
+            Log.i("RubricsLogging", "An error occured while refreshing students in database")
         }
     }
 }

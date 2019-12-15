@@ -1,6 +1,7 @@
 package be.hogent.tile3.rubricapplication.persistence
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.dao.CriteriumEvaluatieDao
@@ -236,7 +237,7 @@ class EvaluatieRepository(private val evaluatieDao: EvaluatieDao, private val cr
                 }
 
             } catch (e: IOException) {
-                Toast.makeText(context, "An error occured while fetching evaluations from repository", Toast.LENGTH_LONG)
+                Log.i("RubricsLogging", "An error occured while fetching evaluations from repository")
             }
         }
     }

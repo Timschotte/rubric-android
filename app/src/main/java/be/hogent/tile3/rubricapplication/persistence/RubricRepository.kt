@@ -1,6 +1,7 @@
 package be.hogent.tile3.rubricapplication.persistence
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import be.hogent.tile3.rubricapplication.App
@@ -93,7 +94,7 @@ class RubricRepository(
                 }
             }
         } catch (e: IOException) {
-            Toast.makeText(context, "An error occured while fetching Rubrics from repository", Toast.LENGTH_LONG).show()
+            Log.i("RubricsLogging", "An error occured while fetching Rubrics from repository")
         }
     }
 }
