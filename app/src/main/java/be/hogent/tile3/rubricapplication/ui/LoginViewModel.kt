@@ -2,6 +2,7 @@ package be.hogent.tile3.rubricapplication.ui
 
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
 import androidx.browser.customtabs.CustomTabsIntent
@@ -38,7 +39,6 @@ class LoginViewModel : ViewModel() {
         App.component.inject(this)
         mAuthStateManager = AuthStateManager.getInstance(context)
         mAuthService = createAuthorizationService()
-        mAuthIntent.set(mAuthService!!.createCustomTabsIntentBuilder().setToolbarColor(Color.BLACK).build())
         mExecutor = Executors.newSingleThreadExecutor()
     }
 
@@ -91,10 +91,10 @@ class LoginViewModel : ViewModel() {
         authException: AuthorizationException?
     ) {
         if (authException != null) {
-            // Log the error
+            Log.v("AUTH", "Auth success: token is "+)
             return
         }
-        accessToken = tokenResponse!!.accessToken!!
+
     }
 
     public fun recreateAuthorizationService() {
@@ -103,7 +103,7 @@ class LoginViewModel : ViewModel() {
         }
         mAuthService = createAuthorizationService()
         mAuthRequest.set(null)
-        mAuthIntent.set(null)
+        mAuthIntent.set(CustomTabsIntent.Builder().setToolbarColor(Color.BLACK).build())
     }
 
     public fun createAuthorizationService(): AuthorizationService {
