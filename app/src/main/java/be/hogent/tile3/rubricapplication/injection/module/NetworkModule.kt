@@ -1,9 +1,6 @@
 package be.hogent.tile3.rubricapplication.injection.module
 
-import android.content.Intent
-import androidx.core.content.ContextCompat.startActivity
 import be.hogent.tile3.rubricapplication.network.RubricApi
-import be.hogent.tile3.rubricapplication.security.AuthConnectionBuilder
 import be.hogent.tile3.rubricapplication.utils.BASE_URL
 import com.itkacher.okhttpprofiler.OkHttpProfilerInterceptor
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
@@ -11,8 +8,6 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
-import net.openid.appauth.AppAuthConfiguration
-import net.openid.appauth.AuthorizationService
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
