@@ -10,9 +10,9 @@ import androidx.lifecycle.ViewModel
 import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.R
 import be.hogent.tile3.rubricapplication.security.AuthConnectionBuilder
-import net.openid.appauth.*
 import be.hogent.tile3.rubricapplication.security.AuthStateManager
 import be.hogent.tile3.rubricapplication.security.Configuration
+import net.openid.appauth.*
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -26,20 +26,20 @@ class LoginViewModel : ViewModel() {
     @Inject
     lateinit var context: Context
 
-    lateinit var mAuthStateManager: AuthStateManager
-    lateinit var mConfiguration: Configuration
+    lateinit var authStateManager: AuthStateManager
+    lateinit var configuration: Configuration
 
-    val mClientId = AtomicReference<String>()
-    var mAuthService: AuthorizationService? = null
-    val mAuthRequest = AtomicReference<AuthorizationRequest>()
-    var mAuthIntent = AtomicReference<CustomTabsIntent>()
-    var mExecutor: ExecutorService? = null
+    val clientId = AtomicReference<String>()
+    var authService: AuthorizationService? = null
+    val authRequest = AtomicReference<AuthorizationRequest>()
+    var authIntent = AtomicReference<CustomTabsIntent>()
+    var executor: ExecutorService? = null
 
     init {
         App.component.inject(this)
-        mAuthStateManager = AuthStateManager.getInstance(context)
-        mAuthService = createAuthorizationService()
-        mExecutor = Executors.newSingleThreadExecutor()
+        authStateManager = AuthStateManager.getInstance(context)
+        authService = createAuthorizationService()
+        executor = Executors.newSingleThreadExecutor()
     }
 
     @MainThread
@@ -61,14 +61,14 @@ class LoginViewModel : ViewModel() {
     ) {
         val clientAuthentication: ClientAuthentication
         try {
-            clientAuthentication = mAuthStateManager.current.clientAuthentication
+            clientAuthentication = authStateManager.current.clientAuthentication
         } catch (ex: ClientAuthentication.UnsupportedAuthenticationMethod) {
             // Token request cannot be made, client authentication for the token endpoint could not be constructed
             return
         }
         val finalRequest: TokenRequest = getFinalRequest(request)
 
-        mAuthService!!.performTokenRequest(finalRequest, clientAuthentication, callback)
+        authService!!.performTokenRequest(finalRequest, clientAuthentication, callback)
     }
 
     public fun getFinalRequest(request: TokenRequest): TokenRequest {
@@ -91,19 +91,20 @@ class LoginViewModel : ViewModel() {
         authException: AuthorizationException?
     ) {
         if (authException != null) {
-            Log.v("AUTH", "Auth success: token is "+)
+            Log.v("AUTH", "Auth success: token is ")
+            authStateManager
             return
         }
 
     }
 
     public fun recreateAuthorizationService() {
-        if (mAuthService != null) {
-            mAuthService!!.dispose()
+        if (authService != null) {
+            authService!!.dispose()
         }
-        mAuthService = createAuthorizationService()
-        mAuthRequest.set(null)
-        mAuthIntent.set(CustomTabsIntent.Builder().setToolbarColor(Color.BLACK).build())
+        authService = createAuthorizationService()
+        authRequest.set(null)
+        authIntent.set(CustomTabsIntent.Builder().setToolbarColor(Color.BLACK).build())
     }
 
     public fun createAuthorizationService(): AuthorizationService {

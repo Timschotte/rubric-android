@@ -3,7 +3,10 @@ package be.hogent.tile3.rubricapplication.security
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.annotation.AnyThread
-import net.openid.appauth.*
+import net.openid.appauth.AuthState
+import net.openid.appauth.AuthorizationException
+import net.openid.appauth.AuthorizationResponse
+import net.openid.appauth.TokenResponse
 import org.json.JSONException
 import java.lang.ref.WeakReference
 import java.util.concurrent.atomic.AtomicReference

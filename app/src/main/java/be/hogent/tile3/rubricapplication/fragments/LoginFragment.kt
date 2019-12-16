@@ -13,13 +13,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import be.hogent.tile3.rubricapplication.R
 import be.hogent.tile3.rubricapplication.databinding.FragmentLoginBinding
+import be.hogent.tile3.rubricapplication.security.Configuration
 import be.hogent.tile3.rubricapplication.ui.LoginViewModel
-
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
 import net.openid.appauth.*
-import be.hogent.tile3.rubricapplication.security.Configuration
-import java.util.concurrent.ExecutorService
 
 class LoginFragment : Fragment() {
     companion object {
@@ -69,7 +67,7 @@ class LoginFragment : Fragment() {
             val ex = AuthorizationException.fromIntent(data)
             when {
                 response?.authorizationCode != null -> {
-                    loginViewModel.mAuthStateManager.updateAfterAuthorization(response, ex)
+                    loginViewModel.authStateManager.updateAfterAuthorization(response, ex)
                     loginViewModel.exchangeAuthorizationCode(response)
                 }
                 ex != null -> return // Authorization flow failed
@@ -80,42 +78,42 @@ class LoginFragment : Fragment() {
 
     @MainThread
     fun startAuth() {
-        loginViewModel.mExecutor?.submit { doAuth() }
+        loginViewModel.executor?.submit { doAuth() }
     }
 
     @WorkerThread
     private fun doAuth() {
         val intent =
-            loginViewModel.mAuthService?.getAuthorizationRequestIntent(loginViewModel.mAuthRequest.get(), loginViewModel.mAuthIntent.get())
+            loginViewModel.authService?.getAuthorizationRequestIntent(loginViewModel.authRequest.get(), loginViewModel.authIntent.get())
         startActivityForResult(intent, RC_AUTH)
     }
 
     fun createAuthRequest() {
         val authRequestBuilder = AuthorizationRequest.Builder(
-            loginViewModel.mAuthStateManager.current.authorizationServiceConfiguration!!,
-            loginViewModel.mClientId.get(),
+            loginViewModel.authStateManager.current.authorizationServiceConfiguration!!,
+            loginViewModel.clientId.get(),
             ResponseTypeValues.CODE,
-            loginViewModel.mConfiguration.redirectUri!!
-        ).setScope(loginViewModel.mConfiguration.scope!!)
+            loginViewModel.configuration.redirectUri!!
+        ).setScope(loginViewModel.configuration.scope!!)
 
-        loginViewModel.mAuthRequest.set(authRequestBuilder.build())
+        loginViewModel.authRequest.set(authRequestBuilder.build())
         authServerObserver.onNext(true)
     }
 
     @WorkerThread
     fun initializeClient() {
-        loginViewModel.mClientId.set(loginViewModel.mConfiguration.clientId)
+        loginViewModel.clientId.set(loginViewModel.configuration.clientId)
         activity?.runOnUiThread { createAuthRequest() }
         return
     }
 
     fun startAuthProcess() {
-        loginViewModel.mConfiguration = Configuration.getInstance(requireContext())
-        if (!loginViewModel.mConfiguration.isValid) {
+        loginViewModel.configuration = Configuration.getInstance(requireContext())
+        if (!loginViewModel.configuration.isValid) {
             return
         }
-        loginViewModel.mConfiguration.acceptConfiguration()
-        loginViewModel.mExecutor?.submit {
+        loginViewModel.configuration.acceptConfiguration()
+        loginViewModel.executor?.submit {
             initializeAppAuth()
         }
     }
@@ -123,10 +121,10 @@ class LoginFragment : Fragment() {
     @WorkerThread
     fun initializeAppAuth() {
         val config = AuthorizationServiceConfiguration(
-            loginViewModel.mConfiguration.authEndpointUri!!,
-            loginViewModel.mConfiguration.tokenEndpointUri!!
+            loginViewModel.configuration.authEndpointUri!!,
+            loginViewModel.configuration.tokenEndpointUri!!
         )
-        loginViewModel.mAuthStateManager.replace(AuthState(config))
+        loginViewModel.authStateManager.replace(AuthState(config))
         initializeClient()
         return
     }
