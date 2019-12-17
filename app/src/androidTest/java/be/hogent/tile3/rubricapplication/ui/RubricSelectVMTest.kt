@@ -20,7 +20,7 @@ class RubricSelectVMTest {
 
     @Test
     fun fetchNavigateToKlassSelect_ShouldReturnExpectedValue() {
-        val expected = "1"
+        val expected = 1L
         val livedata = viewModel.navigateToKlasSelect
 
         viewModel.onRubricClicked(expected)
