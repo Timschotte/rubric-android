@@ -155,12 +155,10 @@ class CriteriumOverzichtViewModel(
 
     /**
      * Constructor.
-     * Dagger dependency injection and initializing _score and _totalscore
+     * Dagger dependency injection.
      */
     init {
         App.component.inject(this)
-        _score.value = 0
-        _totaalScore.value = 0
     }
     /**
      * Co-Routine for retrieving a [EvaluatieRubric] for a given [Rubric] from Room database.
@@ -191,6 +189,8 @@ class CriteriumOverzichtViewModel(
      * Recreates the existing [Evaluatie] and persists as a temporary [Evaluatie]. Initializes UI properties.
      */
     fun initialiseerEvaluatie() = runBlocking {
+        _score.value = 0
+        _totaalScore.value = 0
         val data = _evaluatieRubric.value!!
         // 1: nieuwe evaluatie, of bestaande evaluatie?
         var evaluatie: Evaluatie? = geefEvaluatie(true)
