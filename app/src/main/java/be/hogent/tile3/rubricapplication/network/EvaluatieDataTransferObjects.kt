@@ -7,7 +7,7 @@ import java.util.*
 
 data class NetworkRubricEvaluatie(
     val id: Int?,
-    val docentId: Long,
+    val docentId: String,
     val studentId: Long,
     val rubricId: Long,
     val criteriumEvaluaties: List<NetworkCriteriumEvaluatie>

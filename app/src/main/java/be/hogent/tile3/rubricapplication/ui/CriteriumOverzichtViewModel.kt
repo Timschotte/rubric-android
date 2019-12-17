@@ -233,7 +233,7 @@ class CriteriumOverzichtViewModel(
         // 3: persisteren
         if (evaluatie?.evaluatieId != TEMP_EVALUATIE_ID) {
             //Geen nieuwe temp opslaan als er al een temp aanwezig is (indien app gestopt/gesloten is)
-            val temp = Evaluatie(TEMP_EVALUATIE_ID, student.studentId, rubricId, 1, false)
+            val temp = Evaluatie(TEMP_EVALUATIE_ID, student.studentId, rubricId, "1", false)
             slaTempEvaluatieOp(temp)
             slaTempCriteriumEvaluatiesOp(criteriumEvaluaties)
         }

@@ -40,7 +40,7 @@ data class NetworkNiveauSchaal(
 data class NetworkOpleidingsOnderdeel(
     val id: Long,
     val naam: String,
-    val docenten: List<Long>,
+    val docenten: List<String>,
     val studenten: List<Long>,
     val rubrics: List<Long>
 )
