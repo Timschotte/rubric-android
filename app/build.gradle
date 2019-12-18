@@ -147,6 +147,9 @@ dependencies {
 
     implementation 'com.google.code.gson:gson:2.8.6'
 
+    // Lottie
+    implementation "com.airbnb.android:lottie:$versions.lottie"
+
 }
 dokka {
     outputFormat = 'html'

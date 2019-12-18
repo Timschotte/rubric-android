@@ -32,6 +32,7 @@
             android:background="@drawable/card_background"
             android:elevation="6dp"
             android:textAlignment="textStart"
+            app:apiStatusRV="@{opleidingsOnderdeelViewModel.status}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -39,6 +40,19 @@
             app:layout_constraintTop_toTopOf="@+id/spinning_loader">
 
         </androidx.recyclerview.widget.RecyclerView>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/loadingStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            app:loadingAnimation="@{opleidingsOnderdeelViewModel.status}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

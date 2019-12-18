@@ -26,6 +26,8 @@ import javax.inject.Inject
  * @property _navigateToRubricSelect Private indicator for navigation in Fragment
  * @property navigateToRubricSelect Public getter for [_navigateToRubricSelect]
  */
+enum class ApiStatus { LOADING, ERROR, DONE }
+
 class OpleidingsOnderdeelViewModel : ViewModel() {
     /**
      * Properties
@@ -44,8 +46,8 @@ class OpleidingsOnderdeelViewModel : ViewModel() {
 
     val gefilterdeOpleidingsOnderdelen = MediatorLiveData<List<OpleidingsOnderdeel>>()
 
-    private val _status = MutableLiveData<String>()
-    val status: LiveData<String>
+    private val _status = MutableLiveData<ApiStatus>()
+    val status: LiveData<ApiStatus>
         get() = _status
 
     private val _navigateToRubricSelect = MutableLiveData<Long>()
@@ -94,12 +96,20 @@ class OpleidingsOnderdeelViewModel : ViewModel() {
     private fun refreshRubricDatabase() {
         if (isNetworkAvailable(context)) {
             uiScope.launch {
-                withContext(Dispatchers.IO) {
-                    opleidingsOnderdeelRepository.refreshOpleidingsOnderdelen()
-                    rubricRepository.refreshRubrics()
-                }.apply {
-                    _refreshIsComplete.value = true
+                try {
+                    _status.value = ApiStatus.LOADING
+                    val refresh = async(Dispatchers.IO) {
+                        opleidingsOnderdeelRepository.refreshOpleidingsOnderdelen()
+                        rubricRepository.refreshRubrics()
+                    }
+                    refresh.await()
+                    println("Done refreshing")
+                    _status.value = ApiStatus.DONE
+                } catch (e: Exception) {
+                    _status.value = ApiStatus.ERROR
+                    println("Error refreshing")
                 }
+
             }
         }
     }
