@@ -2,9 +2,17 @@ package be.hogent.tile3.rubricapplication.model
 
 import androidx.room.*
 import androidx.room.ForeignKey.CASCADE
-import com.squareup.moshi.Json
 import java.util.*
-
+/**
+ * Model class for [CriteriumEvaluatie]
+ * @constructor Creates a [CriteriumEvaluatie] class
+ * @property criteriumEvaluatieId   ID for [CriteriumEvaluatie]
+ * @property evaluatieId            ID ([Evaluatie]) for defining the [Evaluatie] the [CriteriumEvaluatie] belongs to
+ * @property criteriumId            ID ([Criterium]) for defining the [Criterium] the [CriteriumEvaluatie] belongs to
+ * @property behaaldNiveau          ID ([Niveau]) for defining the [Niveau] was reached for the [CriteriumEvaluatie]
+ * @property score                  Score that was reached for the [CriteriumEvaluatie]
+ * @property commentaar             Comment that was attached to the [CriteriumEvaluatie]
+ */
 @Entity(foreignKeys = [ForeignKey(
     entity = Criterium::class,
     parentColumns = arrayOf("criteriumId"),
@@ -21,9 +29,6 @@ data class CriteriumEvaluatie(
     @Transient @PrimaryKey @ColumnInfo(name = "criteriumEvaluatieId") val criteriumEvaluatieId: String,
     @Transient @ColumnInfo(name = "evaluatieId") var evaluatieId: String,
     @ColumnInfo(name = "criteriumId") val criteriumId: Long,
-    // Merk op: we verwachten hier een waarde voor behaaldNiveau. By default is dit het centrale
-    // niveau, zodat dit in de GUI bij start goed weergegeven wordt. Dit is het criteriumniveau met
-    // volgnummer 0.
     @ColumnInfo(name = "behaaldNiveau") var behaaldNiveau: Long,
     @ColumnInfo(name = "niveauScore") var score: Int,
     @ColumnInfo(name = "commentaar") var commentaar: String

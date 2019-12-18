@@ -26,6 +26,6 @@ interface RubricApi{
     @POST("evaluatie")
     fun saveEvaluatie(@Body evaluatie: NetworkRubricEvaluatie): Call<NetworkRubricEvaluatie>
 
-    @PUT("evaluatie")
+    @PUT("evaluatie/{id}")
     fun updateEvalutatie(@Path(value = "id") id: Int, @Body evaluatie: NetworkRubricEvaluatie): Call<NetworkRubricEvaluatie>
 }

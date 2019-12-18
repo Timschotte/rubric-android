@@ -84,7 +84,7 @@ class RubricApiTest {
         rubricApi = createApi()
 
         runBlocking {
-            val rubs = rubricApi.getRubrics().await()
+            val rubs = rubricApi.getRubrics("PUBLIEK").await()
             assert(rubs.isNotEmpty())
         }
     }

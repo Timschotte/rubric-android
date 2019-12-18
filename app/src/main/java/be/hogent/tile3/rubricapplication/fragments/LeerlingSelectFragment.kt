@@ -12,7 +12,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-
 import be.hogent.tile3.rubricapplication.R
 import be.hogent.tile3.rubricapplication.adapters.LeerlingListAdapter
 import be.hogent.tile3.rubricapplication.adapters.LeerlingListener
@@ -22,33 +21,51 @@ import be.hogent.tile3.rubricapplication.ui.factories.LeerlingSelectViewModelFac
 import be.hogent.tile3.rubricapplication.utils.TEMP_EVALUATIE_ID
 
 /**
- * A simple [Fragment] subclass.
+ * LeerlingSelect [Fragment] for showing Student list
+ * @property binding [FragmentLeerlingSelectBinding]
+ * @see Fragment
  */
 class LeerlingSelectFragment : Fragment() {
 
+    /**
+     * Properties
+     */
     lateinit var binding: FragmentLeerlingSelectBinding
-
+    /**
+     * Initializes the [LeerlingSelectFragment] in CREATED state. Inflates the fragment layout, initializes ViewModel
+     * databinding objects, observes ViewModel livedata and RecyclerView setup
+     * @param inflater [LayoutInflater]
+     * @param container [ViewGroup]
+     * @param savedInstanceState [Bundle]
+     */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        binding = DataBindingUtil
+        /**
+         * Layout inflation
+         */
+        binding  = DataBindingUtil
             .inflate(inflater, R.layout.fragment_leerling_select, container, false)
+        /**
+         * ViewModel DataBinding
+         */
         val args = LeerlingSelectFragmentArgs.fromBundle(arguments!!)
-
         val viewModelFactory = LeerlingSelectViewModelFactory(args.rubricId.toLong(), args.opleidingsOnderdeelId)
         val leerlingSelectViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(LeerlingSelectViewModel::class.java)
-
         binding.leerlingSelectViewModel = leerlingSelectViewModel
         binding.lifecycleOwner = this
-
+        /**
+         * RecyclerView SetUp
+         */
         val adapter = LeerlingListAdapter(LeerlingListener {
                 student -> leerlingSelectViewModel.onStudentClicked(student)
         })
         binding.leerlingList.adapter = adapter
-
+        /**
+         * ViewModel livedata observers
+         */
         leerlingSelectViewModel.navigateToRubricView.observe(this, Observer { leerling ->
             leerling?.let {
                 this.findNavController().navigate(
@@ -59,35 +76,47 @@ class LeerlingSelectFragment : Fragment() {
                 leerlingSelectViewModel.onStudentNavigated()
             }
         })
-
-
-       leerlingSelectViewModel.gefilterdeStudenten.observe(viewLifecycleOwner, Observer {
+        leerlingSelectViewModel.gefilterdeStudenten.observe(viewLifecycleOwner, Observer {
             it?.let{
-                System.out.println(it)
                 adapter.submitList(it)
             }
         })
-
+        leerlingSelectViewModel.refreshIsComplete.observe(viewLifecycleOwner, Observer{
+            if(it){
+                binding.spinningLoader.visibility = View.GONE
+                binding.leerlingList.visibility = View.VISIBLE
+            }else{
+                binding.spinningLoader.visibility = View.VISIBLE
+                binding.leerlingList.visibility = View.GONE
+            }
+        })
+        /**
+         * Other
+         */
         setHasOptionsMenu(true)
 
         return binding.root
 
     }
-
+    /**
+     * Function used to created the options menu. Inflates the menu layout and add's a SearchBar
+     * @param menu [Menu]
+     * @param inflater [MenuInflater]
+     */
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.searchbar, menu)
-        val searchBarOpleiding = menu.findItem(R.id.action_search).actionView as androidx.appcompat.widget.SearchView
+        val searchBarStudent = menu.findItem(R.id.action_search).actionView as androidx.appcompat.widget.SearchView
 
-        val editText = searchBarOpleiding.findViewById(R.id.search_src_text) as EditText
+        val editText = searchBarStudent.findViewById(R.id.search_src_text) as EditText
 
         editText.addTextChangedListener(
             object : TextWatcher {
                 val handler = Handler()
 
                 override fun afterTextChanged(s: Editable?) {
-                    var text = s?.toString()
-                    var millis:Long
+                    val text = s?.toString()
+                    val millis:Long
                     if(text==""){
                         millis=0
                     } else {

@@ -20,30 +20,48 @@ import be.hogent.tile3.rubricapplication.ui.RubricSelectViewModel
 import be.hogent.tile3.rubricapplication.ui.factories.RubricSelectViewModelFactory
 
 /**
- * A simple [Fragment] subclass.
+ * RubricSelect [Fragment] for showing Rubric list
+ * @property binding [FragmentRubricSelectBinding]
+ * @see Fragment
  */
 class RubricSelectFragment : Fragment() {
-
+    /**
+     * Properties
+     */
     lateinit var binding:FragmentRubricSelectBinding
-
+    /**
+     * Initializes the [RubricSelectFragment] in CREATED state. Inflates the fragment layout, initializes ViewModel
+     * databinding objects, observes ViewModel livedata and RecyclerView setup
+     * @param inflater [LayoutInflater]
+     * @param container [ViewGroup]
+     * @param savedInstanceState [Bundle]
+     */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        /**
+         * Layout inflation
+         */
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_rubric_select, container, false)
+        /**
+         * ViewModel DataBinding
+         */
         val opleidingsOnderdeel = RubricSelectFragmentArgs.fromBundle(arguments!!)
-
         val viewModelFactory = RubricSelectViewModelFactory(opleidingsOnderdeel.opleidingsOnderdeelId)
         val rubricSelectViewModel = ViewModelProviders.of(this, viewModelFactory).get(RubricSelectViewModel::class.java)
-
         binding.rubricSelectViewModel = rubricSelectViewModel
         binding.lifecycleOwner = this
-
+        /**
+         * RecyclerView Setup
+         */
         val adapter = RubricSelectListAdapter(RubricListener {
                 rubricId -> rubricSelectViewModel.onRubricClicked(rubricId)
         })
         binding.rubricList.adapter = adapter
-
+        /**
+         * ViewModel livedata observers
+         */
         rubricSelectViewModel.navigateToKlasSelect.observe(this, Observer { rubric ->
             rubric?.let {
                 this.findNavController().navigate(
@@ -52,24 +70,36 @@ class RubricSelectFragment : Fragment() {
                 rubricSelectViewModel.onOpleidingsOnderdeelNavigated()
             }
         })
-
         rubricSelectViewModel.gefilterdeRubrics.observe(viewLifecycleOwner, Observer {
             it?.let{
-                System.out.println(it)
                 adapter.submitList(it)
             }
         })
-
+        rubricSelectViewModel.refreshIsComplete.observe(viewLifecycleOwner, Observer{
+            if(it){
+                binding.spinningLoader.visibility = View.GONE
+                binding.rubricList.visibility = View.VISIBLE
+            }else{
+                binding.spinningLoader.visibility = View.VISIBLE
+                binding.rubricList.visibility = View.GONE
+            }
+        })
+        /**
+         * Other
+         */
         this.setHasOptionsMenu(true)
-
         return binding.root
     }
-
+    /**
+     * Function used to created the options menu. Inflates the menu layout and add's a SearchBar
+     * @param menu [Menu]
+     * @param inflater [MenuInflater]
+     */
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.searchbar, menu)
-        val searchBarOpleiding = menu.findItem(R.id.action_search).actionView as androidx.appcompat.widget.SearchView
+        val searchBarRubric = menu.findItem(R.id.action_search).actionView as androidx.appcompat.widget.SearchView
 
-        val editText = searchBarOpleiding.findViewById(R.id.search_src_text) as EditText
+        val editText = searchBarRubric.findViewById(R.id.search_src_text) as EditText
 
 
         editText.addTextChangedListener(
@@ -77,8 +107,8 @@ class RubricSelectFragment : Fragment() {
                 val handler = Handler()
 
                 override fun afterTextChanged(s: Editable?) {
-                    var text = s?.toString()
-                    var millis:Long
+                    val text = s?.toString()
+                    val millis:Long
                     if(text==""){
                         millis=0
                     } else {

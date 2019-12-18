@@ -17,12 +17,12 @@ class LeerlingSelectVMTest {
 
     @Before
     fun setUp() {
-        viewModel = LeerlingSelectViewModel("1", 1);
+        viewModel = LeerlingSelectViewModel(1, 1);
     }
 
     @Test
     fun fetchNavigateToRubricView_ShouldReturnExpectedValue() {
-        val expected = Student(1,"Test","120")
+        val expected = Student(1,"Test","Test","Test","120","Test")
         val livedata = viewModel.navigateToRubricView
 
         viewModel.onStudentClicked(expected)

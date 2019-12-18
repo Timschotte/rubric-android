@@ -20,23 +20,33 @@ import be.hogent.tile3.rubricapplication.databinding.FragmentCriteriumEvaluatieB
 import be.hogent.tile3.rubricapplication.model.Niveau
 import be.hogent.tile3.rubricapplication.ui.CriteriumOverzichtViewModel
 import com.google.android.material.chip.Chip
-import android.view.animation.AnimationUtils.loadAnimation
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 
-
-class CriteriumEvaluatieFragment
-    : Fragment() {
+/**
+ * CriteriumEvalutie [Fragment] for showing Criterium specifications
+ * @see Fragment
+ */
+class CriteriumEvaluatieFragment : Fragment() {
 
     lateinit var binding: FragmentCriteriumEvaluatieBinding
 
+    /**
+     * Initializes the [CriteriumEvaluatieFragment] in CREATED state. Inflates the fragment layout, initializes ViewModel
+     * databinding objects, observes ViewModel livedata, RecyclerView setup and onClickListeners handlers
+     * @param inflater [LayoutInflater]
+     * @param container [ViewGroup]
+     * @param savedInstanceState [Bundle]
+     * @see CriteriumOverzichtViewModel
+     */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        /**
+         * Layout inflation
+         */
         binding = DataBindingUtil.inflate(
             inflater,
-            be.hogent.tile3.rubricapplication.R.layout.fragment_criterium_evaluatie,
+            R.layout.fragment_criterium_evaluatie,
             container,
             false
         )
@@ -44,22 +54,32 @@ class CriteriumEvaluatieFragment
         this.parentFragment?.let { it ->
             val criteriumOverzichtViewModel = ViewModelProviders.of(it)
                 .get(CriteriumOverzichtViewModel::class.java)
-
+            /**
+             * Databinding
+             */
             binding.criteriumOverzichtViewModel = criteriumOverzichtViewModel
             binding.criterium = criteriumOverzichtViewModel.geselecteerdCriterium.value
             binding.student = criteriumOverzichtViewModel.student
+            /**
+             * RecyclerView setup
+             */
+            val adapter =
+                CriteriumEvaluatieListAdapter(CriteriumEvaluatieListListener { niveauId, position ->
+                    criteriumOverzichtViewModel.onNiveauClicked(niveauId, position)
+                })
+            binding.criteriumNiveausRecycler.isNestedScrollingEnabled = false
+            binding.criteriumNiveausRecycler.adapter = adapter
+            /**
+             * ViewModel livedata observers
+             */
             criteriumOverzichtViewModel.geselecteerdCriterium.observe(this, Observer{
                 binding.criterium = criteriumOverzichtViewModel.geselecteerdCriterium.value
             })
-
-            criteriumOverzichtViewModel.geselecteerdCriterium.observe(
-                viewLifecycleOwner,
-                Observer { sel ->
+            criteriumOverzichtViewModel.geselecteerdCriterium.observe(viewLifecycleOwner, Observer { sel ->
                     sel.let {
                         binding.criterium = it
                     }
                 })
-
             criteriumOverzichtViewModel.geselecteerdCriteriumNiveau.value?.let {
                     geselecteerdNiveau ->
                 geselecteerdNiveau?.let {
@@ -73,36 +93,41 @@ class CriteriumEvaluatieFragment
                         displayChipsOfSelectedNiveau(it)
                     }
                 })
-
-
-            val adapter =
-                CriteriumEvaluatieListAdapter(CriteriumEvaluatieListListener { niveauId, position ->
-                    criteriumOverzichtViewModel.onNiveauClicked(niveauId, position)
-                })
-
-            binding.criteriumNiveausRecycler.isNestedScrollingEnabled = false
-
-            binding.criteriumNiveausRecycler.adapter = adapter
-
             criteriumOverzichtViewModel.criteriumNiveaus.observe(viewLifecycleOwner, Observer {
                 it?.let {
                     adapter.submitList(it)
                 }
             })
-
-            criteriumOverzichtViewModel.positieGeselecteerdCriteriumNiveau.observe(
-                viewLifecycleOwner,
-                Observer {
+            criteriumOverzichtViewModel.positieGeselecteerdCriteriumNiveau.observe(viewLifecycleOwner, Observer {
                     it?.let {
                         adapter.stelPositieGeselecteerdNiveauIn(it)
                         adapter.notifyDataSetChanged()
                     }
                 })
-
-
+            criteriumOverzichtViewModel.positieGeselecteerdCriterium.observe(viewLifecycleOwner, Observer {
+                    binding.upEdgeButton.visibility = if (it == 0) View.INVISIBLE else View.VISIBLE
+                    binding.downEdgeButton.visibility =
+                        if (it == criteriumOverzichtViewModel.positieLaatsteCriterium.value ?: 0)
+                            View.INVISIBLE else View.VISIBLE
+                })
+            criteriumOverzichtViewModel.score.observe(this, Observer{
+                binding.scoreTextView.text = it.toString()
+            })
+            criteriumOverzichtViewModel.totaalScore.observe(this, Observer{
+                binding.totaalscoreTextView.text = it.toString()
+            })
+            criteriumOverzichtViewModel.criteriumEvaluatie.observe(this, Observer{
+                if(!it.commentaar.isNullOrBlank()) {
+                    binding.commentaarTextView.text = "Commentaar: " + it.commentaar
+                }else{
+                    binding.commentaarTextView.text = ""
+                }
+            })
+            /**
+             * onClickListeners
+             */
             binding.voegCommentaarToeFloatingActionButton.setOnClickListener {
-                val oudeCommentaar =
-                    criteriumOverzichtViewModel.criteriumEvaluatie.value?.commentaar ?: ""
+                val oudeCommentaar = criteriumOverzichtViewModel.criteriumEvaluatie.value?.commentaar ?: ""
 
                 val builder = AlertDialog.Builder(this.context!!)
                 builder.setTitle(R.string.criterium_evaluatie_commentaar_dialog_titel)
@@ -131,54 +156,12 @@ class CriteriumEvaluatieFragment
                 builder.show()
                 input.requestFocus()
             }
-
-            /*binding.toonCriteriumOmschrijvingImageButton.setOnClickListener {
-
-
-                AlertDialog.Builder(this.context!!).setTitle(
-                    criteriumOverzichtViewModel.geselecteerdCriterium.value?.naam
-                        ?: getString(R.string.criterium_evaluatie_omschrijving_dialog_titel_default)
-                ).setMessage(
-                    criteriumOverzichtViewModel.geselecteerdCriterium.value?.omschrijving
-                        ?: getString(R.string.criterium_evaluatie_omschrijving_dialog_omschrijving_default)
-                )
-                    .setPositiveButton(
-                        R.string.criterium_evaluatie_omschrijving_dialog_bevestig,
-                        null
-                    )
-                    .create()
-                    .show()
-            }*/
-
-            criteriumOverzichtViewModel.positieGeselecteerdCriterium.observe(
-                viewLifecycleOwner,
-                Observer {
-                    binding.upEdgeButton.visibility = if (it == 0) View.INVISIBLE else View.VISIBLE
-                    binding.downEdgeButton.visibility =
-                        if (it == criteriumOverzichtViewModel.positieLaatsteCriterium.value ?: 0)
-                            View.INVISIBLE else View.VISIBLE
-                })
-
             binding.upEdgeButton.setOnClickListener {
                 criteriumOverzichtViewModel.onUpEdgeButtonClicked()
             }
-
             binding.downEdgeButton.setOnClickListener {
                 criteriumOverzichtViewModel.onDownEdgeButtonClicked()
             }
-            criteriumOverzichtViewModel.score.observe(this, Observer{
-                binding.scoreTextView.text = it.toString()
-            })
-            criteriumOverzichtViewModel.totaalScore.observe(this, Observer{
-                binding.totaalscoreTextView.text = it.toString()
-            })
-            criteriumOverzichtViewModel.criteriumEvaluatie.observe(this, Observer{
-                if(!it.commentaar.isNullOrBlank()) {
-                    binding.commentaarTextView.text = "Commentaar: " + it.commentaar
-                }else{
-                    binding.commentaarTextView.text = ""
-                }
-            })
         }
 
         return binding.root
