@@ -2,6 +2,7 @@ package be.hogent.tile3.rubricapplication.security
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.annotation.AnyThread
 import net.openid.appauth.*
 import org.json.JSONException
@@ -139,6 +140,6 @@ class AuthStateManager(context: Context) {
     }
 
     fun getAuthorizationHeader():String{
-        return "bearer "+current.accessToken
+        return "bearer ${current.accessToken}"
     }
 }

@@ -40,7 +40,7 @@ data class NetworkNiveauSchaal(
 data class NetworkOpleidingsOnderdeel(
     val id: Long,
     val naam: String,
-    val docenten: List<Long>,
+    val docenten: List<String>,
     val studenten: List<Long>,
     val rubrics: List<Long>
 )
@@ -73,7 +73,7 @@ data class NetworkNiveau(
 
 @JsonClass(generateAdapter = false)
 data class NetworkDocent(
-    val id: Long,
+    val id: String,
     val naam: String,
     val opleidingsOnderdeel: NetworkOpleidingsOnderdeel
 )

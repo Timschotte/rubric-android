@@ -44,8 +44,8 @@ class RubricRepository(
     private lateinit var authStateManager: AuthStateManager
 
     init {
-        authStateManager = AuthStateManager.getInstance(context)
         App.component.inject(this)
+        authStateManager = AuthStateManager.getInstance(context)
     }
     /**
      * Function for retrieving all [Rubric] for a given OpleidingsOnderdeel from Room database.
