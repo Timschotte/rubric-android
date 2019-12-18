@@ -91,9 +91,11 @@ class LoginViewModel : ViewModel() {
         authException: AuthorizationException?
     ) {
         if (authException != null) {
-            Log.v("AUTH", "Auth success: token is ")
-            authStateManager
+            Log.e("AUTH", "Auth failed: "+authException.toJsonString())
             return
+        }else if(tokenResponse!= null){
+            authStateManager.updateAfterTokenResponse(tokenResponse, authException)
+            Log.v("AUTH", "Auth success: "+tokenResponse.jsonSerialize())
         }
 
     }

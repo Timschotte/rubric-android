@@ -2,6 +2,7 @@ package be.hogent.tile3.rubricapplication.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,8 +12,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import be.hogent.tile3.rubricapplication.R
 import be.hogent.tile3.rubricapplication.databinding.FragmentLoginBinding
+import be.hogent.tile3.rubricapplication.security.AuthStateManager
 import be.hogent.tile3.rubricapplication.security.Configuration
 import be.hogent.tile3.rubricapplication.ui.LoginViewModel
 import io.reactivex.Observer
@@ -25,6 +28,7 @@ class LoginFragment : Fragment() {
         private const val RC_AUTH = 100
     }
 
+    private lateinit var authStateManager: AuthStateManager
     private lateinit var binding: FragmentLoginBinding
     private lateinit var loginViewModel: LoginViewModel
 
@@ -45,13 +49,14 @@ class LoginFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        authStateManager = AuthStateManager.getInstance(context!!)
+        loginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
         binding.loginBtn.setOnClickListener { view: View ->
             loginViewModel.recreateAuthorizationService()
             startAuthProcess()
         }
-        loginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
 
         return binding.root
     }
@@ -59,7 +64,7 @@ class LoginFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == AppCompatActivity.RESULT_CANCELED) {
-//            displayAuthCancelled()
+            Log.v("Auth", "login cancelled")
             // nothing
         } else {
 
@@ -73,6 +78,15 @@ class LoginFragment : Fragment() {
                 ex != null -> return // Authorization flow failed
                 else -> return // No authorization state retained - reauthorization required
             }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (authStateManager.current.isAuthorized) {
+            val navController = this.findNavController()
+            navController.currentDestination
+            navController.navigate(R.id.action_loginFragment_to_mainMenuFragment)
         }
     }
 

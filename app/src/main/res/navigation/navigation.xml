@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@+id/loginFragment">
+    app:startDestination="@+id/mainMenuFragment">
 
     <fragment
         android:id="@+id/mainMenuFragment"
@@ -14,6 +14,9 @@
             android:id="@+id/action_mainMenuFragment_to_opleidingSelectFragment"
             app:destination="@id/opleidingSelectFragment"
             app:enterAnim="@anim/nav_default_enter_anim" />
+        <action
+            android:id="@+id/action_mainMenuFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/opleidingSelectFragment"
@@ -80,6 +83,7 @@
         android:label="fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_mainMenuFragment"
-            app:destination="@id/mainMenuFragment" />
+            app:destination="@id/mainMenuFragment"
+            app:launchSingleTop="false" />
     </fragment>
 </navigation>
