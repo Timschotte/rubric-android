@@ -7,7 +7,7 @@ import retrofit2.http.*
 interface RubricApi{
 
     @GET("rubric")
-    fun getRubrics(@Query("status") status: String): Deferred<List<NetworkRubric>>
+    fun getRubrics(@Query("status") status: String, @Header("Authorization") token:String): Deferred<List<NetworkRubric>>
 
     @GET("opleidingsonderdeel")
     fun getOpleidingsOnderdeel(): Deferred<List<NetworkOpleidingsOnderdeel>>
