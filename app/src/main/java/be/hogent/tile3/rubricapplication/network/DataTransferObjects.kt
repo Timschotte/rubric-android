@@ -73,7 +73,7 @@ data class NetworkNiveau(
 
 @JsonClass(generateAdapter = false)
 data class NetworkDocent(
-    val id: Long,
+    val id: String,
     val naam: String,
     val opleidingsOnderdeel: NetworkOpleidingsOnderdeel
 )
