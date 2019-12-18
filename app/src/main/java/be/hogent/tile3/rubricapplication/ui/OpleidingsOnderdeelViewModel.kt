@@ -12,6 +12,7 @@ import be.hogent.tile3.rubricapplication.utils.isNetworkAvailable
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
+enum class ApiStatus { LOADING, ERROR, DONE }
 
 class OpleidingsOnderdeelViewModel : ViewModel() {
 
@@ -29,8 +30,8 @@ class OpleidingsOnderdeelViewModel : ViewModel() {
 
     val gefilterdeOpleidingsOnderdelen = MediatorLiveData<List<OpleidingsOnderdeel>>()
 
-    private val _status = MutableLiveData<String>()
-    val status: LiveData<String>
+    private val _status = MutableLiveData<ApiStatus>()
+    val status: LiveData<ApiStatus>
         get() = _status
 
     init {
@@ -72,10 +73,20 @@ class OpleidingsOnderdeelViewModel : ViewModel() {
     private fun refreshRubricDatabase() {
         if (isNetworkAvailable(context)) {
             uiScope.launch {
-                withContext(Dispatchers.IO) {
-                    opleidingsOnderdeelRepository.refreshOpleidingsOnderdelen()
-                    rubricRepository.refreshRubrics()
+                try {
+                    _status.value = ApiStatus.LOADING
+                    val refresh = async(Dispatchers.IO) {
+                        opleidingsOnderdeelRepository.refreshOpleidingsOnderdelen()
+                        rubricRepository.refreshRubrics()
+                    }
+                    refresh.await()
+                    println("Done refreshing")
+                    _status.value = ApiStatus.DONE
+                } catch (e: Exception) {
+                    _status.value = ApiStatus.ERROR
+                    println("Error refreshing")
                 }
+
             }
         }
     }
