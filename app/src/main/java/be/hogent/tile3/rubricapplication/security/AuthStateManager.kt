@@ -54,9 +54,6 @@ class AuthStateManager(context: Context) {
         val current = current
         current.update(response, ex)
         return replace(current)
-        /* BEGIN TEST */
-
-        /* EINDE TEST */
     }
 
     @AnyThread
