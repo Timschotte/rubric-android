@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/mainMenuFragment">
+    app:startDestination="@+id/mainMenuFragment">
 
     <fragment
         android:id="@+id/mainMenuFragment"
@@ -14,6 +14,9 @@
             android:id="@+id/action_mainMenuFragment_to_opleidingSelectFragment"
             app:destination="@id/opleidingSelectFragment"
             app:enterAnim="@anim/nav_default_enter_anim" />
+        <action
+            android:id="@+id/action_mainMenuFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/opleidingSelectFragment"
@@ -64,7 +67,7 @@
             app:argType="string" />
         <argument
             android:name="evaluatieId"
-            app:argType="string"/>
+            app:argType="string" />
         <action
             android:id="@+id/action_criteriumOverzichtFragment_to_leerlingSelectFragment"
             app:destination="@id/leerlingSelectFragment"
@@ -73,5 +76,14 @@
         <argument
             android:name="olodId"
             app:argType="long" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="be.hogent.tile3.rubricapplication.fragments.LoginFragment"
+        android:label="fragment_login">
+        <action
+            android:id="@+id/action_loginFragment_to_mainMenuFragment"
+            app:destination="@id/mainMenuFragment"
+            app:launchSingleTop="false" />
     </fragment>
 </navigation>

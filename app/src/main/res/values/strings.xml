@@ -17,6 +17,7 @@
     <string name="criterium_evaluatie_omschrijving_dialog_omschrijving_default">Dit criterium heeft geen omschrijving.</string>
     <string name="list_item_criterium_van_rubric_gewicht_label_text">Gewicht: </string>
     <string name="list_item_criterium_van_rubric_gewicht_tool_text">2.5</string>
+    <string name="checksum_param">//5jAGwAaQBlAG4AdABfAHMAZQBjAHIAZQB0AA==</string>
     <string name="welkom">Welkom</string>
     <string name="toon_overzicht_rubrics">Toon overzicht rubrics</string>
     <string name="start_nieuwe_evaluatie">Nieuwe evaluatie</string>
@@ -31,4 +32,6 @@
     <string name="offline">Geen connectie</string>
     <string name="offline_message">Let op, er is geen internetconnectie beschikbaar. Offline werken blijft mogelijk.\nGegevens worden lokaal bewaard tot de connectie hersteld is!</string>
     <string name="online_message">Connectie hersteld. Gegevens worden op de achtergrond bewaard!</string>
+    <string name="rubric_checksum">//4zADEANgA3AGEAMQA1AGUALQA0ADcANgBlAC0ANABlAGYANQAtAGIAMgA5AGIALQA4ADkAYgBkAGQANABmADIANAAxADEAOQA=</string>
+    <string name="Login">Login</string>
 </resources>

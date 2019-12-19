@@ -1,7 +1,5 @@
 package be.hogent.tile3.rubricapplication.injection.module
 
-import android.content.Intent
-import androidx.core.content.ContextCompat.startActivity
 import be.hogent.tile3.rubricapplication.network.RubricApi
 import be.hogent.tile3.rubricapplication.utils.BASE_URL
 import com.itkacher.okhttpprofiler.OkHttpProfilerInterceptor
@@ -72,5 +70,6 @@ class NetworkModule {
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
     }
+
 
 }

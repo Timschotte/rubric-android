@@ -1,0 +1,8 @@
+{
+  "client_id": "rubric-android-client",
+  "redirect_uri": "rubric-android-client:/oauth2redirect",
+  "authorization_scope": "email",
+  "authorization_endpoint_uri": "https://auth.rubric.be/auth/realms/rubric-dev-sso/protocol/openid-connect/auth",
+  "token_endpoint_uri": "https://auth.rubric.be/auth/realms/rubric-dev-sso/protocol/openid-connect/token",
+  "https_required": true
+}

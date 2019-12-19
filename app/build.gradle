@@ -16,6 +16,9 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [
+                'appAuthRedirectScheme': 'rubric-android-client'
+        ]
     }
     buildTypes {
         release {
@@ -147,7 +150,21 @@ dependencies {
 
     implementation 'com.google.code.gson:gson:2.8.6'
 
+    // security
+    implementation 'net.openid:appauth:0.7.1' // OAuth
+    implementation 'com.squareup.okio:okio:2.2.0' //File parser
+
 }
+
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == "androidx") {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion "${targetSdk}.+"
+            }
+        }
+    }}
 dokka {
     outputFormat = 'html'
     outputDirectory = "$buildDir/dokkadocs"

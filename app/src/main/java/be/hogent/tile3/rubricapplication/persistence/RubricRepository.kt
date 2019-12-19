@@ -2,7 +2,6 @@ package be.hogent.tile3.rubricapplication.persistence
 
 import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.dao.CriteriumDao
@@ -12,8 +11,12 @@ import be.hogent.tile3.rubricapplication.model.EvaluatieRubric
 import be.hogent.tile3.rubricapplication.model.Rubric
 import be.hogent.tile3.rubricapplication.network.RubricApi
 import be.hogent.tile3.rubricapplication.network.asDatabaseModel
+import be.hogent.tile3.rubricapplication.security.AuthStateManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.IOException
 import javax.inject.Inject
+
 
 /**
  * Repository for [Rubric] for Room database operations
@@ -27,19 +30,22 @@ class RubricRepository(
     private val rubricDao: RubricDao,
     private val criteriumDao: CriteriumDao,
     private val niveauDao: NiveauDao
+
 ) {
-    /**
-     * Properties
-     */
-    @Inject
-    lateinit var context: Context
+
     @Inject
     lateinit var rubricApi: RubricApi
     /**
      * Constructor
      */
+    @Inject
+    lateinit var context:Context
+
+    private lateinit var authStateManager: AuthStateManager
+
     init {
         App.component.inject(this)
+        authStateManager = AuthStateManager.getInstance(context)
     }
     /**
      * Function for retrieving all [Rubric] for a given OpleidingsOnderdeel from Room database.
@@ -68,8 +74,8 @@ class RubricRepository(
      */
     suspend fun refreshRubrics() {
         try {
-            val rubrics = rubricApi.getRubrics("IN_GEBRUIK").await().toMutableList()
-            rubrics.addAll(rubricApi.getRubrics("PUBLIEK").await())
+            val rubrics = rubricApi.getRubrics("IN_GEBRUIK", authStateManager.getAuthorizationHeader()).await().toMutableList()
+            rubrics.addAll(rubricApi.getRubrics("PUBLIEK", authStateManager.getAuthorizationHeader()).await())
             rubricDao.deleteAllRubrics()
             rubrics.forEach { rubric ->
                 rubricDao.insert(rubric.asDatabaseModel())
