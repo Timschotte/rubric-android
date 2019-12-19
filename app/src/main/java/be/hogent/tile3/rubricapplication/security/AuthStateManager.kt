@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.annotation.AnyThread
+import androidx.fragment.app.Fragment
 import net.openid.appauth.*
 import org.json.JSONException
 import java.lang.ref.WeakReference
@@ -53,6 +54,9 @@ class AuthStateManager(context: Context) {
         val current = current
         current.update(response, ex)
         return replace(current)
+        /* BEGIN TEST */
+
+        /* EINDE TEST */
     }
 
     @AnyThread

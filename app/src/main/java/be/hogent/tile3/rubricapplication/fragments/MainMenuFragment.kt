@@ -43,9 +43,5 @@ class MainMenuFragment : Fragment() {
         }
 
         return binding.root
-
     }
-
-
-
 }
