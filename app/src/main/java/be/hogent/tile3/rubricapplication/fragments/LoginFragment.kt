@@ -58,6 +58,18 @@ class LoginFragment : Fragment() {
             startAuthProcess()
         }
 
+        /* BEGIN TEST PJ */
+        loginViewModel.AuthorizationSuccess?.observe(viewLifecycleOwner, androidx.lifecycle.Observer{
+            it?.let{
+                if(it) {
+                    val navController = this.findNavController()
+                    navController.currentDestination
+                    navController.navigate(R.id.action_loginFragment_to_mainMenuFragment)
+                }
+            }
+        })
+        /* END TEST PJ */
+
         return binding.root
     }
 

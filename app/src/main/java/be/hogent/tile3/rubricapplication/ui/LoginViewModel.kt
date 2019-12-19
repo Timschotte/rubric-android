@@ -6,6 +6,9 @@ import android.util.Log
 import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.R
@@ -34,6 +37,12 @@ class LoginViewModel : ViewModel() {
     val authRequest = AtomicReference<AuthorizationRequest>()
     var authIntent = AtomicReference<CustomTabsIntent>()
     var executor: ExecutorService? = null
+
+    /* BEGIN TEST PJ */
+    private var _authorizationSuccess= MediatorLiveData<Boolean>()
+    public val AuthorizationSuccess: LiveData<Boolean>
+        get() = _authorizationSuccess
+    /* EINDE TEST PJ */
 
     init {
         App.component.inject(this)
@@ -96,9 +105,18 @@ class LoginViewModel : ViewModel() {
         }else if(tokenResponse!= null){
             authStateManager.updateAfterTokenResponse(tokenResponse, authException)
             Log.v("AUTH", "Auth success: "+tokenResponse.jsonSerialize())
+                    /* BEGIN TEST PJ */
+            setAuthorizationSuccess(true)
+                    /* END TEST PJ */
         }
 
     }
+
+    /* BEGIN TEST PJ */
+    private fun setAuthorizationSuccess(bool: Boolean){
+        _authorizationSuccess.value = true
+    }
+    /* END TEST PJ */
 
     public fun recreateAuthorizationService() {
         if (authService != null) {
