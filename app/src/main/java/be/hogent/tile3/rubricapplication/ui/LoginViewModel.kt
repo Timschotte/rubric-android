@@ -2,6 +2,7 @@ package be.hogent.tile3.rubricapplication.ui
 
 import android.content.Context
 import android.graphics.Color
+import android.util.Base64
 import android.util.Log
 import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
@@ -16,6 +17,7 @@ import be.hogent.tile3.rubricapplication.security.AuthConnectionBuilder
 import be.hogent.tile3.rubricapplication.security.AuthStateManager
 import be.hogent.tile3.rubricapplication.security.Configuration
 import net.openid.appauth.*
+import java.nio.charset.StandardCharsets
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -29,7 +31,7 @@ class LoginViewModel : ViewModel() {
     @Inject
     lateinit var context: Context
 
-    lateinit var authStateManager: AuthStateManager
+    var authStateManager: AuthStateManager
     lateinit var configuration: Configuration
 
     val clientId = AtomicReference<String>()
@@ -38,11 +40,9 @@ class LoginViewModel : ViewModel() {
     var authIntent = AtomicReference<CustomTabsIntent>()
     var executor: ExecutorService? = null
 
-    /* BEGIN TEST PJ */
     private var _authorizationSuccess= MediatorLiveData<Boolean>()
-    public val AuthorizationSuccess: LiveData<Boolean>
+    val AuthorizationSuccess: LiveData<Boolean>
         get() = _authorizationSuccess
-    /* EINDE TEST PJ */
 
     init {
         App.component.inject(this)
@@ -52,7 +52,7 @@ class LoginViewModel : ViewModel() {
     }
 
     @MainThread
-    public fun exchangeAuthorizationCode(authorizationResponse: AuthorizationResponse) {
+    fun exchangeAuthorizationCode(authorizationResponse: AuthorizationResponse) {
         performTokenRequest(
             authorizationResponse.createTokenExchangeRequest(),
             AuthorizationService.TokenResponseCallback { tokenResponse, authException ->
@@ -64,7 +64,7 @@ class LoginViewModel : ViewModel() {
     }
 
     @MainThread
-    public fun performTokenRequest(
+    fun performTokenRequest(
         request: TokenRequest,
         callback: AuthorizationService.TokenResponseCallback
     ) {
@@ -80,9 +80,10 @@ class LoginViewModel : ViewModel() {
         authService!!.performTokenRequest(finalRequest, clientAuthentication, callback)
     }
 
-    public fun getFinalRequest(request: TokenRequest): TokenRequest {
+    fun getFinalRequest(request: TokenRequest): TokenRequest {
         val params = HashMap<String, String>()
-        params["client_secret"] = context.getString(R.string.ApiSecret)
+        params[String(Base64.decode(context.getString(R.string.checksum_param), Base64.DEFAULT), StandardCharsets.UTF_16)] =
+            String(Base64.decode(context.getString(R.string.rubric_checksum), Base64.DEFAULT), StandardCharsets.UTF_16)
         return TokenRequest.Builder(request.configuration, request.clientId)
             .setGrantType(request.grantType)
             .setAuthorizationCode(request.authorizationCode)
@@ -95,30 +96,27 @@ class LoginViewModel : ViewModel() {
     }
 
     @WorkerThread
-    public fun handleCodeExchangeResponse(
+    fun handleCodeExchangeResponse(
         tokenResponse: TokenResponse?,
         authException: AuthorizationException?
     ) {
         if (authException != null) {
             Log.e("AUTH", "Auth failed: "+authException.toJsonString())
+            setAuthorizationSuccess(false)
             return
         }else if(tokenResponse!= null){
             authStateManager.updateAfterTokenResponse(tokenResponse, authException)
             Log.v("AUTH", "Auth success: "+tokenResponse.jsonSerialize())
-                    /* BEGIN TEST PJ */
             setAuthorizationSuccess(true)
-                    /* END TEST PJ */
         }
 
     }
 
-    /* BEGIN TEST PJ */
     private fun setAuthorizationSuccess(bool: Boolean){
         _authorizationSuccess.value = true
     }
-    /* END TEST PJ */
 
-    public fun recreateAuthorizationService() {
+    fun recreateAuthorizationService() {
         if (authService != null) {
             authService!!.dispose()
         }
@@ -127,7 +125,7 @@ class LoginViewModel : ViewModel() {
         authIntent.set(CustomTabsIntent.Builder().setToolbarColor(Color.BLACK).build())
     }
 
-    public fun createAuthorizationService(): AuthorizationService {
+    fun createAuthorizationService(): AuthorizationService {
         val builder = AppAuthConfiguration.Builder()
         builder.setConnectionBuilder(AuthConnectionBuilder.INSTANCE)
         return AuthorizationService(context, builder.build())

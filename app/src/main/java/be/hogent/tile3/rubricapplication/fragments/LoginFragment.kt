@@ -58,7 +58,6 @@ class LoginFragment : Fragment() {
             startAuthProcess()
         }
 
-        /* BEGIN TEST PJ */
         loginViewModel.AuthorizationSuccess?.observe(viewLifecycleOwner, androidx.lifecycle.Observer{
             it?.let{
                 if(it) {
@@ -68,13 +67,13 @@ class LoginFragment : Fragment() {
                 }
             }
         })
-        /* END TEST PJ */
 
         return binding.root
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        Log.i("LoginFrag", "onActivityResult resultcode = " + resultCode)
         if (resultCode == AppCompatActivity.RESULT_CANCELED) {
             Log.v("Auth", "login cancelled")
             // nothing
@@ -90,15 +89,6 @@ class LoginFragment : Fragment() {
                 ex != null -> return // Authorization flow failed
                 else -> return // No authorization state retained - reauthorization required
             }
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (authStateManager.current.isAuthorized) {
-            val navController = this.findNavController()
-            navController.currentDestination
-            navController.navigate(R.id.action_loginFragment_to_mainMenuFragment)
         }
     }
 
