@@ -97,12 +97,12 @@ class RubricSelectFragment : Fragment() {
      */
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.searchbar, menu)
-        val searchBarRubric = menu.findItem(R.id.action_search).actionView as androidx.appcompat.widget.SearchView
+        val searchBarRubric = menu.findItem(R.id.action_search).actionView as androidx.appcompat.widget.SearchView?
 
-        val editText = searchBarRubric.findViewById(R.id.search_src_text) as EditText
+        val editText = searchBarRubric?.findViewById(R.id.search_src_text) as EditText?
 
 
-        editText.addTextChangedListener(
+        editText?.addTextChangedListener(
             object : TextWatcher {
                 val handler = Handler()
 
