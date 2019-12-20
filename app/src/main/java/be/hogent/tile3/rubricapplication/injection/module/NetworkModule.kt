@@ -39,27 +39,12 @@ class NetworkModule {
     @Provides
     internal fun provideRetrofitInterface(): Retrofit {
 
-        //To debug Retrofit/OkHttp we can intercept the calls and log them.
-        val interceptor: HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
-            this.level = HttpLoggingInterceptor.Level.BODY
-        }
+
 
         //HTTP client without logging
         val okHttpClient = OkHttpClient.Builder()
             .build()
-        //HTTP client with logging
-        val client: OkHttpClient = OkHttpClient.Builder().apply {
-            this.addInterceptor(interceptor)
-            this.addInterceptor(OkHttpProfilerInterceptor())
-            this.addInterceptor(Interceptor { chain ->
-                val request: Request = chain.request()
-                val response = chain.proceed(request)
-                if (response.code() != 200) {
-                    return@Interceptor response
-                }
-                response
-            })
-        } .build()
+
 
         val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 

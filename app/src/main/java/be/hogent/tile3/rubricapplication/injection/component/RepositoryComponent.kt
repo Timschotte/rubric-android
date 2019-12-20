@@ -5,6 +5,7 @@ import be.hogent.tile3.rubricapplication.injection.module.DatabaseModule
 import be.hogent.tile3.rubricapplication.injection.module.NetworkModule
 import be.hogent.tile3.rubricapplication.persistence.*
 import be.hogent.tile3.rubricapplication.ui.*
+import be.hogent.tile3.rubricapplication.workers.NetworkPersistenceWorker
 import dagger.Component
 import javax.inject.Singleton
 
@@ -21,6 +22,7 @@ interface RepositoryComponent {
     fun inject(studentRepository: StudentRepository)
     fun inject(evaluatieRepository: EvaluatieRepository)
     fun inject(loginViewModel: LoginViewModel)
+    fun inject(networkPersistenceWorker: NetworkPersistenceWorker)
 
 
     @Component.Builder

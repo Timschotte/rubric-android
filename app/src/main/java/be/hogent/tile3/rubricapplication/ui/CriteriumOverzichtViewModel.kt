@@ -488,6 +488,7 @@ class CriteriumOverzichtViewModel(
                 TimeUnit.SECONDS
             )
             .build()
+        WorkManager.getInstance(context).enqueue(nwWorker)
     }
     /**
      * This function shows a [Toast] when no Internet connection is available
