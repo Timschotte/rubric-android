@@ -55,27 +55,19 @@ class RubricSelectViewModel(opleidingsOnderdeelId: Long) : ViewModel() {
      */
     init {
         App.component.inject(this)
-        refreshRubricDatabase()
-        opleidingsOnderdeel.addSource(
-            opleidingsOnderdeelRepository.get(opleidingsOnderdeelId),
-            opleidingsOnderdeel::setValue
-        )
+//        refreshRubricDatabase()
         _rubrics = rubricRepository.getAllRubricsFromOpleidingsOnderdeel(opleidingsOnderdeelId)
-        gefilterdeRubrics.addSource(_rubrics) {
-            gefilterdeRubrics.value = it
-        }
-    }
-    private fun refreshRubricDatabase(){
-        if (isNetworkAvailable(context)) {
-            uiScope.launch {
-                withContext(Dispatchers.IO) {
-                    rubricRepository.refreshRubrics()
-                }.apply {
-                    _refreshIsComplete.value = true
-                }
+        uiScope.launch {
+            opleidingsOnderdeel.addSource(
+                opleidingsOnderdeelRepository.get(opleidingsOnderdeelId),
+                opleidingsOnderdeel::setValue
+            )
+            gefilterdeRubrics.addSource(_rubrics) {
+                gefilterdeRubrics.value = it
             }
-        }
+        }.apply { _refreshIsComplete.value = true }
     }
+    
     /**
      * Function that filters rubrics from SearchBar input on Fragment
      * @param filterText Input to filter the rubrics

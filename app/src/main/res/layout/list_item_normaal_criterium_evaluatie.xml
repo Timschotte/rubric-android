@@ -52,7 +52,7 @@
                     android:layout_weight="50"
                     android:textColor="@color/secondaryVeryDarkColor"
                     android:textSize="16sp"
-                    android:textStyle="bold|italic"
+                    android:textStyle="bold"
                     app:criteriumNiveauNaam="@{niveau}"
                     tools:text="@tools:sample/lorem" />
 
@@ -85,7 +85,6 @@
                         android:textAlignment="textStart"
                         android:textColor="@color/primaryTextColor"
                         android:textSize="12sp"
-                        android:textStyle="italic"
                         app:criteriumNiveauOmschrijving="@{niveau}"
                         tools:text="@tools:sample/lorem/random" />
                 </LinearLayout>
