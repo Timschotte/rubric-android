@@ -1,6 +1,7 @@
 package be.hogent.tile3.rubricapplication.ui
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,6 +14,7 @@ import be.hogent.tile3.rubricapplication.persistence.EvaluatieRepository
 import be.hogent.tile3.rubricapplication.persistence.StudentRepository
 import be.hogent.tile3.rubricapplication.utils.isNetworkAvailable
 import kotlinx.coroutines.*
+import java.util.stream.Collectors.toList
 import javax.inject.Inject
 
 /**
@@ -51,6 +53,10 @@ class LeerlingSelectViewModel(
     lateinit var studenten: LiveData<List<Student>>
     val gefilterdeStudenten = MediatorLiveData<List<Student>>()
 
+    private val _evaluaties = MutableLiveData<List<Evaluatie>>()
+    val evaluaties: LiveData<List<Evaluatie>>
+        get() = _evaluaties
+
     private val _navigateToRubricView = MutableLiveData<Student>()
     val navigateToRubricView
         get() = _navigateToRubricView
@@ -65,18 +71,28 @@ class LeerlingSelectViewModel(
     init {
         App.component.inject(this)
         refreshStudentDatabase()
-        loadStudents()
+        loadStudentData()
         refreshEvaluationDb()
         gefilterdeStudenten.addSource(studenten){
             gefilterdeStudenten.value = it
         }
     }
     /**
-     * Function for retrieving all [Student] for the current OpleidingsOnderdeel from Room database.
+     * Function for retrieving all [Student] for the current OpleidingsOnderdeel as well as all [Evaluatie] for the current Rubric from Room database
      * @see StudentRepository
+     * @see EvaluatieRepository
      */
-    private fun loadStudents(){
+    private fun loadStudentData(){
         studenten = studentRepository.getAllStudentsFromOpleidingsOnderdeel(opleidingsOnderdeelId)
+        coroutineScope.launch{
+            _evaluaties.value = loadEvaluaties()
+        }
+    }
+
+    private suspend fun loadEvaluaties(): List<Evaluatie> {
+        return withContext(Dispatchers.IO){
+            evaluatieRepository.getByRubric(rubricId)
+        }
     }
     /**
      * Function that filters studenten from SearchBar input on Fragment
@@ -143,3 +159,14 @@ class LeerlingSelectViewModel(
         viewModelJob.cancel()
     }
 }
+
+/**
+ * Data class used to hold a [Student] and its associated [Evaluatie] for the [Rubric] to be passed to LeerlingListAdapter
+ * @property student [Student] being evaluated for [Rubric]
+ * @property evaluatie [Evaluatie] for the given [Student] and the [Rubric]
+ */
+
+data class StudentMetEvaluatie(
+    val student: Student,
+    val evaluatie: Evaluatie?
+)

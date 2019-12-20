@@ -15,11 +15,11 @@ import androidx.room.*
  */
 @Entity(
     tableName = "rubric_table",
-    foreignKeys = [ForeignKey(
+    /*foreignKeys = [ForeignKey(
         entity = OpleidingsOnderdeel::class,
         parentColumns = arrayOf("opleidingsOnderdeelId"),
         childColumns = arrayOf("opleidingsOnderdeelId"),
-        onDelete = ForeignKey.SET_NULL)],
+        onDelete = ForeignKey.SET_NULL)],*/
     indices = [Index("opleidingsOnderdeelId")]
 )
 data class Rubric(

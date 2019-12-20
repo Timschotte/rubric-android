@@ -54,6 +54,14 @@ interface EvaluatieDao {
     @Query("SELECT * FROM evaluatie_table where rubricId = :rubricId and studentId=:studentId and evaluatieId!=:tempEvaluatieId LIMIT 1")
     fun getByRubricAndStudent(rubricId: Long, studentId: Long, tempEvaluatieId: String = TEMP_EVALUATIE_ID): Evaluatie
     /**
+     * Retrieves all [Evaluatie] for a given Rubric where [tempEvaluatieId] = [TEMP_EVALUATIE_ID] from [Room] database
+     * @param rubricId [Long]
+     * @param tempEvaluatieId [String] = [TEMP_EVALUATIE_ID]
+     * @return [Evaluatie]
+     */
+    @Query("SELECT * FROM evaluatie_table WHERE rubricId = :rubricId AND evaluatieId!=:tempEvaluatieId")
+    fun getByRubric(rubricId: Long, tempEvaluatieId: String = TEMP_EVALUATIE_ID): List<Evaluatie>
+    /**
      * Retrieves [Evaluatie] (no temporary) for a given Rubric and Student from Room database
      * @param rubricId [Long]
      * @param studentId [Long]

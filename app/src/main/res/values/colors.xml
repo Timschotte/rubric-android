@@ -11,7 +11,7 @@
     <color name="secondaryDarkColor">#3386c4</color>
     <color name="secondaryVeryDarkColor">#0F202A</color>
     <color name="secondaryTextColor">#fafafa</color>
-    <color name="colorAccent">#4ca2d5</color>
+    <color name="colorAccent">#4CA2D5</color>
     <color name="colorPrimary">#ffffff</color>
     <color name="colorPrimaryDark">#000000</color>
 </resources>

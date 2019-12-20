@@ -3,6 +3,7 @@ package be.hogent.tile3.rubricapplication.persistence
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.LiveData
 import be.hogent.tile3.rubricapplication.App
 import be.hogent.tile3.rubricapplication.dao.CriteriumEvaluatieDao
 import be.hogent.tile3.rubricapplication.dao.EvaluatieDao
@@ -109,6 +110,20 @@ class EvaluatieRepository(private val evaluatieDao: EvaluatieDao, private val cr
             evaluatie
         }
     }
+    /**
+     * Function for retrieving all [Evaluatie] for a given Rubric from Room database.
+     * @param rubricId ID from given Rubric
+     * @return [Evaluatie]
+     * @see evaluatieDao
+     * @see withContext
+     * @see Dispatchers.IO
+     */
+    suspend fun getByRubric(rubricId: Long): List<Evaluatie> {
+        return withContext(Dispatchers.IO) {
+            evaluatieDao.getByRubric(rubricId)
+        }
+    }
+
     /**
      * Co-Routine for deleting temporary [Evaluatie] from Room database. This method runs on the IO thread as a background task
      * @see evaluatieDao

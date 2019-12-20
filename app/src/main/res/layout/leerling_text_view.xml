@@ -53,11 +53,22 @@
             tools:text="date" />
 
         <TextView
+            android:id="@+id/studentEvaluatieEindscore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/studentNummer"
+            app:layout_constraintStart_toEndOf="@+id/studentGeboortedatum"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="119/140" />
+
+        <TextView
             android:id="@+id/studentNummer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:textColor="@color/secondaryColor"
+            android:textColor="@color/primaryTextColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

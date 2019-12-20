@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
 import android.widget.EditText
 import androidx.databinding.DataBindingUtil
@@ -18,6 +19,7 @@ import be.hogent.tile3.rubricapplication.adapters.LeerlingListener
 import be.hogent.tile3.rubricapplication.databinding.FragmentLeerlingSelectBinding
 import be.hogent.tile3.rubricapplication.security.AuthStateManager
 import be.hogent.tile3.rubricapplication.ui.LeerlingSelectViewModel
+import be.hogent.tile3.rubricapplication.ui.StudentMetEvaluatie
 import be.hogent.tile3.rubricapplication.ui.factories.LeerlingSelectViewModelFactory
 import be.hogent.tile3.rubricapplication.utils.TEMP_EVALUATIE_ID
 
@@ -92,7 +94,20 @@ class LeerlingSelectFragment : Fragment() {
         })
         leerlingSelectViewModel.gefilterdeStudenten.observe(viewLifecycleOwner, Observer {
             it?.let {
+                var studentenMetEvaluatie = it.map{ stud ->
+                    StudentMetEvaluatie(stud, leerlingSelectViewModel.evaluaties.value?.firstOrNull{eval -> eval.studentId == stud.studentId})
+                }
+                studentenMetEvaluatie.forEach{
+                    Log.i("LeerlingSelect", it.student.studentenNr + " met evaluatie " + it.evaluatie?.evaluatieId)
+                }
                 adapter.submitList(it)
+            }
+        })
+        leerlingSelectViewModel.evaluaties.observe(viewLifecycleOwner, Observer{
+            it?.let{
+                it.forEach{
+                    Log.i("LeerlingSelect", "LeerlingSelect, got evaluatie " + it.evaluatieId)
+                }
             }
         })
         leerlingSelectViewModel.refreshIsComplete.observe(viewLifecycleOwner, Observer {
