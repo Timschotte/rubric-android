@@ -10,6 +10,7 @@ import be.hogent.tile3.rubricapplication.model.Student
 import be.hogent.tile3.rubricapplication.network.RubricApi
 import be.hogent.tile3.rubricapplication.network.asStudentDatabaseModel
 import be.hogent.tile3.rubricapplication.network.asStudentOpleidingsOnderdeelDatabaseModel
+import be.hogent.tile3.rubricapplication.security.AuthStateManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.IOException
@@ -29,11 +30,13 @@ class StudentRepository(private val studentDao: StudentDao, private val studentO
     lateinit var context: Context
     @Inject
     lateinit var rubricApi: RubricApi
+    private val authHeader: String
     /**
      * Constructor
      */
     init {
         App.component.inject(this)
+        authHeader = AuthStateManager.getInstance(context).getAuthorizationHeader()
     }
     /**
      * Function for retrieving all [Student] for a given OpleidingsOnderdeel from Room database.
@@ -42,7 +45,8 @@ class StudentRepository(private val studentDao: StudentDao, private val studentO
      * @see StudentOpleidingsOnderdeelDao
      */
     fun getAllStudentsFromOpleidingsOnderdeel(id: Long): LiveData<List<Student>> {
-        return studentOpleidingsOnderdeelDao.getStudentenFromOpleidingsOnderdeel(id)
+        val studenten = studentOpleidingsOnderdeelDao.getStudentenFromOpleidingsOnderdeel(id)
+        return studenten
     }
     /**
      * Co-Routine for synchronizing all [Student] for a given OpleidingsOnderdeel from backend API with Room database.
@@ -56,12 +60,14 @@ class StudentRepository(private val studentDao: StudentDao, private val studentO
     suspend fun refreshStudenten(olodId : Long){
         try{
             withContext(Dispatchers.IO){
-                val studenten = rubricApi.getStudenten(olodId).await()
-                studentDao.insertAll(*studenten.asStudentDatabaseModel())
-                studentOpleidingsOnderdeelDao.insertAll(*studenten.asStudentOpleidingsOnderdeelDatabaseModel())
+                val studenten = rubricApi.getStudenten(olodId, authHeader).await()
+                val studentDbModels = studenten.asStudentDatabaseModel()
+                val studentOpleidingDbModels = studenten.asStudentOpleidingsOnderdeelDatabaseModel()
+                studentDao.insertAll(*studentDbModels)
+                studentOpleidingsOnderdeelDao.insertAll(*studentOpleidingDbModels)
             }
 
-        } catch (e: IOException){
+        } catch (e: Exception){
             Log.i("RubricsLogging", "An error occured while refreshing students in database")
         }
     }

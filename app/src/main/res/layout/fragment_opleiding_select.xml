@@ -32,13 +32,14 @@
             android:background="@drawable/card_background"
             android:elevation="6dp"
             android:textAlignment="textStart"
+            app:apiStatusRV="@{opleidingsOnderdeelViewModel.status}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/spinning_loader">
 
-        </androidx.recyclerview.widget.RecyclerView>
+        </androidx.recyclerview.widget.RecyclerView>Ò
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

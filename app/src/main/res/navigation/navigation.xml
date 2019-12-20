@@ -80,7 +80,7 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="be.hogent.tile3.rubricapplication.fragments.LoginFragment"
-        android:label="fragment_login">
+        android:label="Login">
         <action
             android:id="@+id/action_loginFragment_to_mainMenuFragment"
             app:destination="@id/mainMenuFragment"

@@ -10,6 +10,7 @@ import be.hogent.tile3.rubricapplication.model.StudentOpleidingsOnderdeel
 import com.squareup.moshi.JsonClass
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.reflect.typeOf
 
 @JsonClass(generateAdapter = false)
 data class NetworkRubric(
@@ -72,13 +73,6 @@ data class NetworkNiveau(
 )
 
 @JsonClass(generateAdapter = false)
-data class NetworkDocent(
-    val id: String,
-    val naam: String,
-    val opleidingsOnderdeel: NetworkOpleidingsOnderdeel
-)
-
-@JsonClass(generateAdapter = false)
 data class NetworkStudent(
     val id: Long,
     val naam: String,
@@ -101,19 +95,6 @@ fun NetworkRubric.asDatabaseModel(): Rubric{
         this.datumTijdLaatsteWijziging,
         this.opleidingsOnderdeel.id
     )
-}
-
-fun List<NetworkRubric>.asDatabaseModel(): List<Rubric> {
-    return map {
-        Rubric(
-            it.id,
-            it.onderwerp,
-            it.omschrijving,
-            it.datumTijdCreatie,
-            it.datumTijdLaatsteWijziging,
-            it.opleidingsOnderdeel.id
-        )
-    }
 }
 
 fun List<NetworkOpleidingsOnderdeel>.asOpleidingsOnderdeelDatabaseModel(): Array<OpleidingsOnderdeel> {

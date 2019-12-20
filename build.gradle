@@ -25,7 +25,8 @@ buildscript {
             'targetSdk'     : 28,
             'dagger'        : "2.23.2",
             'rx'            : "2.2.3",
-            'rxandroid'     : "2.1.0"
+            'rxandroid'     : "2.1.0",
+            "lottie"                     : "3.3.0"
     ]
     ext {
         dokkaVersion = '0.9.17'

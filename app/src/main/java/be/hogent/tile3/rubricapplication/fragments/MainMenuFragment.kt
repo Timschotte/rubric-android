@@ -38,8 +38,6 @@ class MainMenuFragment : Fragment() {
         if (!authStateManager.current.isAuthorized) {
             navController.currentDestination
             navController.navigate(R.id.action_mainMenuFragment_to_loginFragment)
-        } else{
-            Log.v("Auth", "token:" + authStateManager.current.accessToken)
         }
 
         return binding.root

@@ -154,6 +154,9 @@ dependencies {
     implementation 'net.openid:appauth:0.7.1' // OAuth
     implementation 'com.squareup.okio:okio:2.2.0' //File parser
 
+    // Lottie
+    implementation "com.airbnb.android:lottie:$versions.lottie"
+
 }
 
 configurations.all {

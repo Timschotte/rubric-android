@@ -8,6 +8,7 @@ import be.hogent.tile3.rubricapplication.dao.OpleidingsOnderdeelDao
 import be.hogent.tile3.rubricapplication.model.OpleidingsOnderdeel
 import be.hogent.tile3.rubricapplication.network.RubricApi
 import be.hogent.tile3.rubricapplication.network.asOpleidingsOnderdeelDatabaseModel
+import be.hogent.tile3.rubricapplication.security.AuthStateManager
 import java.io.IOException
 import javax.inject.Inject
 /**
@@ -24,13 +25,14 @@ class OpleidingsOnderdeelRepository(private val opleidingsOnderdeelDao: Opleidin
      */
     @Inject lateinit var context: Context
     @Inject lateinit var rubricApi: RubricApi
-    val opleidingsOnderdelen: LiveData<List<OpleidingsOnderdeel>> = opleidingsOnderdeelDao.getAll()
-
+    private val opleidingsOnderdelen: LiveData<List<OpleidingsOnderdeel>> = opleidingsOnderdeelDao.getAll()
+    private val authHeader: String
     /**
      * Constructor
      */
     init {
         App.component.inject(this)
+        authHeader = AuthStateManager.getInstance(context).getAuthorizationHeader()
     }
     /**
      * Function for retrieving an [OpleidingsOnderdeel] from Room database.
@@ -47,7 +49,7 @@ class OpleidingsOnderdeelRepository(private val opleidingsOnderdeelDao: Opleidin
      */
     suspend fun refreshOpleidingsOnderdelen(){
         try{
-            val opleidingsOnderdelen = rubricApi.getOpleidingsOnderdeel().await()
+            val opleidingsOnderdelen = rubricApi.getOpleidingsOnderdeel(authHeader).await()
             opleidingsOnderdeelDao.insertAll(*opleidingsOnderdelen.asOpleidingsOnderdeelDatabaseModel())
         } catch (e: IOException){
             Log.i("RubricsLogging","An error occured while refreshing olods in database")

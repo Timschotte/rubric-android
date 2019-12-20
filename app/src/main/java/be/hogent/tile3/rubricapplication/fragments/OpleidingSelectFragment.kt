@@ -9,16 +9,17 @@ import android.view.*
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.EditText
-import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import be.hogent.tile3.rubricapplication.R
 import be.hogent.tile3.rubricapplication.adapters.OpleidingsOnderdeelListAdapter
 import be.hogent.tile3.rubricapplication.adapters.OpleidingsOnderdeelListener
-import be.hogent.tile3.rubricapplication.ui.OpleidingsOnderdeelViewModel
 import be.hogent.tile3.rubricapplication.databinding.FragmentOpleidingSelectBinding
+import be.hogent.tile3.rubricapplication.security.AuthStateManager
+import be.hogent.tile3.rubricapplication.ui.OpleidingsOnderdeelViewModel
 
 /**
  * OpleidingSelect [Fragment] for showing OpleidingOnderdeel list
@@ -29,7 +30,8 @@ class OpleidingSelectFragment : Fragment() {
     /**
      * Properties
      */
-    lateinit var binding:FragmentOpleidingSelectBinding
+    lateinit var binding: FragmentOpleidingSelectBinding
+
     /**
      * Initializes the [OpleidingSelectFragment] in CREATED state. Inflates the fragment layout, initializes ViewModel
      * databinding objects, observes ViewModel livedata and RecyclerView setup
@@ -44,41 +46,58 @@ class OpleidingSelectFragment : Fragment() {
         /**
          * Layout inflation
          */
+
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_opleiding_select, container, false)
         /**
          * ViewModel DataBinding
          */
-        val opleidingsOnderdeelViewModel = ViewModelProviders.of(this).get(OpleidingsOnderdeelViewModel::class.java)
+        val opleidingsOnderdeelViewModel =
+            ViewModelProviders.of(this).get(OpleidingsOnderdeelViewModel::class.java)
         binding.opleidingsOnderdeelViewModel = opleidingsOnderdeelViewModel
         binding.lifecycleOwner = this
         /**
          * RecyclerView setup
          */
-        val adapter = OpleidingsOnderdeelListAdapter(OpleidingsOnderdeelListener {
-                opleidingsOnderdeelId -> opleidingsOnderdeelViewModel.onOpleidingsOnderdeelClicked(opleidingsOnderdeelId)
-        })
+        val adapter =
+            OpleidingsOnderdeelListAdapter(OpleidingsOnderdeelListener { opleidingsOnderdeelId ->
+                opleidingsOnderdeelViewModel.onOpleidingsOnderdeelClicked(opleidingsOnderdeelId)
+            })
         binding.opleidingenList.adapter = adapter
         /**
          * ViewModel livedata observers
          */
-        opleidingsOnderdeelViewModel.navigateToRubricSelect.observe(this, Observer { opleidingsOnderdeel ->
-            opleidingsOnderdeel?.let {
-                this.findNavController().navigate(
-                    OpleidingSelectFragmentDirections.actionOpleidingSelectFragmentToRubricSelectFragment(opleidingsOnderdeel)
-                )
-                opleidingsOnderdeelViewModel.onOpleidingsOnderdeelNavigated()
-            }
-        })
-        opleidingsOnderdeelViewModel.gefilterdeOpleidingsOnderdelen.observe(viewLifecycleOwner, Observer {
-            it?.let{
-                adapter.submitList(it)
-            }
-        })
-        opleidingsOnderdeelViewModel.refreshIsComplete.observe(viewLifecycleOwner, Observer{
-            if(it){
+
+        val authStateManager = AuthStateManager.getInstance(context!!)
+        val navController = this.findNavController()
+        if (!authStateManager.current.isAuthorized) {
+            navController.currentDestination
+            navController.navigate(R.id.action_mainMenuFragment_to_loginFragment)
+        }
+
+        opleidingsOnderdeelViewModel.navigateToRubricSelect.observe(
+            this,
+            Observer { opleidingsOnderdeel ->
+                opleidingsOnderdeel?.let {
+                    this.findNavController().navigate(
+                        OpleidingSelectFragmentDirections.actionOpleidingSelectFragmentToRubricSelectFragment(
+                            opleidingsOnderdeel
+                        )
+                    )
+                    opleidingsOnderdeelViewModel.onOpleidingsOnderdeelNavigated()
+                }
+            })
+        opleidingsOnderdeelViewModel.gefilterdeOpleidingsOnderdelen.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    adapter.submitList(it)
+                }
+            })
+        opleidingsOnderdeelViewModel.refreshIsComplete.observe(viewLifecycleOwner, Observer {
+            if (it) {
                 binding.spinningLoader.visibility = GONE
                 binding.opleidingenList.visibility = VISIBLE
-            }else{
+            } else {
                 binding.spinningLoader.visibility = VISIBLE
                 binding.opleidingenList.visibility = GONE
             }
@@ -90,6 +109,7 @@ class OpleidingSelectFragment : Fragment() {
         return binding.root
 
     }
+
     /**
      * Function used to created the options menu. Inflates the menu layout and add's a SearchBar
      * @param menu [Menu]
@@ -97,7 +117,8 @@ class OpleidingSelectFragment : Fragment() {
      */
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.searchbar, menu)
-        val searchBarOpleiding = menu.findItem(R.id.action_search).actionView as androidx.appcompat.widget.SearchView
+        val searchBarOpleiding =
+            menu.findItem(R.id.action_search).actionView as androidx.appcompat.widget.SearchView
 
         val editText = searchBarOpleiding.findViewById(R.id.search_src_text) as EditText
 
@@ -107,11 +128,11 @@ class OpleidingSelectFragment : Fragment() {
 
                 override fun afterTextChanged(s: Editable?) {
                     val text = s?.toString()
-                    val millis:Long
-                    if(text==""){
-                        millis=0
+                    val millis: Long
+                    if (text == "") {
+                        millis = 0
                     } else {
-                        millis=600
+                        millis = 600
                     }
                     handler.postDelayed({
                         binding.opleidingsOnderdeelViewModel?.filterChanged(text)

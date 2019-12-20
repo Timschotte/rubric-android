@@ -20,6 +20,7 @@ import be.hogent.tile3.rubricapplication.R
 import be.hogent.tile3.rubricapplication.adapters.CriteriaListListener
 import be.hogent.tile3.rubricapplication.adapters.CriteriumOverzichtListAdapter
 import be.hogent.tile3.rubricapplication.databinding.FragmentCriteriumOverzichtBinding
+import be.hogent.tile3.rubricapplication.security.AuthStateManager
 import be.hogent.tile3.rubricapplication.ui.CriteriumOverzichtViewModel
 import be.hogent.tile3.rubricapplication.ui.factories.CriteriumOverzichtViewModelFactory
 
@@ -66,6 +67,15 @@ class CriteriumOverzichtFragment : Fragment() {
         criteriumOverzichtViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(CriteriumOverzichtViewModel::class.java)
         binding.lifecycleOwner = this
+
+        val authStateManager = AuthStateManager.getInstance(context!!)
+        val navController = this.findNavController()
+        if (!authStateManager.current.isAuthorized) {
+            navController.currentDestination
+            navController.navigate(R.id.action_mainMenuFragment_to_loginFragment)
+        }
+
+
         /**
          * RecyclerView setup
          */
