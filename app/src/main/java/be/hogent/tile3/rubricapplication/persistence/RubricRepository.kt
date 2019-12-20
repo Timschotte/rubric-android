@@ -41,11 +41,11 @@ class RubricRepository(
     @Inject
     lateinit var context:Context
 
-    private lateinit var authStateManager: AuthStateManager
+    private val authHeader: String
 
     init {
         App.component.inject(this)
-        authStateManager = AuthStateManager.getInstance(context)
+        authHeader = AuthStateManager.getInstance(context).getAuthorizationHeader()
     }
     /**
      * Function for retrieving all [Rubric] for a given OpleidingsOnderdeel from Room database.
@@ -74,8 +74,8 @@ class RubricRepository(
      */
     suspend fun refreshRubrics() {
         try {
-            val rubrics = rubricApi.getRubrics("IN_GEBRUIK", authStateManager.getAuthorizationHeader()).await().toMutableList()
-            rubrics.addAll(rubricApi.getRubrics("PUBLIEK", authStateManager.getAuthorizationHeader()).await())
+            val rubrics = rubricApi.getRubrics("IN_GEBRUIK", authHeader).await().toMutableList()
+            rubrics.addAll(rubricApi.getRubrics("PUBLIEK", authHeader).await())
             rubricDao.deleteAllRubrics()
             rubrics.forEach { rubric ->
                 rubricDao.insert(rubric.asDatabaseModel())

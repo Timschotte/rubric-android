@@ -7,8 +7,8 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
 import android.widget.EditText
-import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
@@ -16,6 +16,7 @@ import be.hogent.tile3.rubricapplication.R
 import be.hogent.tile3.rubricapplication.adapters.LeerlingListAdapter
 import be.hogent.tile3.rubricapplication.adapters.LeerlingListener
 import be.hogent.tile3.rubricapplication.databinding.FragmentLeerlingSelectBinding
+import be.hogent.tile3.rubricapplication.security.AuthStateManager
 import be.hogent.tile3.rubricapplication.ui.LeerlingSelectViewModel
 import be.hogent.tile3.rubricapplication.ui.factories.LeerlingSelectViewModelFactory
 import be.hogent.tile3.rubricapplication.utils.TEMP_EVALUATIE_ID
@@ -31,6 +32,7 @@ class LeerlingSelectFragment : Fragment() {
      * Properties
      */
     lateinit var binding: FragmentLeerlingSelectBinding
+
     /**
      * Initializes the [LeerlingSelectFragment] in CREATED state. Inflates the fragment layout, initializes ViewModel
      * databinding objects, observes ViewModel livedata and RecyclerView setup
@@ -45,13 +47,14 @@ class LeerlingSelectFragment : Fragment() {
         /**
          * Layout inflation
          */
-        binding  = DataBindingUtil
+        binding = DataBindingUtil
             .inflate(inflater, R.layout.fragment_leerling_select, container, false)
         /**
          * ViewModel DataBinding
          */
         val args = LeerlingSelectFragmentArgs.fromBundle(arguments!!)
-        val viewModelFactory = LeerlingSelectViewModelFactory(args.rubricId.toLong(), args.opleidingsOnderdeelId)
+        val viewModelFactory =
+            LeerlingSelectViewModelFactory(args.rubricId.toLong(), args.opleidingsOnderdeelId)
         val leerlingSelectViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(LeerlingSelectViewModel::class.java)
         binding.leerlingSelectViewModel = leerlingSelectViewModel
@@ -59,33 +62,44 @@ class LeerlingSelectFragment : Fragment() {
         /**
          * RecyclerView SetUp
          */
-        val adapter = LeerlingListAdapter(LeerlingListener {
-                student -> leerlingSelectViewModel.onStudentClicked(student)
+        val adapter = LeerlingListAdapter(LeerlingListener { student ->
+            leerlingSelectViewModel.onStudentClicked(student)
         })
         binding.leerlingList.adapter = adapter
         /**
          * ViewModel livedata observers
          */
+
+
+        val authStateManager = AuthStateManager.getInstance(context!!)
+        val navController = this.findNavController()
+        if (!authStateManager.current.isAuthorized) {
+            navController.currentDestination
+            navController.navigate(R.id.action_mainMenuFragment_to_loginFragment)
+        }
+
         leerlingSelectViewModel.navigateToRubricView.observe(this, Observer { leerling ->
             leerling?.let {
                 this.findNavController().navigate(
                     LeerlingSelectFragmentDirections
-                        .actionLeerlingSelectFragmentToCriteriumOverzichtFragment(leerling,
-                            args.rubricId, TEMP_EVALUATIE_ID, args.opleidingsOnderdeelId)
+                        .actionLeerlingSelectFragmentToCriteriumOverzichtFragment(
+                            leerling,
+                            args.rubricId, TEMP_EVALUATIE_ID, args.opleidingsOnderdeelId
+                        )
                 )
                 leerlingSelectViewModel.onStudentNavigated()
             }
         })
         leerlingSelectViewModel.gefilterdeStudenten.observe(viewLifecycleOwner, Observer {
-            it?.let{
+            it?.let {
                 adapter.submitList(it)
             }
         })
-        leerlingSelectViewModel.refreshIsComplete.observe(viewLifecycleOwner, Observer{
-            if(it){
+        leerlingSelectViewModel.refreshIsComplete.observe(viewLifecycleOwner, Observer {
+            if (it) {
                 binding.spinningLoader.visibility = View.GONE
                 binding.leerlingList.visibility = View.VISIBLE
-            }else{
+            } else {
                 binding.spinningLoader.visibility = View.VISIBLE
                 binding.leerlingList.visibility = View.GONE
             }
@@ -98,6 +112,7 @@ class LeerlingSelectFragment : Fragment() {
         return binding.root
 
     }
+
     /**
      * Function used to created the options menu. Inflates the menu layout and add's a SearchBar
      * @param menu [Menu]
@@ -106,7 +121,8 @@ class LeerlingSelectFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.searchbar, menu)
-        val searchBarStudent = menu.findItem(R.id.action_search).actionView as androidx.appcompat.widget.SearchView
+        val searchBarStudent =
+            menu.findItem(R.id.action_search).actionView as androidx.appcompat.widget.SearchView
 
         val editText = searchBarStudent.findViewById(R.id.search_src_text) as EditText
 
@@ -116,11 +132,11 @@ class LeerlingSelectFragment : Fragment() {
 
                 override fun afterTextChanged(s: Editable?) {
                     val text = s?.toString()
-                    val millis:Long
-                    if(text==""){
-                        millis=0
+                    val millis: Long
+                    if (text == "") {
+                        millis = 0
                     } else {
-                        millis=600
+                        millis = 600
                     }
                     handler.postDelayed({
                         binding.leerlingSelectViewModel?.filterChanged(text)

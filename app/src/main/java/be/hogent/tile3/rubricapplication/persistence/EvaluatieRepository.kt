@@ -12,6 +12,7 @@ import be.hogent.tile3.rubricapplication.network.NetworkRubricEvaluatie
 import be.hogent.tile3.rubricapplication.network.RubricApi
 import be.hogent.tile3.rubricapplication.network.asDatabaseModel
 import be.hogent.tile3.rubricapplication.network.asNetworkModel
+import be.hogent.tile3.rubricapplication.security.AuthStateManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.IOException
@@ -32,11 +33,14 @@ class EvaluatieRepository(private val evaluatieDao: EvaluatieDao, private val cr
     lateinit var context: Context
     @Inject
     lateinit var rubricApi: RubricApi
+
+    private val authHeader: String
     /**
      * Constructor
      */
     init {
         App.component.inject(this)
+        authHeader = AuthStateManager.getInstance(context).getAuthorizationHeader()
     }
     /**
      * Co-Routine for inserting an [Evaluatie] in Room database. This method runs on the IO thread as a background task
@@ -167,14 +171,14 @@ class EvaluatieRepository(private val evaluatieDao: EvaluatieDao, private val cr
                 try {
                     val existing = rubricApi.getEvaluaties(mapOf("rubricId" to it.rubricId.toString(),
                         "studentId" to it.studentId.toString(),
-                        "docent" to it.docentId.toString())).await().singleOrNull()
+                        "docent" to it.docentId), authHeader).await().singleOrNull()
 
                     val networkRubricEvaluatie: NetworkRubricEvaluatie = it.asNetworkModel(existing?.id)
 
                     if (networkRubricEvaluatie.id != null){
-                        rubricApi.updateEvalutatie(networkRubricEvaluatie.id, networkRubricEvaluatie).execute()
+                        rubricApi.updateEvalutatie(networkRubricEvaluatie.id, networkRubricEvaluatie, authHeader).execute()
                     } else {
-                        rubricApi.saveEvaluatie(networkRubricEvaluatie).execute()
+                        rubricApi.saveEvaluatie(networkRubricEvaluatie, authHeader).execute()
                     }
                     setSynched(it, true)
                 } catch (e: Exception) {
@@ -213,7 +217,7 @@ class EvaluatieRepository(private val evaluatieDao: EvaluatieDao, private val cr
         withContext(Dispatchers.IO) {
             try {
                 val evaluaties = rubricApi.getEvaluaties(
-                    mapOf("rubricId" to rubricId.toString(), "docentId" to docentId.toString()))
+                    mapOf("rubricId" to rubricId.toString(), "docentId" to docentId.toString()), authHeader)
                     .await()
                 evaluaties.forEach { eval ->
                     if(!evaluatieDao.tempEvaluationExists(eval.rubricId, eval.studentId).blockingGet()){
