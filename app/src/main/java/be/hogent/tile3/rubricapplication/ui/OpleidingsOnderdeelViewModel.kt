@@ -100,16 +100,18 @@ class OpleidingsOnderdeelViewModel : ViewModel() {
                     _status.value = ApiStatus.LOADING
                     val refresh = async(Dispatchers.IO) {
                         opleidingsOnderdeelRepository.refreshOpleidingsOnderdelen()
-                        rubricRepository.refreshRubrics()
                     }
                     refresh.await()
+                    val refresh2 = async(Dispatchers.IO) {
+                        rubricRepository.refreshRubrics()
+                    }
+                    refresh2.await()
                     println("Done refreshing")
                     _status.value = ApiStatus.DONE
                 } catch (e: Exception) {
                     _status.value = ApiStatus.ERROR
                     println("Error refreshing")
                 }
-
             }
         }
     }

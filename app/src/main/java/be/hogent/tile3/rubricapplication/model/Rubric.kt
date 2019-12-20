@@ -14,13 +14,7 @@ import androidx.room.*
  * @property datumTijdLaatsteWijziging  Date when [Rubric] was last edited
  */
 @Entity(
-    tableName = "rubric_table",
-    foreignKeys = [ForeignKey(
-        entity = OpleidingsOnderdeel::class,
-        parentColumns = arrayOf("opleidingsOnderdeelId"),
-        childColumns = arrayOf("opleidingsOnderdeelId"),
-        onDelete = ForeignKey.SET_NULL)],
-    indices = [Index("opleidingsOnderdeelId")]
+    tableName = "rubric_table"
 )
 data class Rubric(
     @PrimaryKey
