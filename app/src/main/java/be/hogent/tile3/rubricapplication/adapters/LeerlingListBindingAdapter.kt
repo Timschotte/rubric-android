@@ -9,7 +9,7 @@ import be.hogent.tile3.rubricapplication.model.Student
 fun TextView.setStudentNaam(item: Student?){
     item?.let{
         if(item.studentAchternaam != null && item.studentVoornaam != null) {
-            text = item.studentAchternaam + " " + item.studentAchternaam
+            text = item.studentAchternaam + " " + item.studentVoornaam
         }else{
             text = item.studentNaam
         }
@@ -19,7 +19,7 @@ fun TextView.setStudentNaam(item: Student?){
 fun TextView.setEvaluatieStudentNaam(item: Student?){
     item?.let{
         if(item.studentAchternaam != null && item.studentVoornaam != null) {
-            text = resources.getString(R.string.evaluatie)+" "+item.studentAchternaam + " " + item.studentAchternaam
+            text = resources.getString(R.string.evaluatie)+" "+item.studentAchternaam + " " + item.studentVoornaam
         }else{
             text = resources.getString(R.string.evaluatie)+" "+item.studentNaam
         }

@@ -71,13 +71,6 @@ class LeerlingSelectFragment : Fragment() {
          */
 
 
-        val authStateManager = AuthStateManager.getInstance(context!!)
-        val navController = this.findNavController()
-        if (!authStateManager.current.isAuthorized) {
-            navController.currentDestination
-            navController.navigate(R.id.action_mainMenuFragment_to_loginFragment)
-        }
-
         leerlingSelectViewModel.navigateToRubricView.observe(this, Observer { leerling ->
             leerling?.let {
                 this.findNavController().navigate(

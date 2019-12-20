@@ -9,11 +9,13 @@ import be.hogent.tile3.rubricapplication.dao.NiveauDao
 import be.hogent.tile3.rubricapplication.dao.RubricDao
 import be.hogent.tile3.rubricapplication.model.EvaluatieRubric
 import be.hogent.tile3.rubricapplication.model.Rubric
+import be.hogent.tile3.rubricapplication.network.NetworkRubric
 import be.hogent.tile3.rubricapplication.network.RubricApi
 import be.hogent.tile3.rubricapplication.network.asDatabaseModel
 import be.hogent.tile3.rubricapplication.security.AuthStateManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 
@@ -35,6 +37,9 @@ class RubricRepository(
 
     @Inject
     lateinit var rubricApi: RubricApi
+
+    @Inject
+    lateinit var  olodRepo:OpleidingsOnderdeelRepository
     /**
      * Constructor
      */
@@ -74,11 +79,17 @@ class RubricRepository(
      */
     suspend fun refreshRubrics() {
         try {
-            val rubrics = rubricApi.getRubrics("IN_GEBRUIK", authHeader).await().toMutableList()
-            rubrics.addAll(rubricApi.getRubrics("PUBLIEK", authHeader).await())
+            var rubrics: List<NetworkRubric> = listOf()
+            try{
+                rubrics = rubricApi.getRubrics("IN_GEBRUIK", authHeader).await().toMutableList()
+                rubrics.addAll(rubricApi.getRubrics("PUBLIEK", authHeader).await())
+            }catch(e: HttpException){
+                //empty catch all
+            }
             rubricDao.deleteAllRubrics()
             rubrics.forEach { rubric ->
-                rubricDao.insert(rubric.asDatabaseModel())
+                val dbRubric = rubric.asDatabaseModel()
+                rubricDao.insert(dbRubric)
                 rubric.criteriumGroepen.forEach { criteriumGroep ->
                     criteriumGroep.criteria.forEach { networkCriterium ->
                         criteriumDao.insert(
