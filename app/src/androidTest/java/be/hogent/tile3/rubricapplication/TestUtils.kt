@@ -62,9 +62,9 @@ object TestUtils {
     fun createMockEvaluaties() : List<Evaluatie> {
         val evalList = ArrayList<Evaluatie>()
 
-        evalList.add(Evaluatie("1",1,1,"1", false))
-        evalList.add(Evaluatie("2",1,1,"1", false))
-        evalList.add(Evaluatie("3",1,1,"1", false))
+        evalList.add(Evaluatie("1",1,1,1,false))
+        evalList.add(Evaluatie("2",1,1,1,false))
+        evalList.add(Evaluatie("3",1,1,1,false))
 
         return evalList
     }
@@ -92,9 +92,9 @@ object TestUtils {
     fun createMockStudenten() : List<Student> {
         val studenten = ArrayList<Student>()
 
-        studenten.add(Student(1,"Gregory House","House", "Gregory", "1/1/2000", "150-5789"))
-        studenten.add(Student(2,"Lisa Cuddy","House", "Gregory", "1/1/2000",  "897-167"))
-        studenten.add(Student(3,"Wilson","House", "Gregory", "1/1/2000", "789-569"))
+        studenten.add(Student(1,"Gregory House","House","Gregory","20190101","150-5789"))
+        studenten.add(Student(2,"Lisa Cuddy","Cuddy","Lisa","20190101","897-167"))
+        studenten.add(Student(3,"Wilson House","House","Wilson","20190101","789-569"))
 
         return studenten
     }

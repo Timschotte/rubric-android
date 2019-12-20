@@ -28,6 +28,12 @@ class MainMenuFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main_menu, container, false)
+
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val navController = this.findNavController()
         binding.startEvaluatieButton.setOnClickListener { view: View ->
             navController.navigate(R.id.action_mainMenuFragment_to_opleidingSelectFragment)
@@ -41,7 +47,6 @@ class MainMenuFragment : Fragment() {
         } else{
             Log.v("Auth", "token:" + authStateManager.current.accessToken)
         }
-
-        return binding.root
     }
+
 }

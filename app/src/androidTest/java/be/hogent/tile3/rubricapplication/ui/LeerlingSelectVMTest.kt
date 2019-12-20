@@ -22,7 +22,7 @@ class LeerlingSelectVMTest {
 
     @Test
     fun fetchNavigateToRubricView_ShouldReturnExpectedValue() {
-        val expected = Student(1,"Test","Test","Test","120","Test")
+        val expected = Student(1,"Test","120","Test","20190101","456987")
         val livedata = viewModel.navigateToRubricView
 
         viewModel.onStudentClicked(expected)

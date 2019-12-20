@@ -1,11 +1,26 @@
 package be.hogent.tile3.rubricapplication.network
 
+import androidx.activity.viewModels
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.navigation.fragment.findNavController
+import androidx.test.espresso.action.ViewActions
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.rule.ActivityTestRule
+import be.hogent.tile3.rubricapplication.App
+import be.hogent.tile3.rubricapplication.R
+import be.hogent.tile3.rubricapplication.activities.MainActivity
+import be.hogent.tile3.rubricapplication.security.AuthStateManager
+import be.hogent.tile3.rubricapplication.security.Configuration
+import be.hogent.tile3.rubricapplication.ui.LoginViewModel
 import com.itkacher.okhttpprofiler.OkHttpProfilerInterceptor
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import junit.framework.Assert
 import kotlinx.coroutines.runBlocking
+import net.openid.appauth.AuthorizationRequest
+import net.openid.appauth.AuthorizationService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.mockwebserver.MockResponse
@@ -14,9 +29,15 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.Mock
+import org.mockito.Mockito.mock
+import org.mockito.MockitoAnnotations
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicReference
 
 
 class RubricApiTest {
@@ -84,7 +105,7 @@ class RubricApiTest {
         rubricApi = createApi()
 
         runBlocking {
-            val rubs = rubricApi.getRubrics("PUBLIEK").await()
+            val rubs = rubricApi.getRubrics("All","").await()
             assert(rubs.isNotEmpty())
         }
     }
