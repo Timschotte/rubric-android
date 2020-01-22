@@ -84,7 +84,7 @@ class RubricApiTest {
         rubricApi = createApi()
 
         runBlocking {
-            val rubs = rubricApi.getRubrics("PUBLIEK").await()
+            val rubs = rubricApi.getRubrics("PUBLIEK","").await()
             assert(rubs.isNotEmpty())
         }
     }
@@ -101,7 +101,7 @@ class RubricApiTest {
         rubricApi = createApi()
 
         runBlocking {
-            val olods = rubricApi.getOpleidingsOnderdeel().await()
+            val olods = rubricApi.getOpleidingsOnderdeel("").await()
             assert(olods.isNotEmpty())
         }
     }
@@ -118,7 +118,7 @@ class RubricApiTest {
         rubricApi = createApi()
 
         runBlocking {
-            val studenten = rubricApi.getStudenten().await()
+            val studenten = rubricApi.getStudenten("").await()
             assert(studenten.isNotEmpty())
         }
     }
