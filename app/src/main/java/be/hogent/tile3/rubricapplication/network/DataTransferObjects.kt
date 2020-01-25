@@ -78,7 +78,7 @@ data class NetworkStudent(
     val naam: String,
     val achternaam: String?,
     val voornaam: String?,
-    val geboortedatum: String?,
+    val geboorteDatum: String?,
     val studentNummer: String,
     val opleidingsOnderdelen: List<Long>
 )
@@ -113,7 +113,7 @@ fun List<NetworkStudent>.asStudentDatabaseModel(): Array<Student> {
             it.naam,
             it.achternaam,
             it.voornaam,
-            it.geboortedatum,
+            it.geboorteDatum,
             it.studentNummer
         )
     }.toTypedArray()
