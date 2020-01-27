@@ -34,4 +34,5 @@
     <string name="online_message">Connectie hersteld. Gegevens worden op de achtergrond bewaard!</string>
     <string name="rubric_checksum">//4zADEANgA3AGEAMQA1AGUALQA0ADcANgBlAC0ANABlAGYANQAtAGIAMgA5AGIALQA4ADkAYgBkAGQANABmADIANAAxADEAOQA=</string>
     <string name="Login">Login</string>
+    <string name="logout">uitloggen</string>
 </resources>

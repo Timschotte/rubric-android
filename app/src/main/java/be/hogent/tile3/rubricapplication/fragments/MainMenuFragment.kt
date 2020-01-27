@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import be.hogent.tile3.rubricapplication.R
@@ -33,13 +34,21 @@ class MainMenuFragment : Fragment() {
             navController.navigate(R.id.action_mainMenuFragment_to_opleidingSelectFragment)
         }
 
+        binding.logout.setOnClickListener {view: View ->
+            authStateManager.resetState()
+            goToLogin(navController)
+        }
         authStateManager = AuthStateManager.getInstance(context!!)
 
+        goToLogin(navController)
+
+        return binding.root
+    }
+
+    private fun goToLogin(navController: NavController) {
         if (!authStateManager.current.isAuthorized) {
             navController.currentDestination
             navController.navigate(R.id.action_mainMenuFragment_to_loginFragment)
         }
-
-        return binding.root
     }
 }
