@@ -31,7 +31,7 @@ class MainActivityTest {
     fun clickStartButton_DisplaysSelectOpleiding() {
         onView(withId(R.id.start_evaluatie_button)).perform(ViewActions.click())
 
-        onView(withId(R.id.opleidingenList)).check(matches(isDisplayed()))
+        onView(withId(R.id.opleiding_fragment)).check(matches(isDisplayed()))
     }
 
     @Test
